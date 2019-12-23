@@ -1,0 +1,5 @@
+﻿<Project>
+    <Target Name="_CopyDotNetNuGetFile" AfterTargets="AfterBuild">
+        <Copy SourceFiles="$(MSBuildThisFileDirectory)..\tools\nuget.exe" DestinationFiles="$(OutputPath)\tools\nuget.exe" SkipUnchangedFiles="True"></Copy>
+    </Target>
+</Project>
