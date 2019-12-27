@@ -1,0 +1,9 @@
+<config>
+    <sln_file>..\DotNETBuild.sln</sln_file>
+
+    <project_file>..\DotNETBuild\DotNETBuild.csproj</project_file> 
+    <msbuild-outdir>..\bin\Release</msbuild-outdir>
+    <setup-subrepository>dotentcampus.DotNETBuild</setup-subrepository>
+    <version_file>Version.props</version_file>
+
+</config>

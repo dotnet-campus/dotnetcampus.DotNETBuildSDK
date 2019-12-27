@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <AssemblyName>dotnetCampus.DotNETBuildSDK</AssemblyName>
+    <RootNamespace>dotnetCampus.DotNETBuild</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>林德熙</Authors>
+    <Company>dotnetCampus</Company>
+    <Description>用于辅助做打包应用</Description>
+    <Version>1.0.7</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="tools\nuget.exe" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="tools\nuget.exe" Pack="True" PackagePath="\tools\nuget.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+      <None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+  </ItemGroup>
+
+  <ItemGroup>
+      <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.0.0">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+</Project>
