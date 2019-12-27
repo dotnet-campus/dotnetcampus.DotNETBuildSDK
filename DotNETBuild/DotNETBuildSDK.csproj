@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="dotnetCampus.Configurations.Source" Version="1.0.0">
+      <PackageReference Include="dotnetCampus.Configurations" Version="1.0.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
