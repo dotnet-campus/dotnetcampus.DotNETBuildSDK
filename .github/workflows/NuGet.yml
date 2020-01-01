@@ -18,7 +18,7 @@ jobs:
       with:
         dotnet-version: 3.1.100
     - name: Build with dotnet
-      run: dotnet pack --configuration Release
+      run: dotnet build --configuration Release
     - name: Install Nuget
       run: |
         $sourceNugetExe = "https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"
