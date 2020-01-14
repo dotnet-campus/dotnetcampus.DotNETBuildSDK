@@ -74,8 +74,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             //    return;
             //}
 
-
-
             var folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             var file = Path.Combine(folder, "tools", "nuget.exe");
 
@@ -87,9 +85,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             Log.Info($"找不到 {file} 文件，从资源拿到文件");
-
-
-
 
             Log.Info($"从服务器下载 nuget 文件");
 
@@ -119,31 +114,62 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// </summary>
         public void PublishNupkg(string version = "")
         {
+            var fileList = GetNupkgFileList(version);
+
+            foreach (var file in fileList)
+            {
+                Log.Info($"开始上传{file}");
+                PublishNupkg(new FileInfo(file));
+            }
+        }
+
+        private string[] GetNupkgFileList(string version = "")
+        {
             var nupkgDirectory = FindNupkgDirectory();
 
             if (string.IsNullOrEmpty(nupkgDirectory))
             {
-                throw new ArgumentException($"找不到上传 nuget 的文件夹，请确定 nuget 文件已经生成");
+                Log.Info($"找不到上传 nuget 的文件夹，请确定 nuget 文件已经生成，将进行自动寻找");
+                var fileList = Directory.GetFiles(CompileConfiguration.CodeDirectory, "*.nupkg", SearchOption.AllDirectories);
+                if (fileList.Length == 0)
+                {
+                    throw new ArgumentException("找不到nupkg文件");
+                }
+
+                return fileList;
             }
-
-            var fileList = Directory.GetFiles(nupkgDirectory, $"*{version}.nupkg");
-
-            if (fileList.Length == 0)
+            else
             {
-                throw new ArgumentException($"在{nupkgDirectory}没有找到一个可以上传的文件");
+                var fileList = Directory.GetFiles(nupkgDirectory, $"*{version}.nupkg");
+
+                if (fileList.Length == 0)
+                {
+                    throw new ArgumentException($"在{nupkgDirectory}没有找到一个可以上传的文件");
+                }
+
+                return fileList;
+            }
+        }
+
+        /// <summary>
+        /// 发布指定的文件
+        /// </summary>
+        /// <param name="nupkgFile"></param>
+        public void PublishNupkg(FileInfo nupkgFile)
+        {
+            if (!File.Exists(nupkgFile.FullName))
+            {
+                throw new FileNotFoundException($"找不到 {nupkgFile} 文件");
             }
 
             var toolConfiguration = AppConfigurator.Of<ToolConfiguration>();
             var nugetConfiguration = AppConfigurator.Of<NugetConfiguration>();
             var nugetPath = toolConfiguration.NugetPath;
 
-            foreach (var file in fileList)
-            {
-                var temp = ProcessCommand.ToArgumentPath(file);
+            var temp = ProcessCommand.ToArgumentPath(nupkgFile.FullName);
 
-                ProcessCommand.ExecuteCommand(nugetPath,
-                    $"push {temp} -Source {nugetConfiguration.Source} -ApiKey {nugetConfiguration.ApiKey}");
-            }
+            ProcessCommand.ExecuteCommand(nugetPath,
+                $"push {temp} -Source {nugetConfiguration.Source} -ApiKey {nugetConfiguration.ApiKey}");
         }
 
         private string FindNupkgDirectory()
