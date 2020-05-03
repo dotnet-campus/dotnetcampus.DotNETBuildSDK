@@ -11,6 +11,7 @@ namespace dotnetCampus.DotNETBuild
             Log.LogLevel = logLevel;
             var appConfigurator = AppConfigurator.GetAppConfigurator();
             Log.InitFileLog();
+        
             return appConfigurator;
         }
     }

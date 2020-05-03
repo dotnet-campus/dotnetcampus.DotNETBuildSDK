@@ -10,8 +10,6 @@ namespace dotnetCampus.GitRevisionTask
     {
         static void Main(string[] args)
         {
-            SDK.Init(LogLevel.Error);
-
             var git = GitHelper.GetGitRepo();
             var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
 
@@ -21,8 +19,6 @@ namespace dotnetCampus.GitRevisionTask
             gitConfiguration.GitCount = gitCommitRevisionCount;
 
             gitConfiguration.CurrentCommit = git.GetCurrentCommit();
-
-            Thread.Sleep(300);
         }
     }
 }

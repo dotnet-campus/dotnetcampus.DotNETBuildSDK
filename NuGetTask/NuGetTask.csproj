@@ -10,7 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
+      <!--<PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.206">
+      </PackageReference>-->
+      <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
   </ItemGroup>
 
 </Project>

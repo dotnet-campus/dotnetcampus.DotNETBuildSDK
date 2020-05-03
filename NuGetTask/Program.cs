@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 

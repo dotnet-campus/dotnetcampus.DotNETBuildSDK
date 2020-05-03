@@ -1,8 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using dotnetCampus.Configurations.Core;
+using dotnetCampus.DotNETBuild.Context;
+using dotnetCampus.DotNETBuild.Utils;
 
 namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
 {
@@ -30,12 +32,37 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             args = args ?? Array.Empty<string>();
             entryPointFullTypeName = entryPointFullTypeName?.Trim();
 
-            //MethodInfo entryMethod = EntryPointDiscoverer.FindStaticEntryMethod(entryAssembly, entryPointFullTypeName);
+            MethodInfo entryMethod = EntryPointDiscoverer.FindStaticEntryMethod(entryAssembly, entryPointFullTypeName);
 
             ////TODO The xml docs file name and location can be customized using <DocumentationFile> project property.
             //return await InvokeMethodAsync(args, entryMethod, xmlDocsFilePath, null, console);
-            await Task.Delay(0);
-            return 0;
+
+            SDK.Init(LogLevel.Error);
+            Log.LogLevel = LogLevel.Info;
+
+            var returnObj = 0;
+            var obj = entryMethod.Invoke(null, new[] { args });
+            if (obj is Task task)
+            {
+                await task;
+            }
+            else if (obj is Task<int> taskObj)
+            {
+                await taskObj;
+                returnObj = taskObj.Result;
+            }
+            else if (obj is int n)
+            {
+                returnObj = n;
+            }
+
+            var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
+            if (currentConfiguration is FileConfigurationRepo fileConfiguration)
+            {
+                await fileConfiguration.SaveAsync();
+            }
+
+            return returnObj;
         }
     }
 }
