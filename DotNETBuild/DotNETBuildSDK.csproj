@@ -29,6 +29,6 @@
       </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <!--<None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />-->
   </ItemGroup>
 </Project>
