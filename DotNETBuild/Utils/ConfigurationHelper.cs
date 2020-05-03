@@ -14,19 +14,22 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// </summary>
         internal static IConfigurationRepo GetCurrentConfiguration()
         {
-            Log.Info($"工作路径 " + Environment.CurrentDirectory);
-            string config = "build.coin";
-            config = Path.GetFullPath(config);
-            Log.Info($"配置文件路径" + config);
-
-            var file = new FileInfo(config);
+            var file = GetCurrentConfigurationFile();
 
             FileConfigurationRepo fileConfigurationRepo = ConfigurationFactory.FromFile(file.FullName);
 
             return fileConfigurationRepo;
         }
 
-
+        public static FileInfo GetCurrentConfigurationFile()
+        {
+            Log.Debug("获取当前配置文件路径");
+            Log.Debug($"工作路径 " + Environment.CurrentDirectory);
+            string config = "build.coin";
+            config = Path.GetFullPath(config);
+            Log.Debug($"配置文件路径" + config);
+            return new FileInfo(config);
+        }
 
         /// <summary>
         /// 获取机器级配置文件
@@ -34,7 +37,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         public static FileInfo GetMachineConfigurationFile()
         {
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            folder = Path.Combine(folder,"dotnet-campus","BuildKit");
+            folder = Path.Combine(folder,"dotnet campus","BuildKit");
             var file = new FileInfo(Path.Combine(folder,"configuration.coin"));
             return file;
         }

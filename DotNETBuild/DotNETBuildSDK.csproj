@@ -9,7 +9,6 @@
     <Authors>林德熙</Authors>
     <Company>dotnetCampus</Company>
     <Description>用于辅助做打包应用</Description>
-    <Version>1.0.9</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,11 +23,13 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="dotnetCampus.Configurations" Version="1.1.5">
+      <PackageReference Include="dotnetCampus.Configurations" Version="1.2.6">
        
       </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <!--<None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />-->
+  <ItemGroup><!--<None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />-->
+  
+    <PackageReference Include="CommandLineParser" Version="2.8.0">
+    </PackageReference>
   </ItemGroup>
 </Project>

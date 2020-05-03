@@ -4,10 +4,39 @@ using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
-    static class Log
+    public static class Log
     {
+        public static LogLevel LogLevel { set; get; } = LogLevel.Info;
+
+        public static void Debug(string message)
+        {
+            if (LogLevel < LogLevel.Debug)
+            {
+                return;
+            }
+
+            Console.WriteLine(message);
+            FileLog?.WriteLine($"[Debug] {message}");
+        }
+
+        public static void Warning(string message)
+        {
+            if (LogLevel < LogLevel.Warning)
+            {
+                return;
+            }
+
+            Console.WriteLine(message);
+            FileLog?.WriteLine($"[Warning] {message}");
+        }
+
         public static void Info(string message)
         {
+            if (LogLevel < LogLevel.Info)
+            {
+                return;
+            }
+
             Console.WriteLine(message);
             FileLog?.WriteLine($"[Info] {message}");
         }
