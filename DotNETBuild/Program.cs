@@ -22,7 +22,7 @@ namespace dotnetCampus.DotNETBuild
 
                 AppConfigurator.SetConfigurationFile(new FileInfo(config));
 
-                var fileConfigurationRepo = new FileConfigurationRepo(config);
+                var fileConfigurationRepo = ConfigurationFactory.FromFile(config);
                 IAppConfigurator appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
 
                 var compiler = new Compiler(appConfigurator);

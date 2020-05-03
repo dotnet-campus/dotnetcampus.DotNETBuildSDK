@@ -22,13 +22,8 @@ namespace dotnetCampus.DotNETBuild.Context
                 throw new Exception("必须在调用 GetAppConfigurator 方法之前设置配置文件路径，请将设置路径的代码放在程序运行最前");
             }
 
-            ConfigurationFile = file;
+            _appConfigurator = ConfigurationFactory.FromFile(file.FullName).CreateAppConfigurator();
         }
-
-        /// <summary>
-        /// 配置文件路径
-        /// </summary>
-        public static FileInfo ConfigurationFile { get; private set; }
 
         public static IAppConfigurator GetAppConfigurator()
         {
@@ -36,14 +31,7 @@ namespace dotnetCampus.DotNETBuild.Context
             {
                 Log.Info("没有设置应用配置，自动寻找应用配置");
 
-                Log.Info($"工作路径 " + Environment.CurrentDirectory);
-                string config = "build.fkv";
-                config = Path.GetFullPath(config);
-                Log.Info($"配置文件路径" + config);
-
-                ConfigurationFile = new FileInfo(config);
-
-                var fileConfigurationRepo = new FileConfigurationRepo(ConfigurationFile.FullName);
+                var fileConfigurationRepo = ConfigurationHelper.GetCurrentConfiguration();
                 _appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
             }
 

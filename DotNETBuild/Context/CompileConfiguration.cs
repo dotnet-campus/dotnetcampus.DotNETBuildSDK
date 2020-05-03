@@ -133,17 +133,5 @@ namespace dotnetCampus.DotNETBuild.Context
             set => SetValue(value);
             get => GetString();
         }
-
-        public string BuildLogDirectory
-        {
-            set => SetValue(value);
-            get => GetString() ?? "BuildLogs";
-        }
-
-        public string BuildLogFile
-        {
-            set => SetValue(value);
-            get => GetString();
-        }
     }
 }

@@ -45,36 +45,11 @@ namespace dotnetCampus.DotNETBuild
 
         private void Init()
         {
-            InitLog();
-
             // todo 放在获取属性
             var fileSniff = new FileSniff(AppConfigurator);
             fileSniff.Sniff();
         }
-
-        private void InitLog()
-        {
-            var folder = Path.GetFullPath(CompileConfiguration.BuildLogDirectory);
-            Directory.CreateDirectory(folder);
-
-            var file = Path.Combine(folder, $"DotNETBuild {DateTime.Now:yyMMddhhmmss}.txt");
-
-            if (!string.IsNullOrEmpty(CompileConfiguration.BuildLogFile))
-            {
-                file = CompileConfiguration.BuildLogFile;
-            }
-            else
-            {
-                CompileConfiguration.BuildLogFile = file;
-            }
-
-            var fileLog =
-                new FileLog(new FileInfo(file));
-            Console.WriteLine($"日志文件 {fileLog.LogFile.FullName}");
-
-            Log.FileLog = fileLog;
-        }
-
+        
         public NuGet Nuget { get; }
 
         public MsBuild MsBuild { get; }

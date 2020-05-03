@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
@@ -20,7 +22,31 @@ namespace dotnetCampus.DotNETBuild.Utils
         }
 
         public static FileLog FileLog { set; get; }
-    }
 
-    
+        public static void InitFileLog()
+        {
+            var appConfigurator = AppConfigurator.GetAppConfigurator();
+            var logConfiguration = appConfigurator.Of<LogConfiguration>();
+
+            var folder = Path.GetFullPath(logConfiguration.BuildLogDirectory);
+            Directory.CreateDirectory(folder);
+
+            var file = Path.Combine(folder, $"DotNETBuild {DateTime.Now:yyMMddhhmmss}.txt");
+
+            if (!string.IsNullOrEmpty(logConfiguration.BuildLogFile))
+            {
+                file = logConfiguration.BuildLogFile;
+            }
+            else
+            {
+                logConfiguration.BuildLogFile = file;
+            }
+
+            var fileLog =
+                new FileLog(new FileInfo(file));
+            Console.WriteLine($"日志文件 {fileLog.LogFile.FullName}");
+
+            FileLog = fileLog;
+        }
+    }
 }
