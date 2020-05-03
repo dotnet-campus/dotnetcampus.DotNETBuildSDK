@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using dotnetCampus.DotNETBuild.Utils;
 using System;
+using dotnetCampus.DotNETBuild.Context;
 
 namespace BuildKitTool
 {
@@ -33,6 +34,11 @@ namespace BuildKitTool
             ConfigurationExtension.MergeConfiguration(option, configuration);
 
             CheckCommandInstall();
+
+            var appConfigurator = AppConfigurator.GetAppConfigurator();
+            // 写入当前能找到的各个文件的配置
+            var fileSniff = new FileSniff(appConfigurator);
+            fileSniff.Sniff();
 
             return 0;
         }
