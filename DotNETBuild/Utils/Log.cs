@@ -73,7 +73,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             var fileLog =
                 new FileLog(new FileInfo(file));
-            Console.WriteLine($"日志文件 {fileLog.LogFile.FullName}");
+            Log.Debug($"日志文件 {fileLog.LogFile.FullName}");
 
             FileLog = fileLog;
         }
