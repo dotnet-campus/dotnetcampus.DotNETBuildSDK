@@ -19,15 +19,6 @@ namespace dotnetCampus.DotNETBuild.Context
             get { return GetString(); }
         }
 
-        public string NugetFile
-        {
-            set
-            {
-                SetValue(value);
-            }
-            get { return GetString(); }
-        }
-
         public string MsBuildFile
         {
             set

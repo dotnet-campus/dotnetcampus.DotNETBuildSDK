@@ -96,7 +96,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (File.Exists(file))
             {
-                CompileConfiguration.NugetFile = file;
+                ToolConfiguration.NugetPath = file;
                 Log.Info($"下载 {file} 完成");
             }
             else

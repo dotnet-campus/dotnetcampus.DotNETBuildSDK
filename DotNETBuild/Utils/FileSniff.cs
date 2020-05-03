@@ -9,7 +9,7 @@ namespace dotnetCampus.DotNETBuild.Utils
     /// <summary>
     /// 寻找文件，将找到的文件放在 AppConfigurator 配置
     /// </summary>
-    internal class FileSniff
+    public class FileSniff
     {
         /// <summary>
         /// 创建协助寻找文件
