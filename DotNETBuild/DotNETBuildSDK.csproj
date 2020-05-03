@@ -9,7 +9,7 @@
     <Authors>林德熙</Authors>
     <Company>dotnetCampus</Company>
     <Description>用于辅助做打包应用</Description>
-    <Version>1.0.7</Version>
+    <Version>1.0.9</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +29,6 @@
       </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Properties\" />
+    <None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
   </ItemGroup>
 </Project>
