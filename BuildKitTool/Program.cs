@@ -32,7 +32,17 @@ namespace BuildKitTool
 
             ConfigurationExtension.MergeConfiguration(option, configuration);
 
+            CheckCommandInstall();
+
             return 0;
+        }
+
+        /// <summary>
+        /// 协助部署使用的，用于协助将所有的构建需要的命令更新
+        /// </summary>
+        private static void CheckCommandInstall()
+        {
+            
         }
 
 
