@@ -4,7 +4,7 @@ using dotnetCampus.DotNETBuild;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
-namespace GitRevisionTask
+namespace dotnetCampus.GitRevisionTask
 {
     class Program
     {
