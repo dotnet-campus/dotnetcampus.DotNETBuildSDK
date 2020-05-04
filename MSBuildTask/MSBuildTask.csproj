@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+      <PackAsTool>true</PackAsTool>
+      <ToolCommandName>MSBuildTask</ToolCommandName>
+      <AssemblyName>dotnetCampus.MSBuildTask</AssemblyName>
+      <RootNamespace>dotnetCampus.MSBuildTask</RootNamespace>
+  </PropertyGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
+    </ItemGroup>
+</Project>
