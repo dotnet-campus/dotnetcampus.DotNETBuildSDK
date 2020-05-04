@@ -68,6 +68,7 @@ namespace BuildKitTool
             var appConfigurator = AppConfigurator.GetAppConfigurator();
             var configToolList = appConfigurator.Of<ToolConfiguration>().DotNETToolList;
 
+            Log.Debug("开始确认工具准备完成");
             localToolList.AddRange(configToolList);
             var dotNetTool = new DotNet(appConfigurator);
             dotNetTool.TryInstall(localToolList);

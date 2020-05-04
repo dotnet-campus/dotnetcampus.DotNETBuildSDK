@@ -21,9 +21,21 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <param name="packageNameList"></param>
         public void TryInstall(List<string> packageNameList)
         {
-            foreach (var package in GetNotInstalledToolList(packageNameList))
+            var notInstalledToolList = GetNotInstalledToolList(packageNameList).ToList();
+
+            if (notInstalledToolList.Count>0)
             {
-                InstallDotNETGloablTool(package);
+                Log.Info($"尚未安装的工具如下：{string.Join(';',notInstalledToolList)}");
+                Log.Info($"开始安装必备工具");
+
+                foreach (var package in notInstalledToolList)
+                {
+                    // 虽然下面信息应该是 Debug 级，但是考虑很少需要进行工具的安装，所以修改等级
+                    Log.Info($"开始安装 {package}");
+                    InstallDotNETGloablTool(package);
+                    Log.Info($"完成安装 {package}");
+                }
+                Log.Info("必备工具安装完成");
             }
         }
 
