@@ -1,4 +1,6 @@
-﻿using dotnetCampus.Configurations;
+﻿using System;
+using System.Collections.Generic;
+using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Context
 {
@@ -14,6 +16,26 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set => SetValue(value);
             get => GetString();
+        }
+
+        /// <summary>
+        /// 存放私有安装的工具
+        /// </summary>
+        public string[] DotNETToolList
+        {
+            set => SetValue(string.Join(';', value));
+            get
+            {
+                var configurationString = GetString();
+                if (configurationString == null)
+                {
+                    return Array.Empty<string>();
+                }
+                else
+                {
+                    return ((string) configurationString).Split(';');
+                }
+            }
         }
     }
 }

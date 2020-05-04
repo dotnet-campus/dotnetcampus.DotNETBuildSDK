@@ -1,6 +1,7 @@
 ﻿using CommandLine;
 using dotnetCampus.DotNETBuild.Utils;
 using System;
+using System.Collections.Generic;
 using dotnetCampus.DotNETBuild.Context;
 
 namespace BuildKitTool
@@ -13,7 +14,11 @@ namespace BuildKitTool
                 .MapResult
                 (
                     (InitOption option) => RunInit(option),
-                    error => 1
+                    error =>
+                    {
+                        Console.WriteLine("少年郎，是不是忘了输入 init 执行初始化了");
+                        return 1;
+                    }
                 );
         }
 
@@ -48,7 +53,25 @@ namespace BuildKitTool
         /// </summary>
         private static void CheckCommandInstall()
         {
-            
+            var localToolList = new List<string>
+            {
+                "dotnetCampus.GitRevisionTask",
+                "dotnetCampus.NuGetTask",
+
+                // https://github.com/dotnet-campus/dotnetCampus.TagToVersion
+                "dotnetCampus.TagToVersion",
+                // https://github.com/dotnet-campus/dotnetCampus.UpdateAllDotNetTools
+                "dotnetCampus.UpdateAllDotNetTools",
+            };
+
+            // 读取全局配置的工具
+            var appConfigurator = AppConfigurator.GetAppConfigurator();
+            var configToolList = appConfigurator.Of<ToolConfiguration>().DotNETToolList;
+
+            Log.Debug("开始确认工具准备完成");
+            localToolList.AddRange(configToolList);
+            var dotNetTool = new DotNet(appConfigurator);
+            dotNetTool.TryInstall(localToolList);
         }
 
 
