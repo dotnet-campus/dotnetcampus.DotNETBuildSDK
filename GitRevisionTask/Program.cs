@@ -10,6 +10,9 @@ namespace dotnetCampus.GitRevisionTask
     {
         static void Main(string[] args)
         {
+            // 这个命令可以提供给其他命令作为控制台输出使用，此时需要减少输出内容
+            Log.LogLevel = LogLevel.Error;
+
             var git = GitHelper.GetGitRepo();
             var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
 
