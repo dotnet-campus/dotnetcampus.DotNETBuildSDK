@@ -5,13 +5,15 @@ VisualStudioVersion = 16.0.29521.150
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuildSDK", "DotNETBuild\DotNETBuildSDK.csproj", "{FAC689A0-35C0-471A-9497-43007295DAC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildKitTool", "BuildKitTool\BuildKitTool.csproj", "{404D0C40-4143-4404-A903-A6120953F865}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildKitTool", "BuildKitTool\BuildKitTool.csproj", "{404D0C40-4143-4404-A903-A6120953F865}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitRevisionTask", "GitRevisionTask\GitRevisionTask.csproj", "{4F115E33-8D1B-478A-B585-913DE7DF8923}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitRevisionTask", "GitRevisionTask\GitRevisionTask.csproj", "{4F115E33-8D1B-478A-B585-913DE7DF8923}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetTask", "NuGetTask\NuGetTask.csproj", "{1611E7E0-88DE-4CBE-9416-5C3D62368E43}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NuGetTask", "NuGetTask\NuGetTask.csproj", "{1611E7E0-88DE-4CBE-9416-5C3D62368E43}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSBuildTask", "MSBuildTask\MSBuildTask.csproj", "{9EF5F3FD-8006-4501-972A-7F4E53720794}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSBuildTask", "MSBuildTask\MSBuildTask.csproj", "{9EF5F3FD-8006-4501-972A-7F4E53720794}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NuGetPublishTask", "NuGetPublishTask\NuGetPublishTask.csproj", "{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,6 +85,18 @@ Global
 		{9EF5F3FD-8006-4501-972A-7F4E53720794}.Release|x64.Build.0 = Release|Any CPU
 		{9EF5F3FD-8006-4501-972A-7F4E53720794}.Release|x86.ActiveCfg = Release|Any CPU
 		{9EF5F3FD-8006-4501-972A-7F4E53720794}.Release|x86.Build.0 = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|x64.Build.0 = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Debug|x86.Build.0 = Debug|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|x64.ActiveCfg = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|x64.Build.0 = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|x86.ActiveCfg = Release|Any CPU
+		{65D3840B-15F1-4B7E-95E9-BDA71EA82DAF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
