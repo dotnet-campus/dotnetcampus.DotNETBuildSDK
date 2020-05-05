@@ -2,7 +2,7 @@
 
 namespace dotnetCampus.DotNETBuild.Context
 {
-    class NugetConfiguration : Configuration
+    public class NugetConfiguration : Configuration
     {
         public string ApiKey
         {

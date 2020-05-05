@@ -38,7 +38,8 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             //return await InvokeMethodAsync(args, entryMethod, xmlDocsFilePath, null, console);
 
             SDK.Init(LogLevel.Error);
-            Log.LogLevel = LogLevel.Info;
+            var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
+            Log.LogLevel = currentConfiguration.CreateAppConfigurator().Of<LogConfiguration>().LogLevel;
 
             var returnObj = 0;
             var obj = entryMethod.Invoke(null, new[] { args });
@@ -56,7 +57,6 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
                 returnObj = n;
             }
 
-            var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
             if (currentConfiguration is FileConfigurationRepo fileConfiguration)
             {
                 await fileConfiguration.SaveAsync();
