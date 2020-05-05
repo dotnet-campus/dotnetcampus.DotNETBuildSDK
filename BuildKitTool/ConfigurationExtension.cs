@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.DotNETBuild.Utils;
 
@@ -38,16 +39,32 @@ namespace BuildKitTool
                 }
             }
 
-            if (configuration != ConfigurationEnum.None)
-            {
-                currentConfiguration["Configuration"] = configuration.ToString();
-            }
+            SetLogLevel(configuration, currentConfiguration);
 
+            // 下面代码只是让配置文件里面可以告诉小伙伴这个文件是做什么
             currentConfiguration["AAA须知"] = "此文件为构建过程多个命令共享信息使用，请不要加入代码仓库";
 
             // 序列化写入
             var currentConfigurationFile = ConfigurationHelper.GetCurrentConfigurationFile();
             File.WriteAllText(currentConfigurationFile.FullName, CoinConfigurationSerializer.Serialize(currentConfiguration));
+        }
+
+        private static void SetLogLevel(ConfigurationEnum configuration, Dictionary<string, string> currentConfiguration)
+        {
+            // 如果全局配置和项目配置里面没有写入日志默认配置
+            var logLevel = "Log.LogLevel";
+            if (!currentConfiguration.ContainsKey(logLevel))
+            {
+                // 根据配置进行写入
+                if (configuration == ConfigurationEnum.Release)
+                {
+                    currentConfiguration[logLevel] = LogLevel.Info.ToString();
+                }
+                else
+                {
+                    currentConfiguration[logLevel] = LogLevel.Debug.ToString();
+                }
+            }
         }
 
         static Dictionary<string, string> GetBuildConfiguration()
