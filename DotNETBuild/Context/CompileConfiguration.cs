@@ -1,4 +1,5 @@
-﻿using dotnetCampus.Configurations;
+﻿using System.IO;
+using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Context
 {
@@ -123,6 +124,67 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set => SetValue(value);
             get => GetString();
+        }
+
+        /// <summary>
+        /// 项目的 Build 配置
+        /// </summary>
+        /// \Build
+        public string BuildConfigurationDirectory
+        {
+            set => SetValue(value);
+            // 这里特意不相对于 CodeDirectory 路径，解决在仓库里面打包某个项目找错路径
+            get => GetString() ?? Path.GetFullPath("Build");
+        }
+
+        /// <summary>
+        /// 混淆配置文件夹，包含 saproj 文件
+        /// </summary>
+        /// \Build\obfuscation
+        public string ObfuscationConfigurationSaprojDirectory
+        {
+            set => SetValue(value);
+            get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "obfuscation");
+        }
+
+        /// <summary>
+        /// 安装包配置文件夹
+        /// </summary>
+        /// \Build\Setup
+        public string SetupConfigurationDirectory
+        {
+            set => SetValue(value);
+            get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "Setup");
+        }
+
+        /// <summary>
+        /// 安装包工作文件夹
+        /// </summary>
+        /// \Build\working
+        public string InstallerWorkingDirectory
+        {
+            set => SetValue(value);
+            get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "working");
+        }
+
+        /// <summary>
+        /// 安装包构建文件夹
+        /// </summary>
+        /// \Build\working\compiling
+        public string InstallerCompilingDirectory
+        {
+            set => SetValue(value);
+            get => GetString() ?? Path.Combine(InstallerWorkingDirectory, "compiling");
+        }
+
+        /// <summary>
+        /// 安装包打包文件夹，这个文件夹内容是实际被安装包打包内容
+        /// </summary>
+        /// \Build\working\packing
+        public string InstallerPackingDirectory
+        {
+            set => SetValue(value);
+            get => GetString() ?? Path.Combine(InstallerWorkingDirectory, "packing");
         }
     }
 }

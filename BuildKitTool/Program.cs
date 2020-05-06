@@ -2,6 +2,7 @@
 using dotnetCampus.DotNETBuild.Utils;
 using System;
 using System.Collections.Generic;
+using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 
 namespace BuildKitTool
@@ -36,14 +37,18 @@ namespace BuildKitTool
 
             InitLog(configuration);
 
-            ConfigurationExtension.MergeConfiguration(option, configuration);
+            var fileConfiguration = ConfigurationExtension.MergeConfiguration(option, configuration);
+            var appConfigurator = fileConfiguration.CreateAppConfigurator();
 
-            CheckCommandInstall();
+            CheckCommandInstall(appConfigurator);
 
-            var appConfigurator = AppConfigurator.GetAppConfigurator();
             // 写入当前能找到的各个文件的配置
             var fileSniff = new FileSniff(appConfigurator);
             fileSniff.Sniff();
+
+            appConfigurator.Of<CompileConfiguration>().SetCommonConfiguration();
+
+            fileConfiguration.SaveAsync().Wait();
 
             return 0;
         }
@@ -51,7 +56,8 @@ namespace BuildKitTool
         /// <summary>
         /// 协助部署使用的，用于协助将所有的构建需要的命令更新
         /// </summary>
-        private static void CheckCommandInstall()
+        /// <param name="appConfigurator"></param>
+        private static void CheckCommandInstall(IAppConfigurator appConfigurator)
         {
             var localToolList = new List<string>
             {
@@ -65,7 +71,6 @@ namespace BuildKitTool
             };
 
             // 读取全局配置的工具
-            var appConfigurator = AppConfigurator.GetAppConfigurator();
             var configToolList = appConfigurator.Of<ToolConfiguration>().DotNETToolList;
 
             Log.Debug("开始确认工具准备完成");

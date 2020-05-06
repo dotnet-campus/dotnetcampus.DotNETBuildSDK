@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
@@ -39,8 +40,13 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
 
             SDK.Init(LogLevel.Error);
             var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
-            Log.LogLevel = currentConfiguration.CreateAppConfigurator().Of<LogConfiguration>().LogLevel;
+            // 全局可以配置日志输出
+            var appConfigurator = currentConfiguration.CreateAppConfigurator();
+            Log.LogLevel = appConfigurator.Of<LogConfiguration>().LogLevel;
 
+            SetCommonConfiguration(appConfigurator);  
+
+            // 下面代码调用实际上代码里面的
             var returnObj = 0;
             var obj = entryMethod.Invoke(null, new[] { args });
             if (obj is Task task)
@@ -63,6 +69,13 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             }
 
             return returnObj;
+        }
+
+        private static void SetCommonConfiguration(IAppConfigurator appConfigurator)
+        {
+            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+
+            compileConfiguration.SetCommonConfiguration();
         }
     }
 }
