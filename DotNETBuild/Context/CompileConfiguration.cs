@@ -133,6 +133,7 @@ namespace dotnetCampus.DotNETBuild.Context
         public string BuildConfigurationDirectory
         {
             set => SetValue(value);
+            // 这里特意不相对于 CodeDirectory 路径，解决在仓库里面打包某个项目找错路径
             get => GetString() ?? Path.GetFullPath("Build");
         }
 
