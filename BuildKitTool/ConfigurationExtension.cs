@@ -14,23 +14,24 @@ namespace BuildKitTool
         /// </summary>
         /// <param name="option"></param>
         /// <param name="configuration"></param>
-        public static void MergeConfiguration(InitOption option, ConfigurationEnum configuration)
+        public static FileConfigurationRepo MergeConfiguration(InitOption option, ConfigurationEnum configuration)
         {
             // 放在机器的配置
             var machineConfigurationFile = GetMachineConfigurationFile();
 
+            Dictionary<string, string> machineConfiguration=new Dictionary<string, string>();
             if (!machineConfigurationFile.Exists)
             {
                 Log.Debug("没有找到机器配置" + machineConfigurationFile.FullName);
                 // 不存在机器配置
-                return;
             }
-        
+            else
+            {
+                // 规则是如果当前存在的，那么就不从机器获取
+                machineConfiguration = CoinConfigurationSerializer.Deserialize(File.ReadAllText(machineConfigurationFile.FullName));
+            }
+
             var currentConfiguration = GetBuildConfiguration();
-
-            // 规则是如果当前存在的，那么就不从机器获取
-            var machineConfiguration = CoinConfigurationSerializer.Deserialize(File.ReadAllText(machineConfigurationFile.FullName));
-
             foreach (var (key, value) in machineConfiguration)
             {
                 if (!currentConfiguration.ContainsKey(key))
@@ -45,8 +46,15 @@ namespace BuildKitTool
             currentConfiguration["AAA须知"] = "此文件为构建过程多个命令共享信息使用，请不要加入代码仓库";
 
             // 序列化写入
-            var currentConfigurationFile = ConfigurationHelper.GetCurrentConfigurationFile();
-            File.WriteAllText(currentConfigurationFile.FullName, CoinConfigurationSerializer.Serialize(currentConfiguration));
+            var fileConfiguration = ConfigurationHelper.GetCurrentConfiguration();
+            IConfigurationRepo configurationRepo = fileConfiguration;
+            
+            foreach (var (key, value) in currentConfiguration)
+            {
+                configurationRepo.SetValue(key, value);
+            }
+
+            return fileConfiguration;
         }
 
         private static void SetLogLevel(ConfigurationEnum configuration, Dictionary<string, string> currentConfiguration)

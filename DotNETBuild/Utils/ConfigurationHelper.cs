@@ -13,7 +13,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// 获取当前配置
         /// <para></para>
         /// </summary>
-        internal static IConfigurationRepo GetCurrentConfiguration()
+        public static FileConfigurationRepo GetCurrentConfiguration()
         {
             var file = GetCurrentConfigurationFile();
 
