@@ -45,6 +45,8 @@ namespace BuildKitTool
             var fileSniff = new FileSniff(appConfigurator);
             fileSniff.Sniff();
 
+            appConfigurator.Of<CompileConfiguration>().SetCommonConfiguration();
+
             return 0;
         }
 
