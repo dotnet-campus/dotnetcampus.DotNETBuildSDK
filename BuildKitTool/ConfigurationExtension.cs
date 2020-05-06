@@ -17,18 +17,18 @@ namespace BuildKitTool
         public static FileConfigurationRepo MergeConfiguration(InitOption option, ConfigurationEnum configuration)
         {
             // 放在机器的配置
-            var machineConfigurationFile = GetMachineConfigurationFile();
+            var globalConfigurationFile = GetGlobalConfigurationFile();
 
             Dictionary<string, string> machineConfiguration=new Dictionary<string, string>();
-            if (!machineConfigurationFile.Exists)
+            if (!globalConfigurationFile.Exists)
             {
-                Log.Debug("没有找到机器配置" + machineConfigurationFile.FullName);
+                Log.Debug("没有找到机器配置" + globalConfigurationFile.FullName);
                 // 不存在机器配置
             }
             else
             {
                 // 规则是如果当前存在的，那么就不从机器获取
-                machineConfiguration = CoinConfigurationSerializer.Deserialize(File.ReadAllText(machineConfigurationFile.FullName));
+                machineConfiguration = CoinConfigurationSerializer.Deserialize(File.ReadAllText(globalConfigurationFile.FullName));
             }
 
             var currentConfiguration = GetBuildConfiguration();
@@ -105,7 +105,7 @@ namespace BuildKitTool
         /// <summary>
         /// 获取机器级配置文件
         /// </summary>
-        public static FileInfo GetMachineConfigurationFile()
+        public static FileInfo GetGlobalConfigurationFile()
         {
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             folder = Path.Combine(folder, "dotnet campus", "BuildKit");
