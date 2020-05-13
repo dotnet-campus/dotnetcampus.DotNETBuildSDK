@@ -49,7 +49,6 @@ namespace dotnetCampus.DotNETBuild.Utils
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
             };
-            Log.Info($"执行命令 {exeName} {arguments}");
             var process = Process.Start(processStartInfo);
 
             var output = process.StandardOutput.ReadToEnd();
@@ -58,8 +57,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             {
                 success = process.ExitCode == 0;
             }
-
-            Log.Info(output);
 
             return (success, output);
         }

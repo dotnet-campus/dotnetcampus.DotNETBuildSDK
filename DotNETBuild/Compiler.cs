@@ -3,16 +3,17 @@ using System.IO;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild
 {
     /// <summary>
     /// 编译器
     /// </summary>
-    public class Compiler
+    public class Compiler : DotNetBuildTool
     {
         /// <inheritdoc />
-        public Compiler(IAppConfigurator appConfigurator = null)
+        public Compiler(IAppConfigurator appConfigurator = null, ILogger logger = null) : base(appConfigurator, logger)
         {
             _appConfigurator = appConfigurator;
 
@@ -21,12 +22,16 @@ namespace dotnetCampus.DotNETBuild
             Nuget = new NuGet(AppConfigurator);
             MsBuild = new MsBuild(AppConfigurator);
             TestHelper = new TestHelper(AppConfigurator);
+
+            //_logger = logger ?? AppConfigurator.Of<LogConfiguration>().GetLogger();
         }
 
-        /// <summary>
-        /// 应用配置
-        /// </summary>
-        public IAppConfigurator AppConfigurator => _appConfigurator ?? Context.AppConfigurator.GetAppConfigurator();
+        //private ILogger _logger;
+
+        ///// <summary>
+        ///// 应用配置
+        ///// </summary>
+        //public IAppConfigurator AppConfigurator => _appConfigurator ?? Context.AppConfigurator.GetAppConfigurator();
 
         /// <summary>
         /// 编译配置
@@ -49,7 +54,7 @@ namespace dotnetCampus.DotNETBuild
             var fileSniff = new FileSniff(AppConfigurator);
             fileSniff.Sniff();
         }
-        
+
         public NuGet Nuget { get; }
 
         public MsBuild MsBuild { get; }
@@ -62,8 +67,6 @@ namespace dotnetCampus.DotNETBuild
             return nuGet.Restore(command);
         }
 
-
-
         protected (bool success, string output) DotNetBuild(string command = "")
         {
             if (string.IsNullOrEmpty(command))
@@ -71,12 +74,12 @@ namespace dotnetCampus.DotNETBuild
                 command = $" {ProcessCommand.ToArgumentPath(CompileConfiguration.SlnPath)}";
             }
 
-            return ProcessCommand.ExecuteCommand("dotnet", $"build {command}");
+            return ExecuteCommand("dotnet", $"build {command}");
         }
 
         protected void WriteLog(string message)
         {
-            Log.Info(message);
+            Logger.LogInformation(message);
         }
 
         /// <summary>
@@ -87,7 +90,7 @@ namespace dotnetCampus.DotNETBuild
         /// <returns></returns>
         protected (bool success, string output) Command(string str, string workingDirectory = "")
         {
-            return ProcessCommand.ExecuteCommand("cmd.exe", $"/c {str}", workingDirectory);
+            return ExecuteCommand("cmd.exe", $"/c {str}", workingDirectory);
         }
     }
 }

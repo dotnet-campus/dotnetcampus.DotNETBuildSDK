@@ -1,12 +1,14 @@
 ﻿using System;
-using System.IO;
+using System.Collections.Concurrent;
 using dotnetCampus.DotNETBuild.Context;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
     public static class Log
     {
-        public static LogLevel LogLevel { set; get; } = LogLevel.Info;
+        public static LogLevel LogLevel { set; get; }
 
         public static void Debug(string message)
         {
@@ -32,7 +34,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Info(string message)
         {
-            if (LogLevel < LogLevel.Info)
+            if (LogLevel < LogLevel.Information)
             {
                 return;
             }
@@ -57,25 +59,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             var appConfigurator = AppConfigurator.GetAppConfigurator();
             var logConfiguration = appConfigurator.Of<LogConfiguration>();
 
-            var folder = Path.GetFullPath(logConfiguration.BuildLogDirectory);
-            Directory.CreateDirectory(folder);
-
-            var file = Path.Combine(folder, $"DotNETBuild {DateTime.Now:yyMMddhhmmss}.txt");
-
-            if (!string.IsNullOrEmpty(logConfiguration.BuildLogFile))
-            {
-                file = logConfiguration.BuildLogFile;
-            }
-            else
-            {
-                logConfiguration.BuildLogFile = file;
-            }
-
-            var fileLog =
-                new FileLog(new FileInfo(file));
-            Log.Debug($"日志文件 {fileLog.LogFile.FullName}");
-
-            FileLog = fileLog;
+            FileLog = FileLogProvider.GetFileLog(logConfiguration);
         }
     }
 }
