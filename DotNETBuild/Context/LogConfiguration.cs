@@ -1,4 +1,5 @@
 ﻿using dotnetCampus.Configurations;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
@@ -25,7 +26,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 if (configurationString == null)
                 {
                     // 默认输出等级
-                    return LogLevel.Info;
+                    return LogLevel.Information;
                 }
                 else
                 {
@@ -35,7 +36,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                     }
 
                     // 默认输出等级
-                    return LogLevel.Info;
+                    return LogLevel.Information;
                 }
             }
         }

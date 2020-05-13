@@ -3,21 +3,21 @@ using System.IO;
 using System.Reflection;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
     /// <summary>
     /// 寻找文件，将找到的文件放在 AppConfigurator 配置
     /// </summary>
-    public class FileSniff
+    public class FileSniff : DotNetBuildTool
     {
         /// <summary>
         /// 创建协助寻找文件
         /// </summary>
         /// <param name="appConfigurator"></param>
-        public FileSniff(IAppConfigurator appConfigurator)
+        public FileSniff(IAppConfigurator appConfigurator) : base(appConfigurator)
         {
-            AppConfigurator = appConfigurator;
         }
 
         /// <summary>
@@ -27,12 +27,12 @@ namespace dotnetCampus.DotNETBuild.Utils
         {
             FindNugetFile();
 
-            Log.Info("寻找 nuget 文件完成");
+            Logger.LogInformation("寻找 nuget 文件完成");
 
             var msBuild = new MsBuild(AppConfigurator);
             msBuild.FindMsBuildFile();
 
-            Log.Info("寻找 msbuild 文件完成");
+            Logger.LogInformation("寻找 msbuild 文件完成");
 
             FindCodeDirectory();
 
@@ -47,14 +47,14 @@ namespace dotnetCampus.DotNETBuild.Utils
             var codeConfiguration = CompileConfiguration;
             if (!string.IsNullOrEmpty(codeConfiguration.CodeDirectory))
             {
-                Log.Info($"代码文件夹 {codeConfiguration.CodeDirectory}");
+                Logger.LogInformation($"代码文件夹 {codeConfiguration.CodeDirectory}");
                 return;
             }
 
-            Log.Info("查找代码文件夹，通过定位 .git 文件夹方式");
+            Logger.LogInformation("查找代码文件夹，通过定位 .git 文件夹方式");
 
             var directory = Environment.CurrentDirectory;
-            Log.Info($"从 {directory} 向上寻找");
+            Logger.LogInformation($"从 {directory} 向上寻找");
 
             if (FindCodeDirectory(directory))
             {
@@ -65,7 +65,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             if (assembly != null)
             {
                 directory = Path.GetDirectoryName(assembly.Location);
-                Log.Info($"从 {directory} 向上寻找");
+                Logger.LogInformation($"从 {directory} 向上寻找");
 
                 if (FindCodeDirectory(directory))
                 {
@@ -81,10 +81,11 @@ namespace dotnetCampus.DotNETBuild.Utils
             {
                 if (CheckCodeDirectory(directory))
                 {
-                    Log.Info($"找到代码文件夹 {directory}");
+                    Logger.LogInformation($"找到代码文件夹 {directory}");
                     codeConfiguration.CodeDirectory = directory;
                     return true;
                 }
+
                 directory = Directory.GetParent(directory)?.FullName;
             }
 
@@ -120,7 +121,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (string.IsNullOrEmpty(slnFile))
             {
-                Log.Info($"没有在配置文件找到 CodeConfiguration.SlnFile 配置项，将进行自动查找");
+                Logger.LogInformation($"没有在配置文件找到 CodeConfiguration.SlnFile 配置项，将进行自动查找");
 
                 var directory = Environment.CurrentDirectory;
 
@@ -133,13 +134,14 @@ namespace dotnetCampus.DotNETBuild.Utils
 
                 if (slnFileList.Length > 1)
                 {
-                    throw new ArgumentException($"在{Environment.CurrentDirectory}找到大于一个 sln 文件，找到的文件如下：{string.Join(';', slnFileList)}");
+                    throw new ArgumentException(
+                        $"在{Environment.CurrentDirectory}找到大于一个 sln 文件，找到的文件如下：{string.Join(';', slnFileList)}");
                 }
                 else if (slnFileList.Length == 1)
                 {
                     slnFile = slnFileList[0];
                     codeConfiguration.SlnPath = slnFile;
-                    Log.Info($"找到sln文件 {slnFile}");
+                    Logger.LogInformation($"找到sln文件 {slnFile}");
                 }
                 else
                 {
@@ -158,15 +160,11 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
-
         private void FindNugetFile()
         {
             var nuGet = new NuGet(AppConfigurator);
             nuGet.GetNugetFile();
         }
-
-
-        public IAppConfigurator AppConfigurator { get; }
 
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
     }

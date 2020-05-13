@@ -4,12 +4,11 @@ using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
-    public class MsBuild
+    public class MsBuild : DotNetBuildTool
     {
         /// <inheritdoc />
-        public MsBuild(IAppConfigurator appConfigurator)
+        public MsBuild(IAppConfigurator appConfigurator) : base(appConfigurator)
         {
-            AppConfigurator = appConfigurator;
         }
 
         /// <summary>
@@ -19,7 +18,8 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <param name="configuration"></param>
         /// <param name="slnPath"></param>
         /// <param name="msbuildPath"></param>
-        public void Build(bool parallel = true, MsBuildConfiguration configuration = MsBuildConfiguration.Release, string slnPath = "", string msbuildPath = "")
+        public void Build(bool parallel = true, MsBuildConfiguration configuration = MsBuildConfiguration.Release,
+            string slnPath = "", string msbuildPath = "")
         {
             var command = "";
             if (parallel)
@@ -51,7 +51,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 msbuildPath = CompileConfiguration.MsBuildFile;
             }
 
-            ProcessCommand.RunCommand(msbuildPath, command);
+            ExecuteCommand(msbuildPath, command);
         }
 
 
@@ -92,11 +92,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             {
                 CompileConfiguration.Vs2019ProfessionalMsBuild = vs2019Professional;
             }
-
-
         }
-
-        public IAppConfigurator AppConfigurator { get; }
 
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
 

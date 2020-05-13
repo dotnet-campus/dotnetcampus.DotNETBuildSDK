@@ -5,15 +5,15 @@ using System.Net;
 using System.Reflection;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
-    public class NuGet
+    public class NuGet : DotNetBuildTool
     {
         /// <inheritdoc />
-        public NuGet(IAppConfigurator appConfigurator)
+        public NuGet(IAppConfigurator appConfigurator) : base(appConfigurator)
         {
-            AppConfigurator = appConfigurator;
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 command = ProcessCommand.ToArgumentPath(CompileConfiguration.SlnPath);
             }
 
-            return ProcessCommand.ExecuteCommand(GetNugetFile(), $"restore {command}");
+            return ExecuteCommand(GetNugetFile(), $"restore {command}");
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             var command =
                 $"restore {ProcessCommand.ToArgumentPath(slnPath.FullName)} -MSBuildPath {ProcessCommand.ToArgumentPath(msbuildPath)}";
 
-            ProcessCommand.RunCommand(GetNugetFile(), command);
+            ExecuteCommand(GetNugetFile(), command);
         }
 
         public string GetNugetFile()
@@ -59,7 +59,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (!string.IsNullOrEmpty(toolConfiguration.NugetPath))
             {
-                Log.Info($"获取配置文件的 NuGet 文件 {toolConfiguration.NugetPath}");
+                Logger.LogInformation($"获取配置文件的 NuGet 文件 {toolConfiguration.NugetPath}");
                 return;
             }
 
@@ -84,9 +84,9 @@ namespace dotnetCampus.DotNETBuild.Utils
                 return;
             }
 
-            Log.Info($"找不到 {file} 文件，从资源拿到文件");
+            Logger.LogInformation($"找不到 {file} 文件，从资源拿到文件");
 
-            Log.Info($"从服务器下载 nuget 文件");
+            Logger.LogInformation($"从服务器下载 nuget 文件");
 
             var directory = Path.GetDirectoryName(file);
             Directory.CreateDirectory(directory);
@@ -97,15 +97,13 @@ namespace dotnetCampus.DotNETBuild.Utils
             if (File.Exists(file))
             {
                 ToolConfiguration.NugetPath = file;
-                Log.Info($"下载 {file} 完成");
+                Logger.LogInformation($"下载 {file} 完成");
             }
             else
             {
                 throw new ArgumentException($"找不到 Nuget.exe 文件，在{file}没有找到文件，可以通过 ToolConfiguration.NugetPath 设置");
             }
         }
-
-        public IAppConfigurator AppConfigurator { get; }
 
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
 
@@ -118,7 +116,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             foreach (var file in fileList)
             {
-                Log.Info($"开始上传{file}");
+                Logger.LogInformation($"开始上传{file}");
                 PublishNupkg(new FileInfo(file));
             }
         }
@@ -129,7 +127,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (string.IsNullOrEmpty(nupkgDirectory))
             {
-                Log.Info($"找不到上传 nuget 的文件夹，请确定 nuget 文件已经生成，将进行自动寻找");
+                Logger.LogInformation($"找不到上传 nuget 的文件夹，请确定 nuget 文件已经生成，将进行自动寻找");
                 var fileList = Directory.GetFiles(CompileConfiguration.CodeDirectory, "*.nupkg", SearchOption.AllDirectories);
                 if (fileList.Length == 0)
                 {
@@ -168,7 +166,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             var temp = ProcessCommand.ToArgumentPath(nupkgFile.FullName);
 
-            ProcessCommand.ExecuteCommand(nugetPath,
+            ExecuteCommand(nugetPath,
                 $"push {temp} -Source {nugetConfiguration.Source} -ApiKey {nugetConfiguration.ApiKey}");
         }
 
@@ -177,12 +175,12 @@ namespace dotnetCampus.DotNETBuild.Utils
             var nupkgDirectory = CompileConfiguration.NupkgDirectory;
             if (string.IsNullOrEmpty(nupkgDirectory))
             {
-                Log.Info($"没有输出 nuget 包文件夹，自动查找");
+                Logger.LogInformation($"没有输出 nuget 包文件夹，自动查找");
                 var directory = Path.Combine(CompileConfiguration.CodeDirectory, @"bin\Release");
                 if (CheckNupkgDirectory(directory))
                 {
                     CompileConfiguration.NupkgDirectory = directory;
-                    Log.Info($"找到 nuget 包文件夹 {directory}");
+                    Logger.LogInformation($"找到 nuget 包文件夹 {directory}");
                     return directory;
                 }
 
@@ -190,7 +188,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 if (CheckNupkgDirectory(directory))
                 {
                     CompileConfiguration.NupkgDirectory = directory;
-                    Log.Info($"找到 nuget 包文件夹 {directory}");
+                    Logger.LogInformation($"找到 nuget 包文件夹 {directory}");
                     return directory;
                 }
             }

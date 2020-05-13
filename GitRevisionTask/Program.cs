@@ -3,6 +3,7 @@ using System.Threading;
 using dotnetCampus.DotNETBuild;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.GitRevisionTask
 {

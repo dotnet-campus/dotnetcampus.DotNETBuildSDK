@@ -6,6 +6,7 @@ using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
 {

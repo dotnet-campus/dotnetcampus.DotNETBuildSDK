@@ -4,6 +4,7 @@ using System.IO;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.DotNETBuild.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace BuildKitTool
 {
@@ -66,7 +67,7 @@ namespace BuildKitTool
                 // 根据配置进行写入
                 if (configuration == ConfigurationEnum.Release)
                 {
-                    currentConfiguration[logLevel] = LogLevel.Info.ToString();
+                    currentConfiguration[logLevel] = LogLevel.Information.ToString();
                 }
                 else
                 {
