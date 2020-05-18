@@ -152,8 +152,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <summary>
         /// 发布指定的文件
         /// </summary>
-        /// <param name="nupkgFile"></param>
-        public void PublishNupkg(FileInfo nupkgFile)
+        public void PublishNupkg(FileInfo nupkgFile, bool skipDuplicate = true)
         {
             if (!File.Exists(nupkgFile.FullName))
             {
@@ -164,11 +163,52 @@ namespace dotnetCampus.DotNETBuild.Utils
             var nugetConfiguration = AppConfigurator.Of<NugetConfiguration>();
             var nugetPath = toolConfiguration.NugetPath;
 
-            var temp = ProcessCommand.ToArgumentPath(nupkgFile.FullName);
+            Logger.LogInformation($"开始发布主要的源 {nugetConfiguration.Source}");
+            RunPublishNupkg(nugetPath, nupkgFile.FullName, nugetConfiguration.Source,nugetConfiguration.ApiKey, skipDuplicate);
 
-            ExecuteCommand(nugetPath,
-                $"push {temp} -Source {nugetConfiguration.Source} -ApiKey {nugetConfiguration.ApiKey}");
+            // 推送额外的源，推送失败自动忽略
+            var attachedSource = nugetConfiguration.AttachedSource;
+            if (attachedSource.Length > 0)
+            {
+                Logger.LogInformation($"额外推送的源 NugetConfiguration.AttachedSource 有 {attachedSource.Length} 个");
+                for (var i = 0; i < attachedSource.Length; i++)
+                {
+                    try
+                    {
+                        // 依据 Url 里面不包含空格，可以使用空格分开 APIKey 和源
+                        var splitSource = attachedSource[i].Split(" ");
+                        if (splitSource.Length>0)
+                        {
+                            string source = splitSource[0];
+                            string apiKey = null;
+                            if (splitSource.Length > 1)
+                            {
+                                apiKey = splitSource[1];
+                            }
+
+                            if (!string.IsNullOrEmpty(source))
+                            {
+                                Logger.LogInformation($"正在推送第 {i}/{attachedSource.Length} 个额外 NuGet 源 {source}");
+                                RunPublishNupkg(nugetPath, nupkgFile.FullName, source, apiKey, skipDuplicate);
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.LogWarning(e,"推送额外 NuGet 源");
+                    }
+                }
+            }
         }
+
+        public void RunPublishNupkg(string nugetToolPath, string nupkgFile, string source, string apiKey = "",
+            bool skipDuplicate = true)
+        {
+            var temp = ProcessCommand.ToArgumentPath(nupkgFile);
+            ExecuteCommand(nugetToolPath,
+                $"push {temp} -Source {source} {(string.IsNullOrEmpty(apiKey) ? "" : $"-ApiKey {apiKey}")} {(skipDuplicate ? "-SkipDuplicate" : "")}");
+        }
+
 
         private string FindNupkgDirectory()
         {
