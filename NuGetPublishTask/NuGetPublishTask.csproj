@@ -9,7 +9,7 @@
         <RootNamespace>dotnetCampus.NuGetPublishTask</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.207">
+        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.309">
         </PackageReference>
     </ItemGroup>
 </Project>
