@@ -46,3 +46,7 @@ dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 ```
 
 此配置项用来解决某些内部项目需要用到一些内部工具，这部分内部工具不适合开源，但是又期望在 dotnet buildkit init 的时候自动安装
+
+## 更多工具
+
+另一个比较完善的构建辅助项目 [nuke-build/nuke: The AKEless Build System for C#/.NET](https://github.com/nuke-build/nuke )
