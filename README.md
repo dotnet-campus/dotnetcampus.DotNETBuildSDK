@@ -50,3 +50,5 @@ dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 ## 更多工具
 
 另一个比较完善的构建辅助项目 [nuke-build/nuke: The AKEless Build System for C#/.NET](https://github.com/nuke-build/nuke )
+
+[dotnet/source-build: A repository to track efforts to produce a source tarball of the .NET Core SDK and all its components](https://github.com/dotnet/source-build )
