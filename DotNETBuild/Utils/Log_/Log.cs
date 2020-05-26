@@ -12,7 +12,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Debug(string message)
         {
-            if (LogLevel < LogLevel.Debug)
+            if (LogLevel >= LogLevel.Debug)
             {
                 return;
             }
@@ -23,7 +23,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Warning(string message)
         {
-            if (LogLevel < LogLevel.Warning)
+            if (LogLevel >= LogLevel.Warning)
             {
                 return;
             }
@@ -34,7 +34,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Info(string message)
         {
-            if (LogLevel < LogLevel.Information)
+            if (LogLevel >= LogLevel.Information)
             {
                 return;
             }
