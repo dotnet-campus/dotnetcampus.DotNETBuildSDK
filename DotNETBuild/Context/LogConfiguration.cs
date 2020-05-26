@@ -5,6 +5,11 @@ namespace dotnetCampus.DotNETBuild.Utils
 {
     public class LogConfiguration : Configuration
     {
+        /// <inheritdoc />
+        public LogConfiguration() : base("")
+        {
+        }
+
         public string BuildLogDirectory
         {
             set => SetValue(value);

@@ -9,6 +9,11 @@ namespace dotnetCampus.DotNETBuild.Context
     /// </summary>
     public class ToolConfiguration : Configuration
     {
+        /// <inheritdoc />
+        public ToolConfiguration() : base("")
+        {
+        }
+
         /// <summary>
         /// Nuget路径
         /// </summary>

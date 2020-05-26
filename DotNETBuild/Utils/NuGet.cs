@@ -128,7 +128,8 @@ namespace dotnetCampus.DotNETBuild.Utils
             if (string.IsNullOrEmpty(nupkgDirectory))
             {
                 Logger.LogInformation($"找不到上传 nuget 的文件夹，请确定 nuget 文件已经生成，将进行自动寻找");
-                var fileList = Directory.GetFiles(CompileConfiguration.CodeDirectory, "*.nupkg", SearchOption.AllDirectories);
+                var fileList = Directory.GetFiles(CompileConfiguration.CodeDirectory, "*.nupkg",
+                    SearchOption.AllDirectories);
                 if (fileList.Length == 0)
                 {
                     throw new ArgumentException("找不到nupkg文件");
@@ -163,11 +164,12 @@ namespace dotnetCampus.DotNETBuild.Utils
             var nugetConfiguration = AppConfigurator.Of<NugetConfiguration>();
             var nugetPath = toolConfiguration.NugetPath;
 
-            Logger.LogInformation($"开始发布主要的源 {nugetConfiguration.Source}");
-            RunPublishNupkg(nugetPath, nupkgFile.FullName, nugetConfiguration.Source,nugetConfiguration.ApiKey, skipDuplicate);
+            Logger.LogInformation($"开始发布主要的源 {nugetConfiguration.NuGetSource}");
+            RunPublishNupkg(nugetPath, nupkgFile.FullName, nugetConfiguration.NuGetSource,
+                nugetConfiguration.NuGetApiKey, skipDuplicate);
 
             // 推送额外的源，推送失败自动忽略
-            var attachedSource = nugetConfiguration.AttachedSource;
+            var attachedSource = nugetConfiguration.AttachedNuGetSource;
             if (attachedSource.Length > 0)
             {
                 Logger.LogInformation($"额外推送的源 NugetConfiguration.AttachedSource 有 {attachedSource.Length} 个");
@@ -177,7 +179,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                     {
                         // 依据 Url 里面不包含空格，可以使用空格分开 APIKey 和源
                         var splitSource = attachedSource[i].Split(" ");
-                        if (splitSource.Length>0)
+                        if (splitSource.Length > 0)
                         {
                             string source = splitSource[0];
                             string apiKey = null;
@@ -195,7 +197,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                     }
                     catch (Exception e)
                     {
-                        Logger.LogWarning(e,"推送额外 NuGet 源");
+                        Logger.LogWarning(e, "推送额外 NuGet 源");
                     }
                 }
             }

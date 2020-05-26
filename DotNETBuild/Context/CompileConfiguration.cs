@@ -8,6 +8,11 @@ namespace dotnetCampus.DotNETBuild.Context
     /// </summary>
     public class CompileConfiguration : Configuration
     {
+        /// <inheritdoc />
+        public CompileConfiguration() : base("")
+        {
+        }
+
         /// <summary>
         /// 获取 sln 文件路径
         /// </summary>
