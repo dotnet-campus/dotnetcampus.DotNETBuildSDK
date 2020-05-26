@@ -4,12 +4,13 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <PackAsTool>true</PackAsTool>
-        <ToolCommandName>NuGetPublishTask</ToolCommandName>
-        <AssemblyName>dotnetCampus.NuGetPublishTask</AssemblyName>
-        <RootNamespace>dotnetCampus.NuGetPublishTask</RootNamespace>
+        <ToolCommandName>DotNETTask</ToolCommandName>
+        <AssemblyName>dotnetCampus.DotNETTask</AssemblyName>
+        <RootNamespace>dotnetCampus.DotNETTask</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.311">
         </PackageReference>
     </ItemGroup>
+
 </Project>

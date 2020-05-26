@@ -116,6 +116,18 @@ namespace dotnetCampus.DotNETBuild.Context
             get => GetString();
         }
 
+        /// <summary>
+        /// 应用的版本号
+        /// </summary>
+        public string AppVersion
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// 构建次数
+        /// </summary>
         public string BuildVersion
         {
             set => SetValue(value);
