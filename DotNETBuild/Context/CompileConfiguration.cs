@@ -117,6 +117,15 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
+        /// 程序集记录的版本号
+        /// </summary>
+        public string AssemblyVersion
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
         /// 应用的版本号
         /// </summary>
         public string AppVersion

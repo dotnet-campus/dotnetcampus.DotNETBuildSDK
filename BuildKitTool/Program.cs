@@ -66,6 +66,7 @@ namespace BuildKitTool
                 "dotnetCampus.NuGetTask",
                 "dotnetCampus.DotNETTask",
                 "dotnetCampus.GetAssemblyVersionTask",
+                "dotnetCampus.WriteAppVersionTask",
 
                 // https://github.com/dotnet-campus/dotnetCampus.TagToVersion
                 "dotnetCampus.TagToVersion",

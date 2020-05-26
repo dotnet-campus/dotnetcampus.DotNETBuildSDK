@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <PackAsTool>true</PackAsTool>
+        <ToolCommandName>GetAssemblyVersionTask</ToolCommandName>
+        <AssemblyName>dotnetCampus.WriteAppVersionTask</AssemblyName>
+        <RootNamespace>dotnetCampus.WriteAppVersionTask</RootNamespace>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.312"></PackageReference>
+        <PackageReference Include="CommandLineParser" Version="2.8.0"></PackageReference>
+    </ItemGroup>
+
+</Project>

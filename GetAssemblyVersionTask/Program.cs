@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
 using CommandLine;
-using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
-namespace GetAssemblyVersionTask
+namespace dotnetCampus.GetAssemblyVersionTask
 {
     class Program
     {
@@ -25,10 +22,25 @@ namespace GetAssemblyVersionTask
 #endif
 
                 var file = option.AssemblyInfoFile;
-                var codeDirectory = compileConfiguration.CodeDirectory;
 
-                file = Path.Combine(codeDirectory, file);
-                file = Path.GetFullPath(file);
+                if (string.IsNullOrEmpty(file))
+                {
+                    file = appConfigurator.Default["AssemblyInfoFile"];
+                }
+
+                if (string.IsNullOrEmpty(file))
+                {
+                    throw new ArgumentException($"Can not find AssemblyInfoFile, try to input --AssemblyInfoFile value");
+                }
+
+                if (!Path.IsPathRooted(file))
+                {
+                    var codeDirectory = compileConfiguration.CodeDirectory;
+                    file = Path.Combine(codeDirectory, file);
+                    file = Path.GetFullPath(file);
+                }
+
+                appConfigurator.Default["AssemblyInfoFile"] = file;
 
                 Log.Info($"Start read assmebly info file {file}");
 
@@ -46,12 +58,13 @@ namespace GetAssemblyVersionTask
                 Log.Info($"VersionFormatRegex: {formatRegex}");
 
                 var content = File.ReadAllText(file);
-                var match = Regex.Match(content,formatRegex);
+                var match = Regex.Match(content, formatRegex);
                 if (match.Success)
                 {
                     var assemblyVersion = match.Groups[1].Value;
 
                     Log.Info($"assembly version: {assemblyVersion}");
+                    appConfigurator.Default["AssemblyVersion"] = assemblyVersion;
 
                     var lastVersion = 0;
                     var gitConfiguration = appConfigurator.Of<GitConfiguration>();
@@ -75,10 +88,9 @@ namespace GetAssemblyVersionTask
 
     public class AssmeblyOption
     {
-        [Option('f', "AssemblyInfoFile", Required = true, HelpText = "The assmebly info file")]
+        [Option('f', "AssemblyInfoFile", Required = false, HelpText = "The assmebly info file")]
         public string AssemblyInfoFile { set; get; }
 
-        //version-format
         [Option('r', "VersionFormat", Required = false, HelpText = "The version format regex, default is Version = \\\"(\\d+.\\d+.\\d+)\\\";")]
         public string VersionFormatRegex { set; get; }
     }
