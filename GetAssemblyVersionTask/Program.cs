@@ -61,26 +61,6 @@ namespace GetAssemblyVersionTask
             });
 
         }
-
-        /// <summary>
-        /// 编译配置
-        /// </summary>
-        public class CompileConfiguration : Configuration
-        {
-            /// <inheritdoc />
-            public CompileConfiguration() : base("")
-            {
-            }
-
-            /// <summary>
-            /// 版本号
-            /// </summary>
-            public string AppVersion
-            {
-                set => SetValue(value);
-                get => GetString();
-            }
-        }
     }
 
     public class AssmeblyOption
