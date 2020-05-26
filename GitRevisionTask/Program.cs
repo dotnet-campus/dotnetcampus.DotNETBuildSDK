@@ -19,10 +19,14 @@ namespace dotnetCampus.GitRevisionTask
 
             Console.WriteLine(gitCommitRevisionCount);
 
-            var gitConfiguration = AppConfigurator.GetAppConfigurator().Of<GitConfiguration>();
+            var fileConfigurationRepo = ConfigurationHelper.GetCurrentConfiguration();
+            var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
+            var gitConfiguration = appConfigurator.Of<GitConfiguration>();
             gitConfiguration.GitCount = gitCommitRevisionCount;
 
             gitConfiguration.CurrentCommit = git.GetCurrentCommit();
+
+            fileConfigurationRepo.SaveAsync().Wait();
         }
     }
 }
