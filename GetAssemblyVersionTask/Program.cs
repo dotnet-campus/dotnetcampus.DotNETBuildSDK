@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
 using CommandLine;
-using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
-namespace GetAssemblyVersionTask
+namespace dotnetCampus.GetAssemblyVersionTask
 {
     class Program
     {

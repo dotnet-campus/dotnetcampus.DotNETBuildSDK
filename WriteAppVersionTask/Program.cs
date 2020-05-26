@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using CommandLine;
-using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
-namespace WriteAppVersionTask
+namespace dotnetCampus.WriteAppVersionTask
 {
-
-
     class Program
     {
         static void Main(string[] args)
