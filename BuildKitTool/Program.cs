@@ -64,6 +64,7 @@ namespace BuildKitTool
             {
                 "dotnetCampus.GitRevisionTask",
                 "dotnetCampus.NuGetTask",
+                "dotnetCampus.DotNETTask",
 
                 // https://github.com/dotnet-campus/dotnetCampus.TagToVersion
                 "dotnetCampus.TagToVersion",
