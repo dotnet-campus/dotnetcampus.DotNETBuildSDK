@@ -2,7 +2,10 @@
 
 提供dotnet打包方法
 
-![](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/workflows/.NET%20Core/badge.svg)
+| Build | NuGet |
+|--|--|
+|![](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/workflows/.NET%20Core/badge.svg) |[![](https://img.shields.io/nuget/v/dotnetCampus.DotNETBuildSDK.svg)](https://www.nuget.org/packages/dotnetCampus.DotNETBuildSDK)|
+
 
 每个工具之间没有任何依赖，每个工具都同时输出到控制台和写入到 build.coin 配置文件
 
@@ -36,16 +39,20 @@
 
 ## 配置列表
 
-### Tool.DotNETToolList
+### DotNETToolList
 
 需要安装的工具列表，多个工具之间使用分号分割
 
 ```
-Tool.DotNETToolList
+DotNETToolList
 dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 ```
 
 此配置项用来解决某些内部项目需要用到一些内部工具，这部分内部工具不适合开源，但是又期望在 dotnet buildkit init 的时候自动安装
+
+### AppVersion
+
+应用的版本，将会在 GetAssemblyVersionTask 读取时写入
 
 ## 更多工具
 
