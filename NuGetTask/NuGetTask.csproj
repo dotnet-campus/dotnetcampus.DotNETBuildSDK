@@ -1,17 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <PackAsTool>true</PackAsTool>
-        <ToolCommandName>NuGetTask</ToolCommandName>
-        <AssemblyName>dotnetCampus.NuGetTask</AssemblyName>
-        <RootNamespace>dotnetCampus.NuGetTask</RootNamespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.207">
-        </PackageReference>
-    </ItemGroup>
-
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>NuGetTask</ToolCommandName>
+    <AssemblyName>dotnetCampus.NuGetTask</AssemblyName>
+    <RootNamespace>dotnetCampus.NuGetTask</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.312"></PackageReference>
+  </ItemGroup>
 </Project>
