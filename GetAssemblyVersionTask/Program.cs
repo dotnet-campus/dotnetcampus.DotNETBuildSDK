@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
 using CommandLine;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
@@ -12,11 +14,20 @@ namespace GetAssemblyVersionTask
     {
         static void Main(string[] args)
         {
-            var appConfigurator = AppConfigurator.GetAppConfigurator();
-            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
             Parser.Default.ParseArguments<AssmeblyOption>(args).WithParsed(option =>
             {
+                var appConfigurator = AppConfigurator.GetAppConfigurator();
+                var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+
+#if DEBUG
+                var fileSniff = new FileSniff(appConfigurator);
+                fileSniff.Sniff();
+#endif
+
                 var file = option.AssemblyInfoFile;
+                var codeDirectory = compileConfiguration.CodeDirectory;
+
+                file = Path.Combine(codeDirectory, file);
                 file = Path.GetFullPath(file);
 
                 Log.Info($"Start read assmebly info file {file}");
@@ -32,7 +43,7 @@ namespace GetAssemblyVersionTask
                     formatRegex = "Version = \\\"(\\d+.\\d+.\\d+)\\\";";
                 }
 
-                Log.Info($"VersionFormatRegex={formatRegex}");
+                Log.Info($"VersionFormatRegex: {formatRegex}");
 
                 var content = File.ReadAllText(file);
                 var match = Regex.Match(content,formatRegex);
@@ -59,7 +70,6 @@ namespace GetAssemblyVersionTask
                     throw new ArgumentException($"Can not math VersionFormatRegex={formatRegex} in assmebly info file {file} \r\n The file content:\r\n{content}");
                 }
             });
-
         }
     }
 
