@@ -52,6 +52,7 @@ namespace GetAssemblyVersionTask
                     var assemblyVersion = match.Groups[1].Value;
 
                     Log.Info($"assembly version: {assemblyVersion}");
+                    appConfigurator.Default["AssemblyVersion"] = assemblyVersion;
 
                     var lastVersion = 0;
                     var gitConfiguration = appConfigurator.Of<GitConfiguration>();
