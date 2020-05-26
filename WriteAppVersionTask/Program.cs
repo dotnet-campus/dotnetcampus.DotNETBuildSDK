@@ -1,12 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using CommandLine;
+using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
 namespace WriteAppVersionTask
 {
+
+
     class Program
     {
         static void Main(string[] args)
@@ -22,10 +26,26 @@ namespace WriteAppVersionTask
 #endif
 
                 var file = option.AssemblyInfoFile;
-                var codeDirectory = compileConfiguration.CodeDirectory;
 
-                file = Path.Combine(codeDirectory, file);
-                file = Path.GetFullPath(file);
+                if (string.IsNullOrEmpty(file))
+                {
+                    file = appConfigurator.Default["AssemblyInfoFile"];
+                }
+
+                if (string.IsNullOrEmpty(file))
+                {
+                    throw new ArgumentException(
+                        $"Can not find AssemblyInfoFile, try to input --AssemblyInfoFile value");
+                }
+
+                if (!Path.IsPathRooted(file))
+                {
+                    var codeDirectory = compileConfiguration.CodeDirectory;
+                    file = Path.Combine(codeDirectory, file);
+                    file = Path.GetFullPath(file);
+                }
+
+                appConfigurator.Default["AssemblyInfoFile"] = file;
 
                 Log.Info($"assmebly info file: {file}");
 
