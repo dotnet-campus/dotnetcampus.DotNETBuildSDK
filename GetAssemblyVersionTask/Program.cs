@@ -40,7 +40,7 @@ namespace GetAssemblyVersionTask
                 {
                     var codeDirectory = compileConfiguration.CodeDirectory;
                     file = Path.Combine(codeDirectory, file);
-                    file = P ath.GetFullPath(file);
+                    file = Path.GetFullPath(file);
                 }
 
                 appConfigurator.Default["AssemblyInfoFile"] = file;
