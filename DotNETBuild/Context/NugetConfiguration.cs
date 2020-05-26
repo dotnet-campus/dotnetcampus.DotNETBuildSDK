@@ -6,13 +6,18 @@ namespace dotnetCampus.DotNETBuild.Context
 {
     public class NugetConfiguration : Configuration
     {
-        public string ApiKey
+        /// <inheritdoc />
+        public NugetConfiguration() : base("")
+        {
+        }
+
+        public string NuGetApiKey
         {
             set => SetValue(value);
             get => GetString();
         }
 
-        public string Source
+        public string NuGetSource
         {
             set => SetValue(value);
             get => GetString();
@@ -23,7 +28,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// <para></para>
         /// 格式： 每行一个附加的源，按 Source ApiKey 的格式，其中 ApiKey 可以忽略
         /// </summary>
-        public string[] AttachedSource
+        public string[] AttachedNuGetSource
         {
             set => SetValue(string.Join("\n", value));
             get
