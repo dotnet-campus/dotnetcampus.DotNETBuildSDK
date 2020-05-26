@@ -79,7 +79,6 @@ namespace GetAssemblyVersionTask
         [Option('f', "AssemblyInfoFile", Required = true, HelpText = "The assmebly info file")]
         public string AssemblyInfoFile { set; get; }
 
-        //version-format
         [Option('r', "VersionFormat", Required = false, HelpText = "The version format regex, default is Version = \\\"(\\d+.\\d+.\\d+)\\\";")]
         public string VersionFormatRegex { set; get; }
     }
