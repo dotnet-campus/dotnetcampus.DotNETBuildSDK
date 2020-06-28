@@ -85,6 +85,8 @@ namespace dotnetCampus.WriteAppVersionTask
 
                 content = content.Replace(match.Value, match.Value.Replace(match.Groups[1].Value, appVersion));
 
+                File.WriteAllText(file, content);
+
                 Log.Info($"Wrote the app verion {appVersion} to assembly file {file}");
             });
         }
