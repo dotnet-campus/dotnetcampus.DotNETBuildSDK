@@ -83,7 +83,7 @@ namespace dotnetCampus.WriteAppVersionTask
                         $"Can not math VersionFormatRegex={formatRegex} in assmebly info file {file} \r\n The file content:\r\n{content}");
                 }
 
-                content = content.Replace(match.Value, $"Version = \"{appVersion}\";");
+                content = content.Replace(match.Value, match.Value.Replace(match.Groups[1].Value, appVersion));
 
                 File.WriteAllText(file, content);
 
