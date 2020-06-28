@@ -62,19 +62,22 @@ namespace dotnetCampus.GetAssemblyVersionTask
                 if (match.Success)
                 {
                     var assemblyVersion = match.Groups[1].Value;
+                    var fieldCount = GetVersionFieldCount(assemblyVersion);
 
                     Log.Info($"assembly version: {assemblyVersion}");
                     appConfigurator.Default["AssemblyVersion"] = assemblyVersion;
 
                     var lastVersion = 0;
                     var gitConfiguration = appConfigurator.Of<GitConfiguration>();
-                    if (gitConfiguration.GitCount != null)
+                    if (fieldCount == 3 && gitConfiguration.GitCount != null)
                     {
                         Log.Info($"GitCount: {gitConfiguration.GitCount}");
                         lastVersion = gitConfiguration.GitCount.Value;
                     }
 
-                    var appVersion = $"{assemblyVersion}.{lastVersion}";
+                    var appVersion = fieldCount == 3
+                        ? $"{assemblyVersion}.{lastVersion}"
+                        : assemblyVersion;
                     Log.Info($"app version: {appVersion}");
                     compileConfiguration.AppVersion = appVersion;
                 }
@@ -83,6 +86,42 @@ namespace dotnetCampus.GetAssemblyVersionTask
                     throw new ArgumentException($"Can not math VersionFormatRegex={formatRegex} in assmebly info file {file} \r\n The file content:\r\n{content}");
                 }
             });
+        }
+
+        private static int GetVersionFieldCount(string originalString)
+        {
+            if (Version.TryParse(originalString, out var version))
+            {
+                try
+                {
+                    version.ToString(4);
+                    return 4;
+                }
+                catch (Exception)
+                {
+                    try
+                    {
+                        version.ToString(3);
+                        return 3;
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            version.ToString(2);
+                            return 2;
+                        }
+                        catch (Exception)
+                        {
+                            return 1;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 
