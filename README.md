@@ -59,3 +59,79 @@ dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 另一个比较完善的构建辅助项目 [nuke-build/nuke: The AKEless Build System for C#/.NET](https://github.com/nuke-build/nuke )
 
 [dotnet/source-build: A repository to track efforts to produce a source tarball of the .NET Core SDK and all its components](https://github.com/dotnet/source-build )
+
+
+## 工具列表
+
+### dotnetCampus.BuildKitTool
+
+这是主工具
+
+```
+dotnet tool install -g dotnetCampus.BuildKitTool
+```
+
+使用方法：
+
+```
+dotnet buildkit init [-c debug|release ]
+
+-c --Configuration 可选 表示当前输出等级是 debug 或 release 等级，以及当前默认构建等级。默认是 Debug 等级
+
+执行此命令将会初始化构建环境，包括寻找各个文件路径，以及安装更新必要工具
+```
+
+### PickTextValueTask
+
+从一个文件用正则读取内容，将读取到的内容写入到另一个文件的正则匹配项
+
+```
+dotnet tool install -g dotnetCampus.PickTextValueTask
+```
+
+使用方法
+
+```
+PickTextValueTask -f 输入文件路径 -r 输入文件读取的正则 -o 输出文件路径 -s 输出文件替换的正则
+
+  -f, --InputFile       Required.
+
+  -r, --InputRegex      Required.
+
+  -o, --OutputFile      Required.
+
+  -s, --ReplaceRegex    Required.
+```
+
+此工具将会使用 InputRegex 去读取 InputFile 的内容，找到第一项匹配 `match.Groups[1].Value` 作为输入的值
+
+然后通过 ReplaceRegex 去读取 OutputFile 的内容，将第一项匹配替换为输入的值，然后再写回 OutputFile 文件
+
+```csharp
+            var inputFilePath = "input file.txt";
+            var outputFilePath = "output file.txt";
+
+            var inputText = "<AppVersion>1.2.5-adsfasd</AppVersion>";
+            var outputText = "<git-hash>githash</git-hash>";
+
+            var inputRegex = @"\d+\.\d+\.\d+-([\w\d]+)";
+            var replaceRegex = @"(githash)";
+
+            File.WriteAllText(inputFilePath, inputText);
+            File.WriteAllText(outputFilePath, outputText);
+
+            PickTextValueTask.Program.Main(new[]
+            {
+                "-f",
+                inputFilePath,
+                "-r",
+                inputRegex,
+                "-o",
+                outputFilePath,
+                "-s",
+                replaceRegex
+            });
+
+            var replacedText = File.ReadAllText(outputFilePath);
+            Assert.AreEqual("<git-hash>adsfasd</git-hash>", replacedText);
+```
