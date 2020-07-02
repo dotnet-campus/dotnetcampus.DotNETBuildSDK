@@ -1,6 +1,6 @@
 ﻿using dotnetCampus.Cli;
 
-namespace MatrixRun
+namespace dotnetCampus.MatrixRun
 {
     internal class Options
     {

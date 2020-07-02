@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 using dotnetCampus.Cli;
 
-namespace MatrixRun
+namespace dotnetCampus.MatrixRun
 {
     class Program
     {

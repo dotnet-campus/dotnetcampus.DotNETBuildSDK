@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>MatrixRun</ToolCommandName>
+    <RootNamespace>dotnetCampus.MatrixRun</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
