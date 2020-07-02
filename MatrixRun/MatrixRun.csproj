@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <PackageId>dotnetCampus.MatrixRun</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>MatrixRun</ToolCommandName>
+    <RootNamespace>dotnetCampus.MatrixRun</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.CommandLine" Version="2.0.0" />
+  </ItemGroup>
+
+</Project>
