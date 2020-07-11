@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -13,9 +12,12 @@
     <PackageReference Include="coverlet.collector" Version="1.2.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
     <PackageReference Include="MSTestEnhancer" Version="1.6.0" />
+    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="MSTestEnhancer" Version="1.6.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MatrixRun\MatrixRun.csproj" />
     <ProjectReference Include="..\..\PickTextValueTask\PickTextValueTask.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Reflection;
 
 using dotnetCampus.Cli;
 
@@ -13,54 +14,84 @@ namespace dotnetCampus.MatrixRun
         {
             var options = CommandLine.Parse(args).As<Options>();
             if (options.Matrix is null || options.Command is null
-                || string.IsNullOrWhiteSpace(options.Matrix) || string.IsNullOrWhiteSpace(options.Command))
+                || options.Matrix is null || string.IsNullOrWhiteSpace(options.Command))
             {
                 WriteUsage();
                 return -1;
             }
             else
             {
-                var matrixMatch = Regex.Match(options.Matrix, @"(\w+)=\[(.*)\]");
-                if (matrixMatch.Success)
-                {
-                    var key = matrixMatch.Groups[1].Value;
-                    var values = matrixMatch.Groups[2].Value
-                        .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                        .Select(x => x.Trim())
-                        .Where(x => !string.IsNullOrWhiteSpace(x));
-                    foreach (var value in values)
-                    {
-                        var exitCode = ExecuteMatrix(options.Command, key, value);
-                        if (exitCode != 0)
-                        {
-                            return exitCode;
-                        }
-                    }
-                    return 0;
-                }
-                else
-                {
-                    Console.WriteLine($@"Matrix option {options.Matrix} is not recognized. The correct format for ""Matrix.Key"" should be:
-  Key=[value1,value2]");
-                    return -2;
-                }
+                return Run(options.Matrix, options.Command);
             }
         }
 
-        private static int ExecuteMatrix(string command, string key, string value)
+        private static int Run(IReadOnlyDictionary<string, string> matrix, string command)
         {
-            Console.WriteLine(@$"Execute Command with Environment Variables ""Matrix.{key}={value}"":
-  {command}");
-            Environment.SetEnvironmentVariable($"Matrix.{key}", value);
+            var combination = CartesianProduct.Enumerate(matrix.ToDictionary(
+                    x => x.Key,
+                    x => ExtractValues(x.Value),
+                    StringComparer.Ordinal))
+                .ToList();
+            Console.Write($"[{AppNameVersion()}] Execute commands in {combination.Count} combinations of environment variables.");
+
+            var index = 0;
+            foreach (var dictionary in combination)
+            {
+                index++;
+
+                // 输出环境变量组合。
+                Console.WriteLine($@"
+Execute the command under the environment variable combination {index}/{combination.Count}.
+  - Environment Variables:
+{string.Join(Environment.NewLine, dictionary.Select(x => $"    * Matrix.{x.Key}={x.Value}"))}
+  - Command:
+    > {command}
+");
+
+                // 执行命令
+                var exitCode = ExecuteMatrix(command, dictionary);
+                if (exitCode != 0)
+                {
+                    return exitCode;
+                }
+            }
+            return 0;
+        }
+
+        private static int ExecuteMatrix(string command, IEnumerable<KeyValuePair<string, string>> sectionValues)
+        {
+            // 设置环境变量。
+            foreach (var (key, value) in sectionValues)
+            {
+                Environment.SetEnvironmentVariable($"Matrix.{key}", value);
+            }
+
+            // 执行命令。
             var process = Process.Start("cmd", $"/c {command}");
             process.WaitForExit();
             return process.ExitCode;
         }
+
+        /// <summary>
+        /// 把字符串 [1, 2, 3] 拆成集合 { 1, 2, 3 }。
+        /// </summary>
+        /// <param name="value">字符串。</param>
+        /// <returns>集合。</returns>
+        private static IReadOnlyList<string> ExtractValues(string value) => value.Trim(' ', '[', ']')
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(x => x.Trim())
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .ToList();
 
         private static void WriteUsage() => Console.WriteLine(@"Usage: MatrixRun [options]
 
 Options:
   -m|--matrix   The matrix definetion. e.g. -m Key=[value1,value2]
   -c|--command  The command that will execute using environment variables like %Matrix.Key%.");
+
+        private static string AppNameVersion()
+        {
+            return $"{Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTitleAttribute>()?.Title ?? ""} {Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0"}";
+        }
     }
 }
