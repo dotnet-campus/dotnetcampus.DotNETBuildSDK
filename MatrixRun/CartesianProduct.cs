@@ -22,7 +22,7 @@ namespace dotnetCampus.MatrixRun
         /// <typeparam name="T">任意集合类型。</typeparam>
         /// <param name="lists">要计算笛卡尔集的原集合。</param>
         /// <returns>笛卡尔集，即参数集合的所有可能组合。</returns>
-        public static IEnumerable<List<T>> Enumerate<T>(IEnumerable<IReadOnlyList<T>> lists)
+        public static IEnumerable<IReadOnlyList<T>> Enumerate<T>(IEnumerable<IReadOnlyList<T>> lists)
         {
             // cartesianCount: 笛卡尔集中的集合总数
             ulong cartesianCount = lists.Select(x => (ulong)x.Count).Aggregate(1ul, (a, b) => a * b);
@@ -65,7 +65,7 @@ namespace dotnetCampus.MatrixRun
         /// <typeparam name="TValue">项类型。</typeparam>
         /// <param name="dictionary">原集合。</param>
         /// <returns>带有 Key 标记的笛卡尔集，即参数集合的所有可能组合。</returns>
-        public static IEnumerable<Dictionary<TKey, TValue>> Enumerate<TKey, TValue>(
+        public static IEnumerable<IReadOnlyDictionary<TKey, TValue>> Enumerate<TKey, TValue>(
             IReadOnlyDictionary<TKey, IReadOnlyList<TValue>> dictionary)
             where TKey : notnull
         {
