@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -40,7 +41,54 @@ namespace DotNETBuild.Tests
                 {
                     var expectedList = expectedResult[i];
                     var list = result[i];
-                    CollectionAssert.AreEqual(expectedList, list);
+                    CollectionAssert.AreEqual(expectedList, (ICollection)list);
+                }
+            });
+        }
+
+        [ContractTestCase]
+        public void EnumerateDictionary()
+        {
+            const int A = 101, B = 102, C = 103;
+            const int x = 201, y = 202, z = 203;
+
+            "传入注释声称的例子，可以返回注释声称的返回。".Test(() =>
+            {
+                var dictionary = new Dictionary<string, IReadOnlyList<int>>
+                {
+                    { "α", new []{ A, B, C } },
+                    { "β", new []{ 1, 2 } },
+                    { "γ", new []{ x, y, z } },
+                };
+                var expectedResult = new List<Dictionary<string, int>>
+                {
+                    new Dictionary<string, int>{ { "α", A }, { "β", 1 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", A }, { "β", 1 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", A }, { "β", 1 }, { "γ", z } },
+                    new Dictionary<string, int>{ { "α", A }, { "β", 2 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", A }, { "β", 2 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", A }, { "β", 2 }, { "γ", z } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 1 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 1 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 1 }, { "γ", z } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 2 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 2 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", B }, { "β", 2 }, { "γ", z } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 1 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 1 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 1 }, { "γ", z } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 2 }, { "γ", x } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 2 }, { "γ", y } },
+                    new Dictionary<string, int>{ { "α", C }, { "β", 2 }, { "γ", z } },
+                };
+
+                var result = CartesianProduct.Enumerate(dictionary).ToList();
+                Assert.AreEqual(expectedResult.Count, result.Count);
+                for (var i = 0; i < expectedResult.Count; i++)
+                {
+                    var expectedDictionary = expectedResult[i];
+                    var resultDictionary = result[i];
+                    CollectionAssert.AreEqual(expectedDictionary, (ICollection)resultDictionary);
                 }
             });
         }
