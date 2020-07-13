@@ -26,12 +26,18 @@ namespace dotnetCampus.MatrixRun
         {
             // cartesianCount: 笛卡尔集中的集合总数
             ulong cartesianCount = lists.Select(x => (ulong)x.Count).Aggregate(1ul, (a, b) => a * b);
+            var listCount = lists switch
+            {
+                ICollection<IReadOnlyList<T>> collection => collection.Count,
+                IReadOnlyCollection<IReadOnlyList<T>> readOnlyList => readOnlyList.Count,
+                _ => 0,
+            };
 
             // globalIndex: 当前正在计算的组合在整个笛卡尔集所有组合中的序号
             for (var globalIndex = 0ul; globalIndex < cartesianCount; globalIndex++)
             {
                 // output: 当前序号下的一个组合
-                var output = new List<T>();
+                var output = new List<T>(listCount);
 
                 // otherCount: 除去当前正在计算的组合外剩余组合的个数（用于计算每一子项的序号）
                 ulong otherCount = cartesianCount;
@@ -46,6 +52,7 @@ namespace dotnetCampus.MatrixRun
                     output.Add(list[(int)selfIndex]);
                 }
 
+                listCount = output.Count;
                 yield return output;
             }
         }
