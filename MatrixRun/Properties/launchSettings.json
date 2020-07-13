@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "调试：参数组合": {
+      "commandName": "Project",
+      "commandLineArgs": "-m:S1=[A,B,C];S2=[1,2];S3=[x,y,z] -c \"echo echo Matrix.S1=%Matrix.S1%, Matrix.S2=%Matrix.S2%, Matrix.S3=%Matrix.S3%\""
+    },
+    "调试：无参数": {
+      "commandName": "Project"
+    }
+  }
+}
