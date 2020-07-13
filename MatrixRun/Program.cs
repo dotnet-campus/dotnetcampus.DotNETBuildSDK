@@ -6,6 +6,8 @@ using System.Reflection;
 
 using dotnetCampus.Cli;
 
+using Walterlv.Collections;
+
 namespace dotnetCampus.MatrixRun
 {
     class Program
