@@ -35,6 +35,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuild.Tests", "Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WriteAppVersionTask", "WriteAppVersionTask\WriteAppVersionTask.csproj", "{360289B9-3E01-449D-93F9-36C865531026}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendEmailTask", "SendEmailTask\SendEmailTask.csproj", "{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -189,6 +191,18 @@ Global
 		{360289B9-3E01-449D-93F9-36C865531026}.Release|x64.Build.0 = Release|Any CPU
 		{360289B9-3E01-449D-93F9-36C865531026}.Release|x86.ActiveCfg = Release|Any CPU
 		{360289B9-3E01-449D-93F9-36C865531026}.Release|x86.Build.0 = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|x64.Build.0 = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Debug|x86.Build.0 = Debug|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|x64.ActiveCfg = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|x64.Build.0 = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|x86.ActiveCfg = Release|Any CPU
+		{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

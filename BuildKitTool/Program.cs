@@ -70,6 +70,7 @@ namespace BuildKitTool
                 "dotnetCampus.MatrixRun",
                 "dotnetCampus.NuGetPublishTask",
                 "dotnetCampus.PickTextValueTask",
+                "dotnetCampus.SendEmailTask",
 
                 // https://github.com/dotnet-campus/dotnetCampus.TagToVersion
                 "dotnetCampus.TagToVersion",

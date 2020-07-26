@@ -181,3 +181,36 @@ CurrentCommit
 9a1be330450b10b51230a17390b5cf1a7f8af1d8
 ```
 
+### SendEmailTask
+
+发送邮件
+
+```
+dotnet tool install -g dotnetCampus.SendEmailTask
+```
+
+用法
+
+```
+SendEmail 参数
+```
+
+必选参数如下
+
+- `-t` 或 `--To` 接收方的邮件地址使用 ; 分割多个不同的命令
+- `-s` 或 `--Subject` 邮件标题
+- `-b` 或 `--Body` 邮件内容，将 `\\r\\n` 替换为换行
+
+可选参数如下
+
+- `--SmtpServer` 邮件服务器地址，对应配置文件 `Email.SmtpServer` 内容
+- `--SmtpServerPort` 邮件服务器端口，对应配置文件 `Email.SmtpServerPort` 内容
+- `--UserName` 发送邮件的登录用户名，对应配置文件 `Email.UserName` 内容
+- `--Password` 发送邮件的登录密码，对应配置文件 `Email.Password` 内容
+- `--SenderDisplayName` 发送邮件显示的发送者名字，对应配置文件 `Email.SenderDisplayName` 内容，默认和 `Email.UserName` 相同
+
+例子
+
+```
+SendEmail -t lindexi_gd@outlook.com --subject 测试 --SmtpServer smtp.yandex.com --SmtpServerPort 587 --UserName lindexi@yandex.com --Password miBN8dFLxdUs9d3
+```
