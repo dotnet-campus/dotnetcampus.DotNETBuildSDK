@@ -24,6 +24,7 @@ namespace dotnetCampus.GitCommand
             if (!Directory.Exists(repo.FullName))
             {
                 // 为什么不使用 repo.Exits 因为这个属性默认没有刷新，也就是在创建 DirectoryInfo 的时候文件夹不存在，那么这个值就是 false 即使后续创建了文件夹也不会刷新，需要调用 Refresh 才可以刷新，但是 Refresh 需要修改很多属性
+                // 详细请看 https://blog.walterlv.com/post/file-exists-vs-fileinfo-exists.html
                 throw new ArgumentException("必须传入存在的文件夹", nameof(repo));
             }
 
