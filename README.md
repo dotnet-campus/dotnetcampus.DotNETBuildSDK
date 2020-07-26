@@ -140,6 +140,10 @@ PickTextValueTask -f 输入文件路径 -r 输入文件读取的正则 -o 输出
 
 矩阵命令执行工具
 
+```
+dotnet tool install -g dotnetCampus.MatrixRun
+```
+
 ![image](https://user-images.githubusercontent.com/9959623/87214539-12541b00-c360-11ea-9521-8c310516bec6.png)
 
 ```
@@ -151,3 +155,29 @@ MatrixRun -m:S1=[A,B,C];S2=[1,2];S3=[x,y,z] -c "echo echo Matrix.S1=%Matrix.S1%,
 使用 `-c` 传入执行命令，支持批处理文件
 
 矩阵格式是 `属性名=可选参数` 需要将可选参数放在 `[]` 内，多个不同的参数使用 `,` 分割。多个不同的属性使用 `;` 分割。而 `-c` 后的命令，将会取决于矩阵的全排列次数被调用相应的次数
+
+### GitRevisionTask
+
+获取当前 Git 的 commit 次数以及 hash 的值，用于创建版本号等
+
+```
+dotnet tool install -g dotnetCampus.GitRevisionTask
+```
+
+用法
+
+```
+GitRevisionTask
+```
+
+将会通过控制台输出当前的 Git 的 commit 次数，同时写入到配置文件的 `GitCount` 和 `CurrentCommit` 属性
+
+```
+> 当前的 commit 是这个分支的第几次
+GitCount
+623
+> 当前的 commit 的 hash 的值
+CurrentCommit
+9a1be330450b10b51230a17390b5cf1a7f8af1d8
+```
+
