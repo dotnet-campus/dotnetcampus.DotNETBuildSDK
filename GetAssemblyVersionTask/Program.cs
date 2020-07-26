@@ -127,7 +127,7 @@ namespace dotnetCampus.GetAssemblyVersionTask
 
     public class AssmeblyOption
     {
-        [Option('f', "AssemblyInfoFile", Required = false, HelpText = "The assmebly info file")]
+        [Option('f', "AssemblyInfoFile", Required = false, HelpText = "The assembly info file")]
         public string AssemblyInfoFile { set; get; }
 
         [Option('r', "VersionFormat", Required = false, HelpText = "The version format regex, default is Version = \\\"(\\d+.\\d+.\\d+)\\\";")]
