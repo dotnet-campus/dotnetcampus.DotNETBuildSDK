@@ -88,7 +88,7 @@ Execute the command under the environment variable combination {index}/{combinat
         private static void WriteUsage() => Console.WriteLine(@"Usage: MatrixRun [options]
 
 Options:
-  -m|--matrix   The matrix definetion. e.g. -m Key=[value1,value2]
+  -m|--matrix   The matrix definition. e.g. -m Key=[value1,value2]
   -c|--command  The command that will execute using environment variables like %Matrix.Key%.");
 
         private static string AppNameVersion()
