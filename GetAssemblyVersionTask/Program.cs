@@ -11,7 +11,7 @@ namespace dotnetCampus.GetAssemblyVersionTask
     {
         static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<AssmeblyOption>(args).WithParsed(option =>
+            Parser.Default.ParseArguments<AssemblyOption>(args).WithParsed(option =>
             {
                 var appConfigurator = AppConfigurator.GetAppConfigurator();
                 var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
@@ -125,9 +125,9 @@ namespace dotnetCampus.GetAssemblyVersionTask
         }
     }
 
-    public class AssmeblyOption
+    public class AssemblyOption
     {
-        [Option('f', "AssemblyInfoFile", Required = false, HelpText = "The assmebly info file")]
+        [Option('f', "AssemblyInfoFile", Required = false, HelpText = "The assembly info file")]
         public string AssemblyInfoFile { set; get; }
 
         [Option('r', "VersionFormat", Required = false, HelpText = "The version format regex, default is Version = \\\"(\\d+.\\d+.\\d+)\\\";")]

@@ -135,3 +135,19 @@ PickTextValueTask -f 输入文件路径 -r 输入文件读取的正则 -o 输出
             var replacedText = File.ReadAllText(outputFilePath);
             Assert.AreEqual("<git-hash>adsfasd</git-hash>", replacedText);
 ```
+
+### MatrixRun
+
+矩阵命令执行工具
+
+![image](https://user-images.githubusercontent.com/9959623/87214539-12541b00-c360-11ea-9521-8c310516bec6.png)
+
+```
+MatrixRun -m:S1=[A,B,C];S2=[1,2];S3=[x,y,z] -c "echo echo Matrix.S1=%Matrix.S1%, Matrix.S2=%Matrix.S2%, Matrix.S3=%Matrix.S3%"
+```
+
+通过 `-m` 传入矩阵，可以通过在批处理中使用 `Matrix.Xx` 环境变量获取运行时的值
+
+使用 `-c` 传入执行命令，支持批处理文件
+
+矩阵格式是 `属性名=可选参数` 需要将可选参数放在 `[]` 内，多个不同的参数使用 `,` 分割。多个不同的属性使用 `;` 分割。而 `-c` 后的命令，将会取决于矩阵的全排列次数被调用相应的次数
