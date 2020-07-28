@@ -24,6 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BF227EE-E878-4FD3-A7B3-E3C94CA34E51}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Build.props = Directory.Build.props
+		README.md = README.md
 		build\Version.props = build\Version.props
 	EndProjectSection
 EndProject
@@ -35,7 +36,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuild.Tests", "Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WriteAppVersionTask", "WriteAppVersionTask\WriteAppVersionTask.csproj", "{360289B9-3E01-449D-93F9-36C865531026}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SendEmailTask", "SendEmailTask\SendEmailTask.csproj", "{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SendEmailTask", "SendEmailTask\SendEmailTask.csproj", "{C9D2280E-3319-4EA4-A7B9-22D003D57BAE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
