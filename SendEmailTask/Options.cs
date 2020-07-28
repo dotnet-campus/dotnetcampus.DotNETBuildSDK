@@ -21,7 +21,7 @@ namespace dotnetCampus.SendEmailTask
         public string? Subject { get; set; }
 
         /// <summary>
-        /// 支持将 \\r\\n 替换为换行
+        /// 邮件内容
         /// </summary>
         [Option(BodyCommand, nameof(Body))]
         public string? Body { get; set; }

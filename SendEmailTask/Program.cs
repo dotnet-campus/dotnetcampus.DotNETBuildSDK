@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.SendEmailTask
@@ -46,14 +47,21 @@ namespace dotnetCampus.SendEmailTask
 
             Console.WriteLine($"通过 {smtpServer}:{port} 发送 {options.Subject} 到 {to}");
 
-            var toList = to.Split(';');
+            if (string.IsNullOrEmpty(options.Subject))
+            {
+                throw new ArgumentException($"邮件主题不能为空，请使用 -{Options.SubjectCommand} 或 --{nameof(Options.Subject)}指定邮件主题");
+            }
+
+            var toList = to.Split(';')
+                // 使用 Trim()，因为经常写 ` ;` 或者 `; ` 的字符串
+                .Select(temp => temp.Trim());
 
             EmailHelper.SendEmail(smtpServer, port!.Value, userName!, password!,
-                from!, 
+                from!,
                 displayName!,
-                toList, 
+                toList,
                 options.Subject!,
-                options.Body!.Replace("\\r","\r").Replace("\\n","\n"));
+                options.Body ?? string.Empty);
         }
     }
 }
