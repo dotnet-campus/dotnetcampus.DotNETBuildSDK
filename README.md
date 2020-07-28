@@ -214,3 +214,7 @@ SendEmail 参数
 ```
 SendEmail -t lindexi_gd@outlook.com --subject 测试 --SmtpServer smtp.yandex.com --SmtpServerPort 587 --UserName lindexi@yandex.com --Password miBN8dFLxdUs9d3
 ```
+
+在 GitHub Action 中，可以将用户名密码等存放在凭据管理器里面，详细请看 [Creating and storing encrypted secrets - GitHub Docs](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets )
+
+另外在统一配置下，推荐统一邮箱账号密码存放到机器级配置里，更多关于机器级配置请看上文
