@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using Newtonsoft.Json;
+using System.Xml.Serialization;
 
 namespace dotnetCampus.BuildMd5Task
 {
@@ -45,9 +45,10 @@ namespace dotnetCampus.BuildMd5Task
 
         public static VerifyResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
         {
-            // 读取 json 文件
-            var json = File.ReadAllText(checksumFile.FullName);
-            var fileMd5InfoList = JsonConvert.DeserializeObject<List<FileMd5Info>>(json);
+            // 读取文件
+            var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
+            using var fileStream = checksumFile.OpenRead();
+            var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
 
             var verifyResult = new VerifyResult();
             verifyResult.IsAllMatch = true;
@@ -122,11 +123,12 @@ namespace dotnetCampus.BuildMd5Task
 
         private static void WriteToFile(List<FileMd5Info> fileMd5List, string outputFile)
         {
-            var json = JsonConvert.SerializeObject(fileMd5List, Formatting.Indented);
+            var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
 
-            Console.WriteLine(json);
+            using var fileStream = new FileStream(outputFile, FileMode.OpenOrCreate, FileAccess.Write);
+            fileStream.Position = 0;
 
-            File.WriteAllText(outputFile, json);
+            xmlSerializer.Serialize(fileStream, fileMd5List);
         }
 
         /// <summary>
