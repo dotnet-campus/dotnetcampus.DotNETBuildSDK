@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 
 namespace dotnetCampus.BuildMd5Task
 {
@@ -30,7 +27,8 @@ namespace dotnetCampus.BuildMd5Task
             var outputFile = options.OutputFile;
             if (string.IsNullOrEmpty(outputFile))
             {
-                Console.WriteLine($"Can not find OutputFile in command line. We will use the DefaultOutputFile={Options.DefaultOutputFile} as the OutputFile.");
+                Console.WriteLine(
+                    $"Can not find OutputFile in command line. We will use the DefaultOutputFile={Options.DefaultOutputFile} as the OutputFile.");
                 outputFile = Options.DefaultOutputFile;
             }
 
