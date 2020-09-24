@@ -218,3 +218,26 @@ SendEmail -t lindexi_gd@outlook.com --subject 测试 --SmtpServer smtp.yandex.co
 在 GitHub Action 中，可以将用户名密码等存放在凭据管理器里面，详细请看 [Creating and storing encrypted secrets - GitHub Docs](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets )
 
 另外在统一配置下，推荐统一邮箱账号密码存放到机器级配置里，更多关于机器级配置请看上文
+
+### BuildMd5Task
+
+将对输入的文件或文件夹创建 md5 校验文件，传入文件夹时，将会创建每个文件的校验到相同的输出文件
+
+```
+dotnet tool install -g dotnetCampus.BuildMd5Task
+```
+
+用法
+
+```
+BuildMd5 [参数]
+```
+
+如不添加参数，将对当前工作路径的文件夹创建校验文件，将校验文件存放在当前文件夹的 ChecksumMd5.txt 文件
+
+可选参数
+
+```
+- `-p` 或 `--path` 需要用来创建校验的文件夹或文件，默认将会使用当前工作路径文件夹
+- `-o` 或 `--output` 输出的校验文件，默认将会输出为当前工作路径的 ChecksumMd5.txt 文件
+```
