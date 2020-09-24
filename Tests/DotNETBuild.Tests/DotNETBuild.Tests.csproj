@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\BuildMd5Task\BuildMd5Task.csproj" />
     <ProjectReference Include="..\..\MatrixRun\MatrixRun.csproj" />
     <ProjectReference Include="..\..\PickTextValueTask\PickTextValueTask.csproj" />
   </ItemGroup>

@@ -50,6 +50,7 @@ namespace dotnetCampus.BuildMd5Task
             var fileMd5InfoList = JsonConvert.DeserializeObject<List<FileMd5Info>>(json);
 
             var verifyResult = new VerifyResult();
+            verifyResult.IsAllMatch = true;
 
             foreach (var fileMd5Info in fileMd5InfoList)
             {

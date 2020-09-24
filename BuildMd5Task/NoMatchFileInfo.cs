@@ -20,7 +20,7 @@
         private NoMatchFileInfo(string file, long expectedFileLength, string expectedFileMd5)
         {
             File = file;
-            IsNotFound = false;
+            IsNotFound = true;
             ExpectedFileLength = expectedFileLength;
             ExpectedFileMd5 = expectedFileMd5;
 
