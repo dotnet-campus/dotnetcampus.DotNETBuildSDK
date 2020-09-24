@@ -22,7 +22,7 @@ namespace dotnetCampus.BuildMd5Task
                 });
             }
 
-            WriteAsJson(fileMd5List, outputFile);
+            WriteToFile(fileMd5List, outputFile);
         }
 
         public static void BuildFileMd5(FileInfo file, string outputFile)
@@ -40,7 +40,7 @@ namespace dotnetCampus.BuildMd5Task
                 }
             };
 
-            WriteAsJson(fileMd5List, outputFile);
+            WriteToFile(fileMd5List, outputFile);
         }
 
         public static VerifyResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
@@ -120,7 +120,7 @@ namespace dotnetCampus.BuildMd5Task
             return relativePath;
         }
 
-        private static void WriteAsJson(List<FileMd5Info> fileMd5List, string outputFile)
+        private static void WriteToFile(List<FileMd5Info> fileMd5List, string outputFile)
         {
             var json = JsonConvert.SerializeObject(fileMd5List, Formatting.Indented);
 
