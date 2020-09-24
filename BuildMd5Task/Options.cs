@@ -2,7 +2,7 @@
 
 namespace dotnetCampus.BuildMd5Task
 {
-    internal class Options
+    public class Options
     {
         /// <summary>
         /// 需要用来创建校验的文件夹或文件，默认将会使用当前工作路径文件夹

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text.Json;
+using Newtonsoft.Json;
 
 namespace dotnetCampus.BuildMd5Task
 {
@@ -43,6 +43,49 @@ namespace dotnetCampus.BuildMd5Task
             WriteAsJson(fileMd5List, outputFile);
         }
 
+        public static VerifyResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
+        {
+            // 读取 json 文件
+            var json = File.ReadAllText(checksumFile.FullName);
+            var fileMd5InfoList = JsonConvert.DeserializeObject<List<FileMd5Info>>(json);
+
+            var verifyResult = new VerifyResult();
+
+            foreach (var fileMd5Info in fileMd5InfoList)
+            {
+                var file = new FileInfo(Path.Combine(directory.FullName, fileMd5Info.File));
+                if (file.Exists)
+                {
+                    // 先判断文件长度
+                    var fileLength = file.Length;
+                    if (fileMd5Info.FileSize != fileLength)
+                    {
+                        verifyResult.IsAllMatch = false;
+                        verifyResult.NoMatchFileInfoList.Add(new NoMatchFileInfo(fileMd5Info, fileLength,
+                            string.Empty));
+                    }
+                    else
+                    {
+                        var hash = GetMd5Hash(file);
+                        if (!hash.Equals(fileMd5Info.Md5, StringComparison.OrdinalIgnoreCase))
+                        {
+                            // 哈希不相同
+                            verifyResult.IsAllMatch = false;
+                            verifyResult.NoMatchFileInfoList.Add(new NoMatchFileInfo(fileMd5Info, fileLength, hash));
+                        }
+                    }
+                }
+                else
+                {
+                    // 找不到文件
+                    verifyResult.IsAllMatch = false;
+                    verifyResult.NoMatchFileInfoList.Add(NoMatchFileInfo.GetFileNotFoundMatchFileInfo(fileMd5Info));
+                }
+            }
+
+            return verifyResult;
+        }
+
         private static string MakeRelativePath(string fromPath, string toPath)
         {
             if (string.IsNullOrEmpty(fromPath)) throw new ArgumentNullException(nameof(fromPath));
@@ -78,11 +121,7 @@ namespace dotnetCampus.BuildMd5Task
 
         private static void WriteAsJson(List<FileMd5Info> fileMd5List, string outputFile)
         {
-            var json = JsonSerializer.Serialize(fileMd5List, new JsonSerializerOptions()
-            {
-                AllowTrailingCommas = true,
-                WriteIndented = true
-            });
+            var json = JsonConvert.SerializeObject(fileMd5List, Formatting.Indented);
 
             Console.WriteLine(json);
 
