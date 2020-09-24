@@ -46,7 +46,7 @@ namespace dotnetCampus.BuildMd5Task
             }
             else if (File.Exists(path))
             {
-                BuildFileMd5(path, outputFile);
+                BuildFileMd5(new FileInfo(path), outputFile);
             }
             else
             {
@@ -66,10 +66,16 @@ namespace dotnetCampus.BuildMd5Task
                 fileMd5List.Add(new FileMd5Info()
                 {
                     File = file.FullName.Remove(0, directory.FullName.Length),
+                    FileSize = file.Length,
                     Md5 = GetMd5Hash(file)
                 });
             }
 
+            WriteAsJson(fileMd5List, outputFile);
+        }
+
+        private static void WriteAsJson(List<FileMd5Info> fileMd5List, string outputFile)
+        {
             var json = JsonSerializer.Serialize(fileMd5List, new JsonSerializerOptions()
             {
                 AllowTrailingCommas = true,
@@ -81,11 +87,22 @@ namespace dotnetCampus.BuildMd5Task
             File.WriteAllText(outputFile, json);
         }
 
-        private static void BuildFileMd5(string file, string outputFile)
+        private static void BuildFileMd5(FileInfo file, string outputFile)
         {
-            var hash = GetMd5Hash(new FileInfo(file));
+            var hash = GetMd5Hash(file);
             Console.WriteLine($"Md5={hash}");
-            File.WriteAllText(outputFile, hash);
+
+            var fileMd5List = new List<FileMd5Info>()
+            {
+                new FileMd5Info()
+                {
+                    File = file.Name,
+                    FileSize = file.Length,
+                    Md5 = hash
+                }
+            };
+
+            WriteAsJson(fileMd5List, outputFile);
         }
 
         /// <summary>
