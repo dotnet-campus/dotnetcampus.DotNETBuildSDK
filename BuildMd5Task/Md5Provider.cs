@@ -3,16 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using dotnetCampus.DotNETBuild.Utils;
 
 namespace dotnetCampus.BuildMd5Task
 {
     public class Md5Provider
     {
-        public static void BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile)
+        public static List<FileMd5Info> BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile, string? regexText=null)
         {
+            regexText ??= ".";
+            var regex = new Regex(regexText, RegexOptions.Compiled);
+
             var fileMd5List = new List<FileMd5Info>();
-            foreach (var file in directory.GetFiles("*.*", SearchOption.AllDirectories))
+            foreach (var file in directory.GetFilesWithRegexPattern(regex))
             {
                 fileMd5List.Add(new FileMd5Info()
                 {
@@ -23,6 +28,7 @@ namespace dotnetCampus.BuildMd5Task
             }
 
             WriteToFile(fileMd5List, outputFile);
+            return fileMd5List;
         }
 
         public static void BuildFileMd5(FileInfo file, string outputFile)

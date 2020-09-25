@@ -1,5 +1,9 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
+using System.Xml.Serialization;
 using dotnetCampus.BuildMd5Task;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
@@ -9,6 +13,71 @@ namespace PickTextValueTask.Tests
     [TestClass]
     public class BuildMd5TaskTest
     {
+        [ContractTestCase]
+        public void BuildFolderMd5WithRegexPatternTest()
+        {
+            "传入正则，将会校验符合正则的文件".Test(() =>
+            {
+                // 使用当前文件夹
+                var directory = new DirectoryInfo(".");
+                var outputFile = Options.DefaultOutputFile;
+
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+
+                var regex = @".+\.[exe|dll]^";
+
+                Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, regex);
+                // 等待校验文件写入
+                Thread.Sleep(1000);
+
+                var checksumFile = new FileInfo(outputFile);
+                var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
+                using var fileStream = checksumFile.OpenRead();
+                var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
+
+                // 默认存在 exe 和 dll 文件
+                var existExe = fileMd5InfoList.Any(temp =>
+                    Path.GetExtension(temp.File).Equals(".exe", StringComparison.OrdinalIgnoreCase));
+                var existDll = fileMd5InfoList.Any(temp =>
+                    Path.GetExtension(temp.File).Equals(".dll", StringComparison.OrdinalIgnoreCase));
+                Assert.AreEqual(true, existExe && existDll);
+            });
+
+            "默认不传入正则，将会校验所有文件".Test(() =>
+            {
+                // 使用当前文件夹
+                var directory = new DirectoryInfo(".");
+                var outputFile = Options.DefaultOutputFile;
+
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+
+                Md5Provider.BuildFolderAllFilesMd5(directory, outputFile);
+                // 等待校验文件写入
+                Thread.Sleep(1000);
+
+                var checksumFile = new FileInfo(outputFile);
+                var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
+                using var fileStream = checksumFile.OpenRead();
+                var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
+
+                // 默认存在 exe 和 dll 文件
+                var existExe = fileMd5InfoList.Any(temp =>
+                    Path.GetExtension(temp.File).Equals(".exe", StringComparison.OrdinalIgnoreCase));
+                var existDll = fileMd5InfoList.Any(temp =>
+                     Path.GetExtension(temp.File).Equals(".dll", StringComparison.OrdinalIgnoreCase));
+                var existPdb = fileMd5InfoList.Any(temp =>
+                    Path.GetExtension(temp.File).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
+
+                Assert.AreEqual(true, existExe && existDll);
+            });
+        }
+
         [ContractTestCase]
         public void BuildFolderMd5Test()
         {
