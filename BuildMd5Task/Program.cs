@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text.Json;
+using dotnetCampus.Cli;
 
 namespace dotnetCampus.BuildMd5Task
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            Console.WriteLine($"Start building MD5");
-            var commandLine = dotnetCampus.Cli.CommandLine.Parse(args);
+            Console.WriteLine("Start building MD5");
+            var commandLine = CommandLine.Parse(args);
             var options = commandLine.As<Options>();
 
             var path = options.Path;
@@ -52,7 +49,7 @@ namespace dotnetCampus.BuildMd5Task
                 return;
             }
 
-            Console.WriteLine($"Finished build md5");
+            Console.WriteLine("Finished build md5");
         }
     }
 }

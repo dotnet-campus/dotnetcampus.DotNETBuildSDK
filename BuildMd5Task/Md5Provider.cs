@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using dotnetCampus.DotNETBuild.Utils;
 
@@ -18,14 +17,12 @@ namespace dotnetCampus.BuildMd5Task
 
             var fileMd5List = new List<FileMd5Info>();
             foreach (var file in directory.GetFilesWithMultiSearchPattern(multiSearchPattern))
-            {
-                fileMd5List.Add(new FileMd5Info()
+                fileMd5List.Add(new FileMd5Info
                 {
                     RelativeFilePath = MakeRelativePath(directory.FullName, file.FullName),
                     FileSize = file.Length,
                     Md5 = GetMd5Hash(file)
                 });
-            }
 
             WriteToFile(fileMd5List, outputFile);
         }
@@ -35,9 +32,9 @@ namespace dotnetCampus.BuildMd5Task
             var hash = GetMd5Hash(file);
             Console.WriteLine($"Md5={hash}");
 
-            var fileMd5List = new List<FileMd5Info>()
+            var fileMd5List = new List<FileMd5Info>
             {
-                new FileMd5Info()
+                new FileMd5Info
                 {
                     RelativeFilePath = file.Name,
                     FileSize = file.Length,
@@ -78,7 +75,8 @@ namespace dotnetCampus.BuildMd5Task
                         {
                             // 哈希不相同
                             verifyResult.AreAllMatched = false;
-                            verifyResult.NoMatchedFileInfoList.Add(new NotMatchedFileInfo(fileMd5Info, fileLength, hash));
+                            verifyResult.NoMatchedFileInfoList.Add(
+                                new NotMatchedFileInfo(fileMd5Info, fileLength, hash));
                         }
                     }
                 }
@@ -86,7 +84,8 @@ namespace dotnetCampus.BuildMd5Task
                 {
                     // 找不到文件
                     verifyResult.AreAllMatched = false;
-                    verifyResult.NoMatchedFileInfoList.Add(NotMatchedFileInfo.GetFileNotFoundMatchFileInfo(fileMd5Info));
+                    verifyResult.NoMatchedFileInfoList.Add(
+                        NotMatchedFileInfo.GetFileNotFoundMatchFileInfo(fileMd5Info));
                 }
             }
 
@@ -102,26 +101,20 @@ namespace dotnetCampus.BuildMd5Task
             var toUri = new Uri(toPath);
 
             if (fromUri.Scheme != toUri.Scheme)
-            {
                 // 不是同一种路径，无法转换成相对路径。
                 return toPath;
-            }
 
             if (fromUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase)
                 && !fromPath.EndsWith("/", StringComparison.OrdinalIgnoreCase)
                 && !fromPath.EndsWith("\\", StringComparison.OrdinalIgnoreCase))
-            {
                 // 如果是文件系统，则视来源路径为文件夹。
                 fromUri = new Uri(fromPath + Path.DirectorySeparatorChar);
-            }
 
             var relativeUri = fromUri.MakeRelativeUri(toUri);
             var relativePath = Uri.UnescapeDataString(relativeUri.ToString());
 
             if (toUri.Scheme.Equals("file", StringComparison.InvariantCultureIgnoreCase))
-            {
                 relativePath = relativePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
-            }
 
             return relativePath;
         }
@@ -137,7 +130,7 @@ namespace dotnetCampus.BuildMd5Task
         }
 
         /// <summary>
-        /// 计算 <paramref name="file"/> 的MD5值。
+        ///     计算 <paramref name="file" /> 的MD5值。
         /// </summary>
         /// <returns>Md5值</returns>
         private static string GetMd5Hash(FileInfo file)
@@ -147,7 +140,9 @@ namespace dotnetCampus.BuildMd5Task
         }
 
         /// <summary>
-        /// 计算 <param name="stream">指定流</param> 的MD5值。
+        ///     计算
+        ///     <param name="stream">指定流</param>
+        ///     的MD5值。
         /// </summary>
         /// <returns>Md5值</returns>
         private static string GetMd5HashFromStream(Stream stream)

@@ -1,7 +1,7 @@
 ﻿namespace dotnetCampus.BuildMd5Task
 {
     /// <summary>
-    /// 未匹配的文件信息
+    ///     未匹配的文件信息
     /// </summary>
     public class NotMatchedFileInfo
     {
@@ -10,7 +10,8 @@
         {
         }
 
-        public NotMatchedFileInfo(string relativeFilePath, long actualFileLength, long expectedFileLength, string actualFileMd5,
+        public NotMatchedFileInfo(string relativeFilePath, long actualFileLength, long expectedFileLength,
+            string actualFileMd5,
             string expectedFileMd5)
         {
             RelativeFilePath = relativeFilePath;
@@ -31,20 +32,13 @@
             ActualFileLength = 0;
         }
 
-        public static NotMatchedFileInfo GetFileNotFoundMatchFileInfo(string file, long expectedFileLength,
-            string expectedFileMd5)
-            => new NotMatchedFileInfo(file, expectedFileLength, expectedFileMd5);
-
-        public static NotMatchedFileInfo GetFileNotFoundMatchFileInfo(FileMd5Info fileMd5Info)
-            => new NotMatchedFileInfo(fileMd5Info.RelativeFilePath, fileMd5Info.FileSize, fileMd5Info.Md5);
-
         /// <summary>
-        /// 文件的相对路径
+        ///     文件的相对路径
         /// </summary>
         public string RelativeFilePath { get; }
 
         /// <summary>
-        /// 是否没找到文件
+        ///     是否没找到文件
         /// </summary>
         public bool IsNotFound { get; }
 
@@ -55,5 +49,16 @@
         public string ActualFileMd5 { get; }
 
         public string ExpectedFileMd5 { get; }
+
+        public static NotMatchedFileInfo GetFileNotFoundMatchFileInfo(string file, long expectedFileLength,
+            string expectedFileMd5)
+        {
+            return new NotMatchedFileInfo(file, expectedFileLength, expectedFileMd5);
+        }
+
+        public static NotMatchedFileInfo GetFileNotFoundMatchFileInfo(FileMd5Info fileMd5Info)
+        {
+            return new NotMatchedFileInfo(fileMd5Info.RelativeFilePath, fileMd5Info.FileSize, fileMd5Info.Md5);
+        }
     }
 }
