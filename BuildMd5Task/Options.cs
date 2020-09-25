@@ -20,10 +20,10 @@ namespace dotnetCampus.BuildMd5Task
         public string? OutputFile { get; set; }
 
         /// <summary>
-        /// 匹配文件夹里所有符合此正则的文件名的文件，此属性仅在 <see cref="Path"/> 为文件夹时使用，默认不填将匹配所有文件
+        /// 匹配文件夹里所有符合此通配符的文件名的文件，多个通配符使用 `|` 字符分割，此属性仅在 <see cref="Path"/> 为文件夹时使用，默认不填将匹配所有文件
         /// </summary>
-        [Option(longName: "Regex")]
-        public string? Regex { get; set; }
+        [Option(longName: "SearchPattern")]
+        public string? SearchPattern { get; set; }
 
         public const string DefaultOutputFile = "ChecksumMd5.txt";
     }

@@ -16,7 +16,7 @@ namespace PickTextValueTask.Tests
         [ContractTestCase]
         public void BuildFolderMd5WithRegexPatternTest()
         {
-            "传入正则，将会校验符合正则的文件".Test(() =>
+            "传入通配符，将会校验符合通配符的文件".Test(() =>
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
@@ -27,9 +27,9 @@ namespace PickTextValueTask.Tests
                     File.Delete(outputFile);
                 }
 
-                var regex = @".+\.[exe|dll]^";
+                var multiSearchPattern = @"*.dll|*.exe";
 
-                Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, regex);
+                Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, multiSearchPattern);
                 // 等待校验文件写入
                 Thread.Sleep(1000);
 
@@ -43,10 +43,15 @@ namespace PickTextValueTask.Tests
                     Path.GetExtension(temp.File).Equals(".exe", StringComparison.OrdinalIgnoreCase));
                 var existDll = fileMd5InfoList.Any(temp =>
                     Path.GetExtension(temp.File).Equals(".dll", StringComparison.OrdinalIgnoreCase));
+                var existPdb = fileMd5InfoList.Any(temp =>
+                    Path.GetExtension(temp.File).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
+
+                // 上面通配符写了 exe 和 dll 文件，不包含 pdb 文件
                 Assert.AreEqual(true, existExe && existDll);
+                Assert.AreEqual(false, existPdb);
             });
 
-            "默认不传入正则，将会校验所有文件".Test(() =>
+            "默认不传入通配符，将会校验所有文件".Test(() =>
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
@@ -74,7 +79,7 @@ namespace PickTextValueTask.Tests
                 var existPdb = fileMd5InfoList.Any(temp =>
                     Path.GetExtension(temp.File).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
 
-                Assert.AreEqual(true, existExe && existDll);
+                Assert.AreEqual(true, existExe && existDll && existPdb);
             });
         }
 

@@ -11,13 +11,13 @@ namespace dotnetCampus.BuildMd5Task
 {
     public class Md5Provider
     {
-        public static List<FileMd5Info> BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile, string? regexText=null)
+        public static void BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile,
+            string? multiSearchPattern = null)
         {
-            regexText ??= ".";
-            var regex = new Regex(regexText, RegexOptions.Compiled);
+            multiSearchPattern ??= "*";
 
             var fileMd5List = new List<FileMd5Info>();
-            foreach (var file in directory.GetFilesWithRegexPattern(regex))
+            foreach (var file in directory.GetFilesWithMultiSearchPattern(multiSearchPattern))
             {
                 fileMd5List.Add(new FileMd5Info()
                 {
@@ -28,7 +28,6 @@ namespace dotnetCampus.BuildMd5Task
             }
 
             WriteToFile(fileMd5List, outputFile);
-            return fileMd5List;
         }
 
         public static void BuildFileMd5(FileInfo file, string outputFile)
@@ -54,7 +53,7 @@ namespace dotnetCampus.BuildMd5Task
             // 读取文件
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
             using var fileStream = checksumFile.OpenRead();
-            var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
+            var fileMd5InfoList = (List<FileMd5Info>) xmlSerializer.Deserialize(fileStream);
 
             var verifyResult = new VerifyResult();
             verifyResult.IsAllMatch = true;
