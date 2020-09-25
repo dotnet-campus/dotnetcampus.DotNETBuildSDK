@@ -36,7 +36,16 @@ namespace dotnetCampus.BuildMd5Task
 
             if (Directory.Exists(path))
             {
-                Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile);
+                // 只有文件夹下才需要使用通配符
+                var searchPattern = options.SearchPattern;
+                if (string.IsNullOrEmpty(searchPattern))
+                {
+                    Console.WriteLine($"SearchPattern is not set, we will use '*' by default.");
+                }
+                searchPattern ??= "*";
+                Console.WriteLine($"SearchPattern={searchPattern}");
+
+                Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile, searchPattern);
             }
             else if (File.Exists(path))
             {
