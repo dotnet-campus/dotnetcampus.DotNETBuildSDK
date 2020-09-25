@@ -14,13 +14,13 @@ namespace PickTextValueTask.Tests
     public class BuildMd5TaskTest
     {
         [ContractTestCase]
-        public void BuildFolderMd5WithRegexPatternTest()
+        public void BuildFolderMd5WithMultiSearchPatternTest()
         {
             "传入通配符，将会校验符合通配符的文件".Test(() =>
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
-                var outputFile = Options.DefaultOutputFile;
+                var outputFile = Options.DefaultOutputFileName;
 
                 if (File.Exists(outputFile))
                 {
@@ -40,11 +40,11 @@ namespace PickTextValueTask.Tests
 
                 // 默认存在 exe 和 dll 文件
                 var existExe = fileMd5InfoList.Any(temp =>
-                    Path.GetExtension(temp.File).Equals(".exe", StringComparison.OrdinalIgnoreCase));
+                    Path.GetExtension(temp.RelativeFilePath).Equals(".exe", StringComparison.OrdinalIgnoreCase));
                 var existDll = fileMd5InfoList.Any(temp =>
-                    Path.GetExtension(temp.File).Equals(".dll", StringComparison.OrdinalIgnoreCase));
+                    Path.GetExtension(temp.RelativeFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase));
                 var existPdb = fileMd5InfoList.Any(temp =>
-                    Path.GetExtension(temp.File).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
+                    Path.GetExtension(temp.RelativeFilePath).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
 
                 // 上面通配符写了 exe 和 dll 文件，不包含 pdb 文件
                 Assert.AreEqual(true, existExe && existDll);
@@ -55,7 +55,7 @@ namespace PickTextValueTask.Tests
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
-                var outputFile = Options.DefaultOutputFile;
+                var outputFile = Options.DefaultOutputFileName;
 
                 if (File.Exists(outputFile))
                 {
@@ -73,11 +73,11 @@ namespace PickTextValueTask.Tests
 
                 // 默认存在 exe 和 dll 文件
                 var existExe = fileMd5InfoList.Any(temp =>
-                    Path.GetExtension(temp.File).Equals(".exe", StringComparison.OrdinalIgnoreCase));
+                    Path.GetExtension(temp.RelativeFilePath).Equals(".exe", StringComparison.OrdinalIgnoreCase));
                 var existDll = fileMd5InfoList.Any(temp =>
-                     Path.GetExtension(temp.File).Equals(".dll", StringComparison.OrdinalIgnoreCase));
+                     Path.GetExtension(temp.RelativeFilePath).Equals(".dll", StringComparison.OrdinalIgnoreCase));
                 var existPdb = fileMd5InfoList.Any(temp =>
-                    Path.GetExtension(temp.File).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
+                    Path.GetExtension(temp.RelativeFilePath).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
 
                 Assert.AreEqual(true, existExe && existDll && existPdb);
             });
@@ -90,7 +90,7 @@ namespace PickTextValueTask.Tests
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
-                var outputFile = Options.DefaultOutputFile;
+                var outputFile = Options.DefaultOutputFileName;
 
                 if (File.Exists(outputFile))
                 {
@@ -105,14 +105,14 @@ namespace PickTextValueTask.Tests
                 // 读取校验文件，然后测试是否文件完全相同
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
                 // 预期是所有都相同
-                Assert.AreEqual(true, verifyResult.IsAllMatch);
+                Assert.AreEqual(true, verifyResult.AreAllMatched);
             });
 
             "将输出文件夹的所有文件创建校验文件然后修改某个文件，可以输出被更改的文件".Test(() =>
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
-                var outputFile = Options.DefaultOutputFile;
+                var outputFile = Options.DefaultOutputFileName;
 
                 if (File.Exists(outputFile))
                 {
@@ -135,15 +135,15 @@ namespace PickTextValueTask.Tests
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
 
                 // 预期是找到修改的文件
-                Assert.AreEqual(false, verifyResult.IsAllMatch);
-                Assert.AreEqual(testFile, verifyResult.NoMatchFileInfoList[0].File);
+                Assert.AreEqual(false, verifyResult.AreAllMatched);
+                Assert.AreEqual(testFile, verifyResult.NoMatchedFileInfoList[0].RelativeFilePath);
             });
 
             "将输出文件夹的所有文件创建校验文件然后删除某个文件，可以输出被删除的文件".Test(() =>
             {
                 // 使用当前文件夹
                 var directory = new DirectoryInfo(".");
-                var outputFile = Options.DefaultOutputFile;
+                var outputFile = Options.DefaultOutputFileName;
 
                 if (File.Exists(outputFile))
                 {
@@ -166,9 +166,9 @@ namespace PickTextValueTask.Tests
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
 
                 // 预期是找到修改的文件
-                Assert.AreEqual(false, verifyResult.IsAllMatch);
-                Assert.AreEqual(testFile, verifyResult.NoMatchFileInfoList[0].File);
-                Assert.AreEqual(true, verifyResult.NoMatchFileInfoList[0].IsNotFound);
+                Assert.AreEqual(false, verifyResult.AreAllMatched);
+                Assert.AreEqual(testFile, verifyResult.NoMatchedFileInfoList[0].RelativeFilePath);
+                Assert.AreEqual(true, verifyResult.NoMatchedFileInfoList[0].IsNotFound);
             });
         }
     }

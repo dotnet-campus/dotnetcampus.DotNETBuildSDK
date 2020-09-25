@@ -21,7 +21,7 @@ namespace dotnetCampus.BuildMd5Task
             {
                 fileMd5List.Add(new FileMd5Info()
                 {
-                    File = MakeRelativePath(directory.FullName, file.FullName),
+                    RelativeFilePath = MakeRelativePath(directory.FullName, file.FullName),
                     FileSize = file.Length,
                     Md5 = GetMd5Hash(file)
                 });
@@ -39,7 +39,7 @@ namespace dotnetCampus.BuildMd5Task
             {
                 new FileMd5Info()
                 {
-                    File = file.Name,
+                    RelativeFilePath = file.Name,
                     FileSize = file.Length,
                     Md5 = hash
                 }
@@ -48,27 +48,27 @@ namespace dotnetCampus.BuildMd5Task
             WriteToFile(fileMd5List, outputFile);
         }
 
-        public static VerifyResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
+        public static DirectoryCheckingResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
         {
             // 读取文件
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
             using var fileStream = checksumFile.OpenRead();
             var fileMd5InfoList = (List<FileMd5Info>) xmlSerializer.Deserialize(fileStream);
 
-            var verifyResult = new VerifyResult();
-            verifyResult.IsAllMatch = true;
+            var verifyResult = new DirectoryCheckingResult();
+            verifyResult.AreAllMatched = true;
 
             foreach (var fileMd5Info in fileMd5InfoList)
             {
-                var file = new FileInfo(Path.Combine(directory.FullName, fileMd5Info.File));
+                var file = new FileInfo(Path.Combine(directory.FullName, fileMd5Info.RelativeFilePath));
                 if (file.Exists)
                 {
                     // 先判断文件长度
                     var fileLength = file.Length;
                     if (fileMd5Info.FileSize != fileLength)
                     {
-                        verifyResult.IsAllMatch = false;
-                        verifyResult.NoMatchFileInfoList.Add(new NoMatchFileInfo(fileMd5Info, fileLength,
+                        verifyResult.AreAllMatched = false;
+                        verifyResult.NoMatchedFileInfoList.Add(new NotMatchedFileInfo(fileMd5Info, fileLength,
                             string.Empty));
                     }
                     else
@@ -77,16 +77,16 @@ namespace dotnetCampus.BuildMd5Task
                         if (!hash.Equals(fileMd5Info.Md5, StringComparison.OrdinalIgnoreCase))
                         {
                             // 哈希不相同
-                            verifyResult.IsAllMatch = false;
-                            verifyResult.NoMatchFileInfoList.Add(new NoMatchFileInfo(fileMd5Info, fileLength, hash));
+                            verifyResult.AreAllMatched = false;
+                            verifyResult.NoMatchedFileInfoList.Add(new NotMatchedFileInfo(fileMd5Info, fileLength, hash));
                         }
                     }
                 }
                 else
                 {
                     // 找不到文件
-                    verifyResult.IsAllMatch = false;
-                    verifyResult.NoMatchFileInfoList.Add(NoMatchFileInfo.GetFileNotFoundMatchFileInfo(fileMd5Info));
+                    verifyResult.AreAllMatched = false;
+                    verifyResult.NoMatchedFileInfoList.Add(NotMatchedFileInfo.GetFileNotFoundMatchFileInfo(fileMd5Info));
                 }
             }
 

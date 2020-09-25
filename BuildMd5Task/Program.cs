@@ -11,14 +11,14 @@ namespace dotnetCampus.BuildMd5Task
     {
         static void Main(string[] args)
         {
-            Console.WriteLine($"Start build md5");
+            Console.WriteLine($"Start building MD5");
             var commandLine = dotnetCampus.Cli.CommandLine.Parse(args);
             var options = commandLine.As<Options>();
 
             var path = options.Path;
             if (string.IsNullOrEmpty(path))
             {
-                Console.WriteLine("Can not find Path in command line. We will use the WorkingDirectory as the path.");
+                Console.WriteLine("Path option is not set, we will use the working directory by default.");
                 path = Environment.CurrentDirectory;
             }
 
@@ -28,8 +28,8 @@ namespace dotnetCampus.BuildMd5Task
             if (string.IsNullOrEmpty(outputFile))
             {
                 Console.WriteLine(
-                    $"Can not find OutputFile in command line. We will use the DefaultOutputFile={Options.DefaultOutputFile} as the OutputFile.");
-                outputFile = Options.DefaultOutputFile;
+                    $"Output is not set, we will use '{Options.DefaultOutputFileName}' by default.");
+                outputFile = Options.DefaultOutputFileName;
             }
 
             outputFile = Path.GetFullPath(outputFile);

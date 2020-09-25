@@ -4,7 +4,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>netcoreapp3.1</TargetFramework>
         <Nullable>enable</Nullable>
-        <PackageId>dotnetCampus.BuildFolderMd5Task</PackageId>
+        <PackageId>dotnetCampus.BuildMd5Task</PackageId>
         <PackAsTool>true</PackAsTool>
         <ToolCommandName>BuildMd5</ToolCommandName>
         <RootNamespace>dotnetCampus.BuildMd5Task</RootNamespace>

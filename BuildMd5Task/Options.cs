@@ -14,7 +14,7 @@ namespace dotnetCampus.BuildMd5Task
         public string? Path { get; set; }
 
         /// <summary>
-        /// 输出的校验文件，默认将会输出为当前工作路径的 <see cref="DefaultOutputFile"/> 文件
+        /// 输出的校验文件，默认将会输出为当前工作路径的 <see cref="DefaultOutputFileName"/> 文件
         /// </summary>
         [Option('o', "Output")]
         public string? OutputFile { get; set; }
@@ -25,6 +25,10 @@ namespace dotnetCampus.BuildMd5Task
         [Option(longName: "SearchPattern")]
         public string? SearchPattern { get; set; }
 
-        public const string DefaultOutputFile = "ChecksumMd5.txt";
+        /// <summary>
+        /// 默认校验文件名
+        /// </summary>
+        /// 为什么叫 ChecksumMd5 是因为后续也许有 ChecksumSha1 等，加上校验使用的算法可以方便理解
+        public const string DefaultOutputFileName = "ChecksumMd5.txt";
     }
 }
