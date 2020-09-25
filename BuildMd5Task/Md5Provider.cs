@@ -123,8 +123,7 @@ namespace dotnetCampus.BuildMd5Task
         {
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
 
-            using var fileStream = new FileStream(outputFile, FileMode.OpenOrCreate, FileAccess.Write);
-            fileStream.Position = 0;
+            using var fileStream = new FileStream(outputFile, FileMode.CreateNew, FileAccess.Write);
 
             xmlSerializer.Serialize(fileStream, fileMd5List);
         }
