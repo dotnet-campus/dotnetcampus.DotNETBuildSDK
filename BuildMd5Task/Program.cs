@@ -43,6 +43,7 @@ namespace dotnetCampus.BuildMd5Task
                     Console.WriteLine($"SearchPattern is not set, we will use '*' by default.");
                 }
                 searchPattern ??= "*";
+                Console.WriteLine($"SearchPattern={searchPattern}");
 
                 Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile, searchPattern);
             }
