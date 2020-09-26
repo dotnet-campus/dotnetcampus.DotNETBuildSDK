@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
 using dotnetCampus.DotNETBuild.Utils;
@@ -11,18 +13,34 @@ namespace dotnetCampus.BuildMd5Task
     public class Md5Provider
     {
         public static void BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile,
-            string? multiSearchPattern = null)
+            string? multiSearchPattern = null,
+            string? ignoreList = null)
         {
             multiSearchPattern ??= "*";
+            var ignoreFileList = ParseIgnoreFileList(ignoreList);
 
             var fileMd5List = new List<FileMd5Info>();
             foreach (var file in directory.GetFilesWithMultiSearchPattern(multiSearchPattern))
+            {
+                var relativeFilePath = MakeRelativePath(directory.FullName, file.FullName);
+                // 判断是否忽略列表
+                StringComparison stringComparison = RuntimeInformation.IsOSPlatform(OSPlatform.Windows)
+                    // 在 Windows 下忽略大小写
+                    ? StringComparison.OrdinalIgnoreCase
+                    : StringComparison.Ordinal;
+                if (ignoreFileList.Any(temp => string.Equals(relativeFilePath, temp, stringComparison)))
+                {
+                    // 这是被忽略的数据
+                    continue;
+                }
+
                 fileMd5List.Add(new FileMd5Info
                 {
-                    RelativeFilePath = MakeRelativePath(directory.FullName, file.FullName),
+                    RelativeFilePath = relativeFilePath,
                     FileSize = file.Length,
                     Md5 = GetMd5Hash(file)
                 });
+            }
 
             WriteToFile(fileMd5List, outputFile);
         }
@@ -90,6 +108,16 @@ namespace dotnetCampus.BuildMd5Task
             }
 
             return verifyResult;
+        }
+
+        private static List<string> ParseIgnoreFileList(string? ignoreList)
+        {
+            if (string.IsNullOrEmpty(ignoreList))
+            {
+                return new List<string>();
+            }
+
+            return ignoreList.Split('|').ToList();
         }
 
         private static string MakeRelativePath(string fromPath, string toPath)

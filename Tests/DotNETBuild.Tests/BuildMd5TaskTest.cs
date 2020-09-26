@@ -14,6 +14,44 @@ namespace PickTextValueTask.Tests
     public class BuildMd5TaskTest
     {
         [ContractTestCase]
+        public void BuildFolderMd5WithIgnoreFileList()
+        {
+            "传入忽略文件列表，可以忽略文件".Test(() =>
+            {
+                // 使用当前文件夹
+                var directory = new DirectoryInfo(".");
+                var outputFile = Options.DefaultOutputFileName;
+
+                if (File.Exists(outputFile))
+                {
+                    File.Delete(outputFile);
+                }
+
+                var multiSearchPattern = @"*.dll|*.exe";
+                var ignoreListString = "BuildMd5Task.dll|Castle.Core.dll";
+
+                Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, multiSearchPattern, ignoreListString);
+                // 等待校验文件写入
+                Thread.Sleep(1000);
+
+                var checksumFile = new FileInfo(outputFile);
+                var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
+                using var fileStream = checksumFile.OpenRead();
+                var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
+
+                // 不存在忽略的文件
+                var existBuildMd5TaskDll = fileMd5InfoList.Any(temp =>
+                    temp.RelativeFilePath.Equals("BuildMd5Task.dll", StringComparison.OrdinalIgnoreCase));
+                var existCastleCoreDll = fileMd5InfoList.Any(temp =>
+                    temp.RelativeFilePath.Equals("Castle.Core.dll", StringComparison.OrdinalIgnoreCase));
+
+                // 上面通配符写了 exe 和 dll 文件，不包含 pdb 文件
+                Assert.AreEqual(false, existBuildMd5TaskDll);
+                Assert.AreEqual(false, existCastleCoreDll);
+            });
+        }
+
+        [ContractTestCase]
         public void BuildFolderMd5WithMultiSearchPatternTest()
         {
             "传入通配符，将会校验符合通配符的文件".Test(() =>
