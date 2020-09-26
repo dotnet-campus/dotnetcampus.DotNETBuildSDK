@@ -17,9 +17,8 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// </summary>
         public static IEnumerable<FileInfo> GetFilesWithRegexPattern(this DirectoryInfo directory, Regex regex)
         {
-            foreach (var file in directory.EnumerateFiles("*", SearchOption.AllDirectories))
-                if (regex.IsMatch(file.Name))
-                    yield return file;
+            return directory.EnumerateFiles("*", SearchOption.AllDirectories)
+                .Where(file => regex.IsMatch(file.Name));
         }
 
         public static IEnumerable<FileInfo> GetFilesWithMultiSearchPattern(this DirectoryInfo directory,
