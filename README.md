@@ -241,4 +241,9 @@ BuildMd5 [参数]
 - `-p` 或 `--path` 需要用来创建校验的文件夹或文件，默认将会使用当前工作路径文件夹
 - `-o` 或 `--output` 输出的校验文件，默认将会输出为当前工作路径的 ChecksumMd5.txt 文件
 - `--search-pattern` 匹配文件夹里所有符合此通配符的文件名的文件，多个通配符使用 `|` 字符分割，如同时匹配 exe 和 dll 文件可以使用 `--search-pattern "*.dll|*.exe"` 这句命令。此属性仅在 Path 为文件夹时使用，默认不填将匹配所有文件
+- `--ignore-list` 忽略文件列表，暂不支持通配符，需要使用相对路径，路径相对于 Path 路径。多个相对路径使用 `|` 字符分割，此属性仅在 Path 为文件夹时使用。如忽略 `file\lindexi.exe` 文件可以使用 `--ignore-list "file\lindexi.exe"` 这句命令
 ```
+
+## 相似的项目
+
+[dotnetcore/FlubuCore: A cross platform build and deployment automation system for building projects and executing deployment scripts using C# code.](https://github.com/dotnetcore/FlubuCore )
