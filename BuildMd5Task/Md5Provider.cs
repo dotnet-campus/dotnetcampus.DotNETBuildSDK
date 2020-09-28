@@ -14,7 +14,7 @@ namespace dotnetCampus.BuildMd5Task
     {
         public static void BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile,
             string? multiSearchPattern = null,
-            string? ignoreList = null)
+            string? ignoreList = null, bool overwrite = false)
         {
             multiSearchPattern ??= "*";
             var ignoreFileList = ParseIgnoreFileList(ignoreList);
@@ -42,10 +42,10 @@ namespace dotnetCampus.BuildMd5Task
                 });
             }
 
-            WriteToFile(fileMd5List, outputFile);
+            WriteToFile(fileMd5List, outputFile, overwrite);
         }
 
-        public static void BuildFileMd5(FileInfo file, string outputFile)
+        public static void BuildFileMd5(FileInfo file, string outputFile, bool overwrite)
         {
             var hash = GetMd5Hash(file);
             Console.WriteLine($"Md5={hash}");
@@ -60,7 +60,7 @@ namespace dotnetCampus.BuildMd5Task
                 }
             };
 
-            WriteToFile(fileMd5List, outputFile);
+            WriteToFile(fileMd5List, outputFile, overwrite);
         }
 
         public static DirectoryCheckingResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
@@ -147,8 +147,13 @@ namespace dotnetCampus.BuildMd5Task
             return relativePath;
         }
 
-        private static void WriteToFile(List<FileMd5Info> fileMd5List, string outputFile)
+        private static void WriteToFile(List<FileMd5Info> fileMd5List, string outputFile, bool overwrite)
         {
+            if (overwrite && File.Exists(outputFile))
+            {
+                File.Delete(outputFile);
+            }
+
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
 
             using var fileStream = new FileStream(outputFile, FileMode.CreateNew, FileAccess.Write);

@@ -14,6 +14,45 @@ namespace PickTextValueTask.Tests
     public class BuildMd5TaskTest
     {
         [ContractTestCase]
+        public void BuildMd5OverwriteChecksumFile()
+        {
+            "没有设置可以重写校验文件，在存在校验文件将会失败".Test(() =>
+            {
+                var outputFile = Options.DefaultOutputFileName;
+
+                if (!File.Exists(outputFile))
+                {
+                    // 创建出来一个校验文件
+                    File.WriteAllText(outputFile, "林德熙是逗比");
+                }
+
+                Assert.ThrowsException<System.IO.IOException>(() =>
+                {
+                    dotnetCampus.BuildMd5Task.Program.Main(new string[0]);
+                });
+            });
+
+            "设置可以重写校验文件，在存在校验文件将会覆盖原先的文件".Test(() =>
+            {
+                var outputFile = Options.DefaultOutputFileName;
+
+                var text = "林德熙是逗比";
+                if (!File.Exists(outputFile))
+                {
+                    // 创建出来一个校验文件
+                    File.WriteAllText(outputFile, text);
+                }
+
+                dotnetCampus.BuildMd5Task.Program.Main(new[] {"--overwrite", "true"});
+
+                // 等待校验文件写入
+                Thread.Sleep(1000);
+
+                Assert.AreNotEqual(text,File.ReadAllText(outputFile));
+            });
+        }
+
+        [ContractTestCase]
         public void BuildFolderMd5WithIgnoreFileList()
         {
             "传入忽略文件列表，可以忽略文件".Test(() =>

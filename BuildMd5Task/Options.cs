@@ -36,5 +36,11 @@ namespace dotnetCampus.BuildMd5Task
         /// </summary>
         [Option("IgnoreList", LocalizableDescription = "忽略文件列表，暂不支持通配符，需要使用相对路径，路径相对于 Path 路径。多个相对路径使用 `|` 字符分割，此属性仅在 Path 为文件夹时使用")]
         public string? IgnoreList { set; get; }
+
+        /// <summary>
+        /// 如果校验文件存在，那么将会被覆盖重写。默认值是 false 也就是说校验文件存在将会失败
+        /// </summary>
+        [Option("Overwrite", LocalizableDescription = "如果校验文件存在，那么将会被覆盖重写。默认值是 false 也就是说校验文件存在将会失败")]
+        public bool Overwrite { set; get; } = false;
     }
 }

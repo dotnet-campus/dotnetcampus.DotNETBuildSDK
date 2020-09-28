@@ -242,6 +242,7 @@ BuildMd5 [参数]
 - `-o` 或 `--output` 输出的校验文件，默认将会输出为当前工作路径的 ChecksumMd5.txt 文件
 - `--search-pattern` 匹配文件夹里所有符合此通配符的文件名的文件，多个通配符使用 `|` 字符分割，如同时匹配 exe 和 dll 文件可以使用 `--search-pattern "*.dll|*.exe"` 这句命令。此属性仅在 Path 为文件夹时使用，默认不填将匹配所有文件
 - `--ignore-list` 忽略文件列表，暂不支持通配符，需要使用相对路径，路径相对于 Path 路径。多个相对路径使用 `|` 字符分割，此属性仅在 Path 为文件夹时使用。如忽略 `file\lindexi.exe` 文件可以使用 `--ignore-list "file\lindexi.exe"` 这句命令
+- `--overwrite [true|false]` 如果校验文件存在，那么将会被覆盖重写。默认值是 false 也就是说校验文件存在将会失败
 ```
 
 ## 相似的项目

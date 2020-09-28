@@ -6,7 +6,7 @@ namespace dotnetCampus.BuildMd5Task
 {
     internal class Program
     {
-        private static void Main(string[] args)
+        internal static void Main(string[] args)
         {
             Console.WriteLine("Start building MD5");
             var commandLine = CommandLine.Parse(args);
@@ -47,11 +47,11 @@ namespace dotnetCampus.BuildMd5Task
                 var ignoreList = options.IgnoreList;
                 Console.WriteLine($"SearchPattern={ignoreList??"<null>"}");
 
-                Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile, searchPattern, ignoreList);
+                Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile, searchPattern, ignoreList, options.Overwrite);
             }
             else if (File.Exists(path))
             {
-                Md5Provider.BuildFileMd5(new FileInfo(path), outputFile);
+                Md5Provider.BuildFileMd5(new FileInfo(path), outputFile, options.Overwrite);
             }
             else
             {
