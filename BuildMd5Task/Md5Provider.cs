@@ -149,14 +149,10 @@ namespace dotnetCampus.BuildMd5Task
 
         private static void WriteToFile(List<FileMd5Info> fileMd5List, string outputFile, bool overwrite)
         {
-            if (overwrite && File.Exists(outputFile))
-            {
-                File.Delete(outputFile);
-            }
-
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
 
-            using var fileStream = new FileStream(outputFile, FileMode.CreateNew, FileAccess.Write);
+            var fileMode = overwrite ? FileMode.Create : FileMode.CreateNew;
+            using var fileStream = new FileStream(outputFile, fileMode, FileAccess.Write);
 
             xmlSerializer.Serialize(fileStream, fileMd5List);
         }
