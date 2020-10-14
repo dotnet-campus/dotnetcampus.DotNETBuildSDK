@@ -71,11 +71,17 @@ namespace BuildKitTool
                 "dotnetCampus.NuGetPublishTask",
                 "dotnetCampus.PickTextValueTask",
                 "dotnetCampus.SendEmailTask",
+                "dotnetCampus.BuildMd5Task",
 
+                // 用于 Tag 打包
                 // https://github.com/dotnet-campus/dotnetCampus.TagToVersion
                 "dotnetCampus.TagToVersion",
+                // 用于更新所有的 dotnet tool 工具
                 // https://github.com/dotnet-campus/dotnetCampus.UpdateAllDotNetTools
                 "dotnetCampus.UpdateAllDotNetTools",
+                // 用于下载文件
+                // https://github.com/dotnet-campus/dotnetCampus.FileDownloader
+                "dotnetCampus.FileDownloader.Tool",
             };
 
             // 读取全局配置的工具
