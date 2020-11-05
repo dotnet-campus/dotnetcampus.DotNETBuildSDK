@@ -38,7 +38,7 @@ namespace dotnetCampus.DotNETBuild.Context
                 }
                 else
                 {
-                    return ((string) configurationString).Split(';');
+                    return ((string)configurationString).Split(';');
                 }
             }
         }

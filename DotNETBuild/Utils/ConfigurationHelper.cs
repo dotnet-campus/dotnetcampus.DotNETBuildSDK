@@ -38,8 +38,8 @@ namespace dotnetCampus.DotNETBuild.Utils
         public static FileInfo GetMachineConfigurationFile()
         {
             var folder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            folder = Path.Combine(folder,"dotnet campus","BuildKit");
-            var file = new FileInfo(Path.Combine(folder,"configuration.coin"));
+            folder = Path.Combine(folder, "dotnet campus", "BuildKit");
+            var file = new FileInfo(Path.Combine(folder, "configuration.coin"));
             return file;
         }
 

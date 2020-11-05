@@ -45,7 +45,7 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             var appConfigurator = currentConfiguration.CreateAppConfigurator();
             Log.LogLevel = appConfigurator.Of<LogConfiguration>().LogLevel;
 
-            SetCommonConfiguration(appConfigurator);  
+            SetCommonConfiguration(appConfigurator);
 
             // 下面代码调用实际上代码里面的
             var returnObj = 0;

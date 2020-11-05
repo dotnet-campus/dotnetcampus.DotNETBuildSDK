@@ -1,4 +1,4 @@
-using System.IO;
+锘縰sing System.IO;
 using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -26,7 +26,7 @@ namespace PickTextValueTask.Tests
             File.WriteAllText(inputFilePath, inputText);
             File.WriteAllText(outputFilePath, outputText);
 
-            // 文件写入
+            // 鏂囦欢鍐欏叆
             Thread.Sleep(100);
 
             PickTextValueTask.Program.Main(new[]
@@ -41,7 +41,7 @@ namespace PickTextValueTask.Tests
                 replaceRegex
             });
 
-            // 文件写入
+            // 鏂囦欢鍐欏叆
             Thread.Sleep(100);
 
             var replacedText = File.ReadAllText(outputFilePath);

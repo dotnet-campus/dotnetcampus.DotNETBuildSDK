@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
-  public  static class ProcessCommand
+    public static class ProcessCommand
     {
         public static string ToArgumentPath(string filePath)
         {
