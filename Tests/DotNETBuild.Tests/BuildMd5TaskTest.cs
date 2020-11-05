@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,14 +16,14 @@ namespace PickTextValueTask.Tests
         [ContractTestCase]
         public void BuildMd5OverwriteChecksumFile()
         {
-            "Ã»ÓĞÉèÖÃ¿ÉÒÔÖØĞ´Ğ£ÑéÎÄ¼ş£¬ÔÚ´æÔÚĞ£ÑéÎÄ¼ş½«»áÊ§°Ü".Test(() =>
+            "æ²¡æœ‰è®¾ç½®å¯ä»¥é‡å†™æ ¡éªŒæ–‡ä»¶ï¼Œåœ¨å­˜åœ¨æ ¡éªŒæ–‡ä»¶å°†ä¼šå¤±è´¥".Test(() =>
             {
                 var outputFile = Options.DefaultOutputFileName;
 
                 if (!File.Exists(outputFile))
                 {
-                    // ´´½¨³öÀ´Ò»¸öĞ£ÑéÎÄ¼ş
-                    File.WriteAllText(outputFile, "ÁÖµÂÎõÊÇ¶º±È");
+                    // åˆ›å»ºå‡ºæ¥ä¸€ä¸ªæ ¡éªŒæ–‡ä»¶
+                    File.WriteAllText(outputFile, "æ—å¾·ç†™æ˜¯é€—æ¯”");
                 }
 
                 Assert.ThrowsException<System.IO.IOException>(() =>
@@ -32,32 +32,32 @@ namespace PickTextValueTask.Tests
                 });
             });
 
-            "ÉèÖÃ¿ÉÒÔÖØĞ´Ğ£ÑéÎÄ¼ş£¬ÔÚ´æÔÚĞ£ÑéÎÄ¼ş½«»á¸²¸ÇÔ­ÏÈµÄÎÄ¼ş".Test(() =>
+            "è®¾ç½®å¯ä»¥é‡å†™æ ¡éªŒæ–‡ä»¶ï¼Œåœ¨å­˜åœ¨æ ¡éªŒæ–‡ä»¶å°†ä¼šè¦†ç›–åŸå…ˆçš„æ–‡ä»¶".Test(() =>
             {
                 var outputFile = Options.DefaultOutputFileName;
 
-                var text = "ÁÖµÂÎõÊÇ¶º±È";
+                var text = "æ—å¾·ç†™æ˜¯é€—æ¯”";
                 if (!File.Exists(outputFile))
                 {
-                    // ´´½¨³öÀ´Ò»¸öĞ£ÑéÎÄ¼ş
+                    // åˆ›å»ºå‡ºæ¥ä¸€ä¸ªæ ¡éªŒæ–‡ä»¶
                     File.WriteAllText(outputFile, text);
                 }
 
-                dotnetCampus.BuildMd5Task.Program.Main(new[] {"--overwrite", "true"});
+                dotnetCampus.BuildMd5Task.Program.Main(new[] { "--overwrite", "true" });
 
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
-                Assert.AreNotEqual(text,File.ReadAllText(outputFile));
+                Assert.AreNotEqual(text, File.ReadAllText(outputFile));
             });
         }
 
         [ContractTestCase]
         public void BuildFolderMd5WithIgnoreFileList()
         {
-            "´«ÈëºöÂÔÎÄ¼şÁĞ±í£¬¿ÉÒÔºöÂÔÎÄ¼ş".Test(() =>
+            "ä¼ å…¥å¿½ç•¥æ–‡ä»¶åˆ—è¡¨ï¼Œå¯ä»¥å¿½ç•¥æ–‡ä»¶".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -70,7 +70,7 @@ namespace PickTextValueTask.Tests
                 var ignoreListString = "BuildMd5Task.dll|Castle.Core.dll";
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, multiSearchPattern, ignoreListString);
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
                 var checksumFile = new FileInfo(outputFile);
@@ -78,13 +78,13 @@ namespace PickTextValueTask.Tests
                 using var fileStream = checksumFile.OpenRead();
                 var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
 
-                // ²»´æÔÚºöÂÔµÄÎÄ¼ş
+                // ä¸å­˜åœ¨å¿½ç•¥çš„æ–‡ä»¶
                 var existBuildMd5TaskDll = fileMd5InfoList.Any(temp =>
                     temp.RelativeFilePath.Equals("BuildMd5Task.dll", StringComparison.OrdinalIgnoreCase));
                 var existCastleCoreDll = fileMd5InfoList.Any(temp =>
                     temp.RelativeFilePath.Equals("Castle.Core.dll", StringComparison.OrdinalIgnoreCase));
 
-                // ÉÏÃæÍ¨Åä·ûĞ´ÁË exe ºÍ dll ÎÄ¼ş£¬²»°üº¬ pdb ÎÄ¼ş
+                // ä¸Šé¢é€šé…ç¬¦å†™äº† exe å’Œ dll æ–‡ä»¶ï¼Œä¸åŒ…å« pdb æ–‡ä»¶
                 Assert.AreEqual(false, existBuildMd5TaskDll);
                 Assert.AreEqual(false, existCastleCoreDll);
             });
@@ -93,9 +93,9 @@ namespace PickTextValueTask.Tests
         [ContractTestCase]
         public void BuildFolderMd5WithMultiSearchPatternTest()
         {
-            "´«ÈëÍ¨Åä·û£¬½«»áĞ£Ñé·ûºÏÍ¨Åä·ûµÄÎÄ¼ş".Test(() =>
+            "ä¼ å…¥é€šé…ç¬¦ï¼Œå°†ä¼šæ ¡éªŒç¬¦åˆé€šé…ç¬¦çš„æ–‡ä»¶".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -107,7 +107,7 @@ namespace PickTextValueTask.Tests
                 var multiSearchPattern = @"*.dll|*.exe";
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile, multiSearchPattern);
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
                 var checksumFile = new FileInfo(outputFile);
@@ -115,7 +115,7 @@ namespace PickTextValueTask.Tests
                 using var fileStream = checksumFile.OpenRead();
                 var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
 
-                // Ä¬ÈÏ´æÔÚ exe ºÍ dll ÎÄ¼ş
+                // é»˜è®¤å­˜åœ¨ exe å’Œ dll æ–‡ä»¶
                 var existExe = fileMd5InfoList.Any(temp =>
                     Path.GetExtension(temp.RelativeFilePath).Equals(".exe", StringComparison.OrdinalIgnoreCase));
                 var existDll = fileMd5InfoList.Any(temp =>
@@ -123,14 +123,14 @@ namespace PickTextValueTask.Tests
                 var existPdb = fileMd5InfoList.Any(temp =>
                     Path.GetExtension(temp.RelativeFilePath).Equals(".pdb", StringComparison.OrdinalIgnoreCase));
 
-                // ÉÏÃæÍ¨Åä·ûĞ´ÁË exe ºÍ dll ÎÄ¼ş£¬²»°üº¬ pdb ÎÄ¼ş
+                // ä¸Šé¢é€šé…ç¬¦å†™äº† exe å’Œ dll æ–‡ä»¶ï¼Œä¸åŒ…å« pdb æ–‡ä»¶
                 Assert.AreEqual(true, existExe && existDll);
                 Assert.AreEqual(false, existPdb);
             });
 
-            "Ä¬ÈÏ²»´«ÈëÍ¨Åä·û£¬½«»áĞ£ÑéËùÓĞÎÄ¼ş".Test(() =>
+            "é»˜è®¤ä¸ä¼ å…¥é€šé…ç¬¦ï¼Œå°†ä¼šæ ¡éªŒæ‰€æœ‰æ–‡ä»¶".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -140,7 +140,7 @@ namespace PickTextValueTask.Tests
                 }
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile);
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
                 var checksumFile = new FileInfo(outputFile);
@@ -148,7 +148,7 @@ namespace PickTextValueTask.Tests
                 using var fileStream = checksumFile.OpenRead();
                 var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
 
-                // Ä¬ÈÏ´æÔÚ exe ºÍ dll ÎÄ¼ş
+                // é»˜è®¤å­˜åœ¨ exe å’Œ dll æ–‡ä»¶
                 var existExe = fileMd5InfoList.Any(temp =>
                     Path.GetExtension(temp.RelativeFilePath).Equals(".exe", StringComparison.OrdinalIgnoreCase));
                 var existDll = fileMd5InfoList.Any(temp =>
@@ -163,9 +163,9 @@ namespace PickTextValueTask.Tests
         [ContractTestCase]
         public void BuildFolderMd5Test()
         {
-            "½«Êä³öÎÄ¼ş¼ĞµÄËùÓĞÎÄ¼ş´´½¨Ğ£ÑéÎÄ¼ş£¬¿ÉÒÔÖØĞÂĞ£Ñé³É¹¦".Test(() =>
+            "å°†è¾“å‡ºæ–‡ä»¶å¤¹çš„æ‰€æœ‰æ–‡ä»¶åˆ›å»ºæ ¡éªŒæ–‡ä»¶ï¼Œå¯ä»¥é‡æ–°æ ¡éªŒæˆåŠŸ".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -176,18 +176,18 @@ namespace PickTextValueTask.Tests
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile);
 
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
-                // ¶ÁÈ¡Ğ£ÑéÎÄ¼ş£¬È»ºó²âÊÔÊÇ·ñÎÄ¼şÍêÈ«ÏàÍ¬
+                // è¯»å–æ ¡éªŒæ–‡ä»¶ï¼Œç„¶åæµ‹è¯•æ˜¯å¦æ–‡ä»¶å®Œå…¨ç›¸åŒ
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
-                // Ô¤ÆÚÊÇËùÓĞ¶¼ÏàÍ¬
+                // é¢„æœŸæ˜¯æ‰€æœ‰éƒ½ç›¸åŒ
                 Assert.AreEqual(true, verifyResult.AreAllMatched);
             });
 
-            "½«Êä³öÎÄ¼ş¼ĞµÄËùÓĞÎÄ¼ş´´½¨Ğ£ÑéÎÄ¼şÈ»ºóĞŞ¸ÄÄ³¸öÎÄ¼ş£¬¿ÉÒÔÊä³ö±»¸ü¸ÄµÄÎÄ¼ş".Test(() =>
+            "å°†è¾“å‡ºæ–‡ä»¶å¤¹çš„æ‰€æœ‰æ–‡ä»¶åˆ›å»ºæ ¡éªŒæ–‡ä»¶ç„¶åä¿®æ”¹æŸä¸ªæ–‡ä»¶ï¼Œå¯ä»¥è¾“å‡ºè¢«æ›´æ”¹çš„æ–‡ä»¶".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -196,29 +196,29 @@ namespace PickTextValueTask.Tests
                     File.Delete(outputFile);
                 }
 
-                // ¼ÓÈëÒ»¸ö½«±»¸ü¸ÄµÄÎÄ¼ş
+                // åŠ å…¥ä¸€ä¸ªå°†è¢«æ›´æ”¹çš„æ–‡ä»¶
                 var testFile = "test.txt";
-                File.WriteAllText(testFile, "¶º±È");
+                File.WriteAllText(testFile, "é€—æ¯”");
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile);
 
-                // ĞŞ¸Ä²âÊÔÎÄ¼ş
-                File.WriteAllText(testFile, "ÁÖµÂÎõÊÇ¶º±È");
+                // ä¿®æ”¹æµ‹è¯•æ–‡ä»¶
+                File.WriteAllText(testFile, "æ—å¾·ç†™æ˜¯é€—æ¯”");
 
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
-                // ¶ÁÈ¡Ğ£ÑéÎÄ¼ş£¬È»ºó²âÊÔÊÇ·ñÎÄ¼şÍêÈ«ÏàÍ¬
+                // è¯»å–æ ¡éªŒæ–‡ä»¶ï¼Œç„¶åæµ‹è¯•æ˜¯å¦æ–‡ä»¶å®Œå…¨ç›¸åŒ
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
 
-                // Ô¤ÆÚÊÇÕÒµ½ĞŞ¸ÄµÄÎÄ¼ş
+                // é¢„æœŸæ˜¯æ‰¾åˆ°ä¿®æ”¹çš„æ–‡ä»¶
                 Assert.AreEqual(false, verifyResult.AreAllMatched);
                 Assert.AreEqual(testFile, verifyResult.NoMatchedFileInfoList[0].RelativeFilePath);
             });
 
-            "½«Êä³öÎÄ¼ş¼ĞµÄËùÓĞÎÄ¼ş´´½¨Ğ£ÑéÎÄ¼şÈ»ºóÉ¾³ıÄ³¸öÎÄ¼ş£¬¿ÉÒÔÊä³ö±»É¾³ıµÄÎÄ¼ş".Test(() =>
+            "å°†è¾“å‡ºæ–‡ä»¶å¤¹çš„æ‰€æœ‰æ–‡ä»¶åˆ›å»ºæ ¡éªŒæ–‡ä»¶ç„¶ååˆ é™¤æŸä¸ªæ–‡ä»¶ï¼Œå¯ä»¥è¾“å‡ºè¢«åˆ é™¤çš„æ–‡ä»¶".Test(() =>
             {
-                // Ê¹ÓÃµ±Ç°ÎÄ¼ş¼Ğ
+                // ä½¿ç”¨å½“å‰æ–‡ä»¶å¤¹
                 var directory = new DirectoryInfo(".");
                 var outputFile = Options.DefaultOutputFileName;
 
@@ -227,22 +227,22 @@ namespace PickTextValueTask.Tests
                     File.Delete(outputFile);
                 }
 
-                // ¼ÓÈëÒ»¸ö½«±»¸ü¸ÄµÄÎÄ¼ş
+                // åŠ å…¥ä¸€ä¸ªå°†è¢«æ›´æ”¹çš„æ–‡ä»¶
                 var testFile = "test.txt";
-                File.WriteAllText(testFile, "¶º±È");
+                File.WriteAllText(testFile, "é€—æ¯”");
 
                 Md5Provider.BuildFolderAllFilesMd5(directory, outputFile);
 
-                // É¾³ı²âÊÔÎÄ¼ş
+                // åˆ é™¤æµ‹è¯•æ–‡ä»¶
                 File.Delete(testFile);
 
-                // µÈ´ıĞ£ÑéÎÄ¼şĞ´Èë
+                // ç­‰å¾…æ ¡éªŒæ–‡ä»¶å†™å…¥
                 Thread.Sleep(1000);
 
-                // ¶ÁÈ¡Ğ£ÑéÎÄ¼ş£¬È»ºó²âÊÔÊÇ·ñÎÄ¼şÍêÈ«ÏàÍ¬
+                // è¯»å–æ ¡éªŒæ–‡ä»¶ï¼Œç„¶åæµ‹è¯•æ˜¯å¦æ–‡ä»¶å®Œå…¨ç›¸åŒ
                 var verifyResult = Md5Provider.VerifyFolderMd5(directory, new FileInfo(outputFile));
 
-                // Ô¤ÆÚÊÇÕÒµ½ĞŞ¸ÄµÄÎÄ¼ş
+                // é¢„æœŸæ˜¯æ‰¾åˆ°ä¿®æ”¹çš„æ–‡ä»¶
                 Assert.AreEqual(false, verifyResult.AreAllMatched);
                 Assert.AreEqual(testFile, verifyResult.NoMatchedFileInfoList[0].RelativeFilePath);
                 Assert.AreEqual(true, verifyResult.NoMatchedFileInfoList[0].IsNotFound);

@@ -99,23 +99,23 @@ namespace BuildKitTool
             switch (configurationEnum)
             {
                 case ConfigurationEnum.Debug:
-                {
-                    Log.LogLevel = LogLevel.Debug;
-                    Log.Debug("开始配置日志输出等级");
-                    Log.Debug("进入 Debug 模式，更多信息将会详细输出");
-                }
+                    {
+                        Log.LogLevel = LogLevel.Debug;
+                        Log.Debug("开始配置日志输出等级");
+                        Log.Debug("进入 Debug 模式，更多信息将会详细输出");
+                    }
                     break;
                 case ConfigurationEnum.Release:
                     // 保持原因的信息级输出
                     break;
                 case ConfigurationEnum.None:
                 default:
-                {
-                    Log.LogLevel = LogLevel.Debug;
-                    Log.Debug("开始配置日志输出等级");
-                    Log.Debug($"看不懂你的配置是什么意思，就按照 Debug 模式输出");
-                    break;
-                }
+                    {
+                        Log.LogLevel = LogLevel.Debug;
+                        Log.Debug("开始配置日志输出等级");
+                        Log.Debug($"看不懂你的配置是什么意思，就按照 Debug 模式输出");
+                        break;
+                    }
             }
         }
     }

@@ -22,7 +22,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             codeDirectory = compileConfiguration.CodeDirectory;
             if (string.IsNullOrEmpty(codeDirectory))
             {
-                throw new ArgumentException("没有找到 git 仓库文件夹，请确定当前项目被 Git 管理 当前工作路径:"+Environment.CurrentDirectory);
+                throw new ArgumentException("没有找到 git 仓库文件夹，请确定当前项目被 Git 管理 当前工作路径:" + Environment.CurrentDirectory);
             }
 
             var git = new Git(new DirectoryInfo(codeDirectory))

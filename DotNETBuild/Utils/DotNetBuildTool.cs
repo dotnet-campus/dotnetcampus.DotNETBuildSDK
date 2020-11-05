@@ -5,7 +5,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 {
     public abstract class DotNetBuildTool
     {
-        protected DotNetBuildTool(IAppConfigurator appConfigurator,ILogger logger=null)
+        protected DotNetBuildTool(IAppConfigurator appConfigurator, ILogger logger = null)
         {
             AppConfigurator = appConfigurator;
 
@@ -19,7 +19,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             string workingDirectory = "")
         {
             Logger.LogInformation($"执行命令 {exeName} {arguments}");
-            (bool success, string output) = ProcessCommand.ExecuteCommand(exeName, arguments,workingDirectory);
+            (bool success, string output) = ProcessCommand.ExecuteCommand(exeName, arguments, workingDirectory);
 
             if (success)
             {

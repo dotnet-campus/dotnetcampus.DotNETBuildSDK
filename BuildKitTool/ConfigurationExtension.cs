@@ -20,7 +20,7 @@ namespace BuildKitTool
             // 放在机器的配置
             var globalConfigurationFile = GetGlobalConfigurationFile();
 
-            Dictionary<string, string> machineConfiguration=new Dictionary<string, string>();
+            Dictionary<string, string> machineConfiguration = new Dictionary<string, string>();
             if (!globalConfigurationFile.Exists)
             {
                 Log.Debug("没有找到机器配置" + globalConfigurationFile.FullName);
@@ -49,7 +49,7 @@ namespace BuildKitTool
             // 序列化写入
             var fileConfiguration = ConfigurationHelper.GetCurrentConfiguration();
             IConfigurationRepo configurationRepo = fileConfiguration;
-            
+
             foreach (var (key, value) in currentConfiguration)
             {
                 configurationRepo.SetValue(key, value);

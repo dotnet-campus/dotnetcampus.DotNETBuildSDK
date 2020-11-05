@@ -45,7 +45,7 @@ namespace dotnetCampus.BuildMd5Task
                 searchPattern ??= "*";
                 Console.WriteLine($"SearchPattern={searchPattern}");
                 var ignoreList = options.IgnoreList;
-                Console.WriteLine($"SearchPattern={ignoreList??"<null>"}");
+                Console.WriteLine($"SearchPattern={ignoreList ?? "<null>"}");
 
                 Md5Provider.BuildFolderAllFilesMd5(new DirectoryInfo(path), outputFile, searchPattern, ignoreList, options.Overwrite);
             }

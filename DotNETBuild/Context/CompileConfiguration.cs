@@ -33,7 +33,7 @@ namespace dotnetCampus.DotNETBuild.Context
             }
             get
             {
-                var msbuild= GetString();
+                var msbuild = GetString();
 
                 if (!string.IsNullOrEmpty(msbuild))
                 {
