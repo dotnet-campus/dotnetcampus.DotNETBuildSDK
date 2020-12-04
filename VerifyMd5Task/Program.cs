@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using dotnetCampus.BuildMd5Task;
 using dotnetCampus.Cli;
@@ -35,20 +36,50 @@ namespace dotnetCampus.VerifyMd5Task
             Console.WriteLine($"Path={path}");
             Console.WriteLine($"ChecksumMd5FilePath={checksumMd5FilePath}");
 
+            if (!Directory.Exists(path))
+            {
+                throw new DirectoryNotFoundException($"Can not find path={path}");
+            }
+
+            if (!File.Exists(checksumMd5FilePath))
+            {
+                throw new FileNotFoundException($"Can not find ChecksumMd5FilePath={checksumMd5FilePath}");
+            }
+
             var directoryCheckingResult = Md5Provider.VerifyFolderMd5(new DirectoryInfo(path), new FileInfo(checksumMd5FilePath));
 
-            foreach (var temp in directoryCheckingResult.NoMatchedFileInfoList)
-            {
-                var stringBuilder = new StringBuilder();
-                stringBuilder.AppendLine($"File: {temp.RelativeFilePath}")
-                    .AppendLine($"IsNotFound: {temp.IsNotFound}")
-                    .AppendLine($"ActualFileMd5: {temp.ActualFileMd5}")
-                    .AppendLine($"ActualFileLength: {temp.ActualFileLength}")
-                    .AppendLine($"ExpectedFileMd5: {temp.ExpectedFileMd5}")
-                    .AppendLine($"ExpectedFileLength: {temp.ExpectedFileLength}");
+            // 没有全成功，上报和记录日志哪些文件失败
+            var noMatchFileInfoList = directoryCheckingResult.NoMatchedFileInfoList;
 
-                Console.WriteLine(stringBuilder.ToString());
+            var stringBuilder = new StringBuilder();
+
+            // 文件丢失的列表
+            var notFoundFileList = noMatchFileInfoList.Where(temp => temp.IsNotFound).ToList();
+            if (notFoundFileList.Count > 0)
+            {
+                stringBuilder.AppendLine($"NotFoundFileList: {notFoundFileList.Count}");
+                foreach (var temp in notFoundFileList)
+                {
+                    stringBuilder.Append($"File:{temp.RelativeFilePath}\r\nExpectedFileMd5:{temp.ExpectedFileMd5}\r\n");
+                }
             }
+
+            var damagedFileList = noMatchFileInfoList.Where(temp => !temp.IsNotFound).ToList();
+            // 损坏的文件列表
+            if (damagedFileList.Count > 0)
+            {
+                stringBuilder.AppendLine($"DamagedFileList: {damagedFileList.Count}");
+                foreach (var temp in damagedFileList)
+                {
+                    stringBuilder.AppendLine($"File: {temp.RelativeFilePath}")
+                        .AppendLine($"ActualFileMd5: {temp.ActualFileMd5}")
+                        .AppendLine($"ActualFileLength: {temp.ActualFileLength}")
+                        .AppendLine($"ExpectedFileMd5: {temp.ExpectedFileMd5}")
+                        .AppendLine($"ExpectedFileLength: {temp.ExpectedFileLength}");
+                }
+            }
+
+            Console.WriteLine(stringBuilder);
 
             if (!directoryCheckingResult.AreAllMatched)
             {
