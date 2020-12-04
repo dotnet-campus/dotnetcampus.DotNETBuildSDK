@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <PackageId>dotnetCampus.VerifyMd5Task</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>VerifyMd5Task</ToolCommandName>
+    <RootNamespace>dotnetCampus.VerifyMd5Task</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\DotNETBuild\Assembly.cs" Link="Assembly.cs" />
+    <Compile Include="..\DotNETBuild\Utils\DirectoryInfoHelper.cs" Link="DirectoryInfoHelper.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
+    <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BuildMd5Task\BuildMd5Task.csproj" />
+  </ItemGroup>
+</Project>
