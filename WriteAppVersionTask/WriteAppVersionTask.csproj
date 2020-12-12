@@ -9,7 +9,7 @@
         <RootNamespace>dotnetCampus.WriteAppVersionTask</RootNamespace>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.312"></PackageReference>
+        <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.3.3"></PackageReference>
         <PackageReference Include="CommandLineParser" Version="2.8.0"></PackageReference>
     </ItemGroup>
 

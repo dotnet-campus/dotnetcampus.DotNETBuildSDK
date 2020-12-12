@@ -11,8 +11,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.CommandLine" Version="2.2.0" />
-    <PackageReference Include="Walterlv.Collections.Source" Version="5.7.0" />
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
+    <PackageReference Include="Walterlv.Collections.Source" Version="5.11.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
