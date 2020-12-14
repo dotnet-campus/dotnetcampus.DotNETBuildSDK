@@ -9,6 +9,6 @@
     <RootNamespace>dotnetCampus.NuGetTask</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.1.312"></PackageReference>
+    <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.3.3"></PackageReference>
   </ItemGroup>
 </Project>
