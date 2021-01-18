@@ -8,12 +8,9 @@ namespace dotnetCampus.DotNETBuild.Utils
     {
         protected DotNetBuildTool(IAppConfigurator appConfigurator, ILogger logger = null)
         {
-            AppConfigurator = appConfigurator;
-            if (AppConfigurator == null)
-            {
-                var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
-                AppConfigurator = currentConfiguration.CreateAppConfigurator();
-            }
+            AppConfigurator = appConfigurator
+                              ?? dotnetCampus.DotNETBuild.Context
+                                  .AppConfigurator.GetAppConfigurator(); ;
 
             Logger = logger ?? AppConfigurator.Of<LogConfiguration>().GetLogger();
         }
