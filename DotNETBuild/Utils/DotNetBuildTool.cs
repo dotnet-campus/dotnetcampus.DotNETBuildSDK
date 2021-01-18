@@ -1,4 +1,5 @@
-﻿using dotnetCampus.Configurations;
+﻿using System;
+using dotnetCampus.Configurations;
 using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
@@ -8,6 +9,11 @@ namespace dotnetCampus.DotNETBuild.Utils
         protected DotNetBuildTool(IAppConfigurator appConfigurator, ILogger logger = null)
         {
             AppConfigurator = appConfigurator;
+            if (AppConfigurator == null)
+            {
+                var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
+                AppConfigurator = currentConfiguration.CreateAppConfigurator();
+            }
 
             Logger = logger ?? AppConfigurator.Of<LogConfiguration>().GetLogger();
         }
