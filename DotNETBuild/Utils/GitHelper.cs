@@ -47,6 +47,12 @@ namespace dotnetCampus.DotNETBuild.Utils
             gitConfiguration.GitCount = gitCommitRevisionCount;
 
             gitConfiguration.CurrentCommit = git.GetCurrentCommit();
+
+            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+            if (string.IsNullOrEmpty(compileConfiguration.CurrentCommit))
+            {
+                compileConfiguration.CurrentCommit = gitConfiguration.CurrentCommit;
+            }
         }
     }
 }
