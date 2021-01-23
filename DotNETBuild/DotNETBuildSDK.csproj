@@ -9,6 +9,7 @@
     <Authors>林德熙</Authors>
     <Company>dotnetCampus</Company>
     <Description>用于辅助做打包应用</Description>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
