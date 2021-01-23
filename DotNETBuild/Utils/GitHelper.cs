@@ -40,7 +40,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void FillGitInfo(IAppConfigurator appConfigurator = null)
         {
-            appConfigurator??= AppConfigurator.GetAppConfigurator();
+            appConfigurator ??= AppConfigurator.GetAppConfigurator();
             var git = GitHelper.GetGitRepo(appConfigurator);
             var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
             var gitConfiguration = appConfigurator.Of<GitConfiguration>();
