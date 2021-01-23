@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.GitCommand;
 
@@ -9,8 +10,13 @@ namespace dotnetCampus.DotNETBuild.Utils
     {
         public static Git GetGitRepo()
         {
-            // 先尝试从项目配置获取
             var appConfigurator = AppConfigurator.GetAppConfigurator();
+            return GetGitRepo(appConfigurator);
+        }
+
+        public static Git GetGitRepo(IAppConfigurator appConfigurator)
+        {
+            // 先尝试从项目配置获取
             var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
             var codeDirectory = compileConfiguration.CodeDirectory;
             if (string.IsNullOrEmpty(codeDirectory))
@@ -30,6 +36,23 @@ namespace dotnetCampus.DotNETBuild.Utils
                 NeedWriteLog = false,
             };
             return git;
+        }
+
+        public static void FillGitInfo(IAppConfigurator appConfigurator = null)
+        {
+            appConfigurator??= AppConfigurator.GetAppConfigurator();
+            var git = GitHelper.GetGitRepo(appConfigurator);
+            var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
+            var gitConfiguration = appConfigurator.Of<GitConfiguration>();
+            gitConfiguration.GitCount = gitCommitRevisionCount;
+
+            gitConfiguration.CurrentCommit = git.GetCurrentCommit();
+
+            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+            if (string.IsNullOrEmpty(compileConfiguration.CurrentCommit))
+            {
+                compileConfiguration.CurrentCommit = gitConfiguration.CurrentCommit;
+            }
         }
     }
 }
