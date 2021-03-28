@@ -5,6 +5,14 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <PackageId>dotnetCampus.CopyAfterCompileTool</PackageId>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>CopyAfterCompile</ToolCommandName>
+    <RootNamespace>dotnetCampus.CopyAfterCompileTool</RootNamespace>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
   </ItemGroup>
