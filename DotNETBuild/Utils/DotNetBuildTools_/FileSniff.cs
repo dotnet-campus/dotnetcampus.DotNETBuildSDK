@@ -145,7 +145,23 @@ namespace dotnetCampus.DotNETBuild.Utils
                 }
                 else
                 {
-                    throw new ArgumentException($"没有在{Environment.CurrentDirectory}找到sln文件");
+                    // 再试试找找 csproj 文件，有些项目是不存在 sln 文件的
+                    var csprojFileList = Directory.GetFiles(directory, "*.csproj");
+                    if (csprojFileList.Length > 1)
+                    {
+                        throw new ArgumentException(
+                            $"在{Environment.CurrentDirectory}找不到一个 sln 文件，但找到多个 csproj 文件，找到的文件如下：{string.Join(';', csprojFileList)}");
+                    }
+                    else if (csprojFileList.Length == 1)
+                    {
+                        slnFile = csprojFileList[0];
+                        codeConfiguration.SlnPath = slnFile;
+                        Logger.LogInformation($"找不到sln文件，但找到一个 csproj 文件 {slnFile}");
+                    }
+                    else
+                    {
+                        throw new ArgumentException($"没有在{Environment.CurrentDirectory}找到sln文件或 csproj 文件");
+                    }
                 }
             }
             else
