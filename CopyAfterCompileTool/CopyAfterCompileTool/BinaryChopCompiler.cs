@@ -121,6 +121,12 @@ namespace dotnetCampus.CopyAfterCompileTool
                 try
                 {
                     Log($"开始 {commit} 二分，本次任务第{i+1}次构建，总共{commitList.Count}次构建");
+
+                    if (!CheckNeedCompile(commit))
+                    {
+                        continue;
+                    }
+
                     CleanDirectory(commit);
 
                     // 如果没有指定使用 bat 脚本构建，那么执行通用构建
@@ -166,6 +172,19 @@ namespace dotnetCampus.CopyAfterCompileTool
                     Log(e.ToString());
                 }
             }
+        }
+
+        private bool CheckNeedCompile(string commit)
+        {
+            if (BinaryChopCompileConfiguration.OverwriteCompiledCommit)
+            {
+                return true;
+            }
+
+            // 如果有构建过的，那么就不再构建
+            var folder = Path.Combine(TargetDirectory.FullName,commit);
+            // 如果存在就是构建过的
+            return !Directory.Exists(folder);
         }
 
         private static FileInfo GetCurrentBuildLogFile(IAppConfigurator appConfigurator)

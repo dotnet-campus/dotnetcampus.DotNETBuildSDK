@@ -8,6 +8,15 @@ namespace dotnetCampus.CopyAfterCompileTool
         {
         }
 
+        /// <summary>
+        /// 是否在遇到之前已构建过的 commit 可以重新构建，默认是构建过就不覆盖
+        /// </summary>
+        public bool OverwriteCompiledCommit
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? false;
+        }
+
         public string OriginBranch
         {
             set => SetValue(value);
