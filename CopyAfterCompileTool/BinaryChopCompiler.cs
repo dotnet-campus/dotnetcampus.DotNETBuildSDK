@@ -138,7 +138,10 @@ namespace CopyAfterCompileTool
                         var currentBuildLogFile1 = GetCurrentBuildLogFile(appConfigurator);
 
                         var msBuildCompiler = new MsBuild(appConfigurator);
-                        msBuildCompiler.Build();
+                        msBuildCompiler.Build(new MsBuildCommandOptions()
+                        {
+                            ShouldRestore = true
+                        });
                         var currentBuildLogFile = currentBuildLogFile1;
 
                         MoveFile(commit, currentBuildLogFile);

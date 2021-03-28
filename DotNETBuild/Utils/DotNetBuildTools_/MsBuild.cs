@@ -17,13 +17,13 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <summary>
         /// 执行编译
         /// </summary>
-        /// <param name="parallel"></param>
-        /// <param name="configuration"></param>
-        /// <param name="slnPath"></param>
-        /// <param name="msbuildPath"></param>
-        public void Build(bool parallel = true, MsBuildConfiguration configuration = MsBuildConfiguration.Release,
-            string slnPath = "", string msbuildPath = "")
+        public void Build(MsBuildCommandOptions options)
         {
+            var parallel = options.Parallel;
+            var configuration = options.MsBuildConfiguration;
+            var slnPath = options.SlnPath;
+            var msbuildPath = options.MsBuildPath;
+
             var command = "";
             if (parallel)
             {
@@ -31,6 +31,11 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             command += $" /p:configuration={(configuration == MsBuildConfiguration.Release ? "release" : "debug")}";
+
+            if (options.ShouldRestore)
+            {
+                command += " -restore";
+            }
 
             if (string.IsNullOrEmpty(slnPath))
             {
@@ -40,6 +45,25 @@ namespace dotnetCampus.DotNETBuild.Utils
             command += $" {ProcessCommand.ToArgumentPath(slnPath)}";
 
             Build(command, msbuildPath);
+        }
+
+        /// <summary>
+        /// 执行编译
+        /// </summary>
+        /// <param name="parallel"></param>
+        /// <param name="configuration"></param>
+        /// <param name="slnPath"></param>
+        /// <param name="msbuildPath"></param>
+        public void Build(bool parallel = true, MsBuildConfiguration configuration = MsBuildConfiguration.Release,
+            string slnPath = "", string msbuildPath = "")
+        {
+            Build(new MsBuildCommandOptions()
+            {
+                Parallel = parallel,
+                MsBuildConfiguration = configuration,
+                SlnPath = slnPath,
+                MsBuildPath = msbuildPath
+            });
         }
 
         /// <summary>
@@ -121,5 +145,17 @@ namespace dotnetCampus.DotNETBuild.Utils
         }
     }
 
+#nullable enable
+    public class MsBuildCommandOptions
+    {
+        public bool Parallel { get; set; } = true;
 
+        public MsBuild.MsBuildConfiguration MsBuildConfiguration { get; set; } = MsBuild.MsBuildConfiguration.Release;
+
+        public string? SlnPath { get; set; }
+
+        public string? MsBuildPath { get; set; }
+
+        public bool ShouldRestore { set; get; } = false;
+    }
 }
