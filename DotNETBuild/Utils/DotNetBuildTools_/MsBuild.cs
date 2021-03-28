@@ -4,6 +4,9 @@ using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
+    /// <summary>
+    /// 对 msbuild 命令行工具的封装
+    /// </summary>
     public class MsBuild : DotNetBuildTool
     {
         /// <inheritdoc />
@@ -54,7 +57,10 @@ namespace dotnetCampus.DotNETBuild.Utils
             ExecuteCommand(msbuildPath, command);
         }
 
-
+        /// <summary>
+        /// 获取 msbuild 命令行工具路径
+        /// </summary>
+        /// <returns></returns>
         public string GetMsBuildFile()
         {
             if (!string.IsNullOrEmpty(CompileConfiguration.MsBuildFile))
@@ -94,12 +100,26 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
+        /// <summary>
+        /// 构建配置
+        /// </summary>
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
 
+        /// <summary>
+        /// 构建选项
+        /// </summary>
         public enum MsBuildConfiguration
         {
+            /// <summary>
+            /// 发布版
+            /// </summary>
             Release,
+            /// <summary>
+            /// 调试版
+            /// </summary>
             Debug,
         }
     }
+
+
 }

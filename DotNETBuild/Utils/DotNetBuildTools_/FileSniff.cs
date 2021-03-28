@@ -166,6 +166,9 @@ namespace dotnetCampus.DotNETBuild.Utils
             nuGet.GetNugetFile();
         }
 
+        /// <summary>
+        /// 构建的配置
+        /// </summary>
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
     }
 }

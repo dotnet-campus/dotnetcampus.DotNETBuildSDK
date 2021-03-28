@@ -145,6 +145,9 @@ namespace dotnetCampus.GitCommand
             }
         }
 
+        /// <summary>
+        /// 是否需要写入日志
+        /// </summary>
         public bool NeedWriteLog { set; get; } = true;
 
         private string FileStr()
@@ -152,7 +155,7 @@ namespace dotnetCampus.GitCommand
             return string.Format(GitStr, Repo.FullName);
         }
 
-        private static string Command(string str, string workingDirectory)
+        private string Command(string str, string workingDirectory)
         {
             // string str = Console.ReadLine();
             //System.Console.InputEncoding = System.Text.Encoding.UTF8;//乱码
@@ -224,7 +227,7 @@ namespace dotnetCampus.GitCommand
             //    line = reader.ReadLine();
             //}
 
-            p.WaitForExit(TimeSpan.FromMinutes(1).Milliseconds); //等待程序执行完退出进程
+            p.WaitForExit((int)DefaultCommandTimeout.TotalMilliseconds); //等待程序执行完退出进程
             p.Close();
 
             exited = true;
@@ -232,43 +235,44 @@ namespace dotnetCampus.GitCommand
             return output + "\r\n";
         }
 
+
+        /// <summary>
+        /// 默认命令的超时时间
+        /// </summary>
+        public TimeSpan DefaultCommandTimeout { set; get; } = TimeSpan.FromMinutes(1);
+
+        /// <summary>
+        /// 切换到某个 commit 或分支
+        /// </summary>
         public void Checkout(string commit)
         {
-            Control($"checkout {commit}");
+            Checkout(commit, false);
         }
 
         /// <summary>
-        /// 创建新分支
+        /// 切换到某个 commit 或分支
+        /// </summary>
+        /// <param name="commit"></param>
+        /// <param name="shouldHard">是否需要强行切换，加上 -f 命令</param>
+        public void Checkout(string commit, bool shouldHard)
+        {
+            var command = $"checkout {commit}";
+
+            if (shouldHard)
+            {
+                command += " -f";
+            }
+
+            Control(command);
+        }
+
+        /// <summary>
+        /// 创建新分支，使用 checkout -b <paramref name="branchName"/> 命令
         /// </summary>
         /// <param name="branchName"></param>
         public void CheckoutNewBranch(string branchName)
         {
             Control($"checkout -b {branchName}");
         }
-    }
-
-    public class GitDiffFile
-    {
-        /// <inheritdoc />
-        public GitDiffFile(DiffType diffType, FileInfo file)
-        {
-            DiffType = diffType;
-            File = file;
-        }
-
-        public DiffType DiffType { get; }
-        public FileInfo File { get; }
-    }
-
-    public enum DiffType
-    {
-        Added,// A
-        Copied,// C
-        Deleted,// D
-        Modified,// M
-        Renamed,// R
-        Changed,// T
-        Unmerged,// U
-        Unknown,// X
     }
 }

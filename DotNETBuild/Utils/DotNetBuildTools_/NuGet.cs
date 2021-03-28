@@ -9,6 +9,9 @@ using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
+    /// <summary>
+    /// 对 NuGet 工具的命令行封装
+    /// </summary>
     public class NuGet : DotNetBuildTool
     {
         /// <inheritdoc />
@@ -43,6 +46,10 @@ namespace dotnetCampus.DotNETBuild.Utils
             ExecuteCommand(GetNugetFile(), command);
         }
 
+        /// <summary>
+        /// 获取 NuGet.exe 工具路径
+        /// </summary>
+        /// <returns></returns>
         public string GetNugetFile()
         {
             FindNugetFile();
@@ -105,6 +112,9 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
+        /// <summary>
+        /// 构建时的配置
+        /// </summary>
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
 
         /// <summary>
@@ -203,6 +213,14 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
+        /// <summary>
+        /// 执行发布 nupkg 包的命令
+        /// </summary>
+        /// <param name="nugetToolPath"></param>
+        /// <param name="nupkgFile"></param>
+        /// <param name="source"></param>
+        /// <param name="apiKey"></param>
+        /// <param name="skipDuplicate"></param>
         public void RunPublishNupkg(string nugetToolPath, string nupkgFile, string source, string apiKey = "",
             bool skipDuplicate = true)
         {
@@ -237,7 +255,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             return nupkgDirectory;
 
-            bool CheckNupkgDirectory(string directory)
+            static bool CheckNupkgDirectory(string directory)
             {
                 return Directory.GetFiles(directory, "*.nupkg").Any();
             }

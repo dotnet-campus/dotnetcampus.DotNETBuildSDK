@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace dotnetCampus.DotNETBuild.Utils
@@ -10,6 +11,18 @@ namespace dotnetCampus.DotNETBuild.Utils
     /// </summary>
     public static class DirectoryInfoHelper
     {
+        /// <summary>
+        /// 获取程序集所在文件夹
+        /// </summary>
+        /// <param name="assembly"></param>
+        /// <returns></returns>
+        public static DirectoryInfo GetAssemblyDirectoryInfo(this Assembly assembly)
+        {
+            assembly ??= Assembly.GetExecutingAssembly();
+            var folder = Path.GetDirectoryName(assembly.Location)!;
+            return new DirectoryInfo(folder);
+        }
+
         public const char MultiSearchPatternSeparator = '|';
 
         /// <summary>
