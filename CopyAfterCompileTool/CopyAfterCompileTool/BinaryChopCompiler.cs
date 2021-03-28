@@ -135,6 +135,10 @@ namespace dotnetCampus.CopyAfterCompileTool
 
                         var currentBuildLogFile1 = GetCurrentBuildLogFile(appConfigurator);
 
+                        // 填充一下文件路径
+                        var fileSniff = new FileSniff(appConfigurator);
+                        fileSniff.Sniff();
+
                         var msBuildCompiler = new MsBuild(appConfigurator);
                         msBuildCompiler.Build(new MsBuildCommandOptions()
                         {
@@ -190,6 +194,11 @@ namespace dotnetCampus.CopyAfterCompileTool
             if (nugetFile.Exists)
             {
                 toolConfiguration.NugetPath = nugetFile.FullName;
+            }
+            else
+            {
+                // 因为其实没有用到 nuget 工具，因此也就不需要在后续步骤去下载
+                toolConfiguration.NugetPath = "nuget.exe";
             }
 
             return appConfigurator;
