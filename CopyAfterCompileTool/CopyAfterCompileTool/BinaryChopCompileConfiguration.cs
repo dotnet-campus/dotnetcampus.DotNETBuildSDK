@@ -4,6 +4,10 @@ namespace dotnetCampus.CopyAfterCompileTool
 {
     class BinaryChopCompileConfiguration : Configuration
     {
+        public BinaryChopCompileConfiguration() : base("")
+        {
+        }
+
         public string OriginBranch
         {
             set => SetValue(value);

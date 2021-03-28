@@ -48,7 +48,7 @@ namespace dotnetCampus.GitCommand
         public string[] GetLogCommit()
         {
             var file = Path.GetTempFileName();
-            Control($"log --pretty=format:\"%h\" > {file}");
+            Control($"log --pretty=format:\"%H\" > {file}");
 
             return File.ReadAllLines(file);
         }
@@ -86,7 +86,7 @@ namespace dotnetCampus.GitCommand
         public string[] GetLogCommit(string formCommit, string toCommit)
         {
             var file = Path.GetTempFileName();
-            Control($"log --pretty=format:\"%h\" {formCommit}..{toCommit} > {file}");
+            Control($"log --pretty=format:\"%H\" {formCommit}..{toCommit} > {file}");
 
             return File.ReadAllLines(file);
         }

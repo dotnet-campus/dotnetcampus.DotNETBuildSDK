@@ -49,10 +49,10 @@ namespace dotnetCampus.CopyAfterCompileTool
         public BinaryChopCompiler(IAppConfigurator appConfigurator,
             DirectoryInfo codeDirectory,
             DirectoryInfo targetDirectory,
-            DirectoryInfo outputDirectory = null,
-            string originBranch = null,
+            DirectoryInfo? outputDirectory = null,
+            string? originBranch = null,
             //ICompiler compiler = null,
-            ILogger logger = null)
+            ILogger? logger = null)
         {
             AppConfigurator = appConfigurator;
 
@@ -97,8 +97,6 @@ namespace dotnetCampus.CopyAfterCompileTool
 
         public string OriginBranch { get; } = "dev";
 
-        //private ICompiler Compiler { get; }
-
         /// <summary>
         /// 移动到的文件夹，编译完成将输出移动到这个文件夹
         /// </summary>
@@ -122,7 +120,7 @@ namespace dotnetCampus.CopyAfterCompileTool
                 var commit = commitList[i];
                 try
                 {
-                    Log($"开始 {commit} 二分，本次任务第{i}次构建，总共{commitList.Count}次构建");
+                    Log($"开始 {commit} 二分，本次任务第{i+1}次构建，总共{commitList.Count}次构建");
                     CleanDirectory(commit);
 
                     // 如果没有指定使用 bat 脚本构建，那么执行通用构建
@@ -237,7 +235,7 @@ namespace dotnetCampus.CopyAfterCompileTool
         private string[] GetCommitList()
         {
             var git = _git;
-            if (LastCommit is null)
+            if (string.IsNullOrEmpty(LastCommit))
             {
                 return git.GetLogCommit();
             }

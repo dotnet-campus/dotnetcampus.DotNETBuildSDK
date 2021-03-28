@@ -24,7 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="dotnetCampus.Configurations" Version="1.6.2">
+      <PackageReference Include="dotnetCampus.Configurations" Version="1.6.8">
        
       </PackageReference>
   </ItemGroup>
