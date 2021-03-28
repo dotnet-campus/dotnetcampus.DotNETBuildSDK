@@ -12,11 +12,10 @@
     <ToolCommandName>CopyAfterCompile</ToolCommandName>
     <RootNamespace>dotnetCampus.CopyAfterCompileTool</RootNamespace>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Walterlv.IO.PackageManagement" Version="0.15.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\DotNETBuild\DotNETBuildSDK.csproj" />
   </ItemGroup>
 </Project>

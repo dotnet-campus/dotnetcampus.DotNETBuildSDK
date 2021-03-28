@@ -1,6 +1,6 @@
 ﻿using dotnetCampus.Configurations;
 
-namespace CopyAfterCompileTool
+namespace dotnetCampus.CopyAfterCompileTool
 {
     class BinaryChopCompileConfiguration : Configuration
     {

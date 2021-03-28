@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Reflection;
 
-namespace CopyAfterCompileTool
+namespace dotnetCampus.CopyAfterCompileTool
 {
     class Program
     {

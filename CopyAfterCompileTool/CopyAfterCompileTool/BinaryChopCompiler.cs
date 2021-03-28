@@ -10,14 +10,14 @@ using dotnetCampus.GitCommand;
 using Microsoft.Extensions.Logging;
 using Walterlv.IO.PackageManagement;
 
-namespace CopyAfterCompileTool
+namespace dotnetCampus.CopyAfterCompileTool
 {
     /// <summary>
     /// 对二分查找做准备，编译每个提交
     /// </summary>
-    class BinaryChopCompiler
+    public class BinaryChopCompiler
     {
-        public static BinaryChopCompiler CreateInstance(IAppConfigurator appConfigurator = null)
+        public static BinaryChopCompiler CreateInstance(IAppConfigurator? appConfigurator = null)
         {
             appConfigurator ??= dotnetCampus.DotNETBuild.Context.AppConfigurator.GetAppConfigurator();
 
