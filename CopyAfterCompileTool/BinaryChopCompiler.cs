@@ -17,7 +17,7 @@ namespace CopyAfterCompileTool
     /// </summary>
     class BinaryChopCompiler
     {
-        public static BinaryChopCompiler CreateInstance(IAppConfigurator appConfigurator=null)
+        public static BinaryChopCompiler CreateInstance(IAppConfigurator appConfigurator = null)
         {
             appConfigurator ??= dotnetCampus.DotNETBuild.Context.AppConfigurator.GetAppConfigurator();
 
@@ -43,9 +43,9 @@ namespace CopyAfterCompileTool
 
             Directory.CreateDirectory(targetDirectory.FullName);
 
-            return  new BinaryChopCompiler(appConfigurator, codeDirectory, targetDirectory, outputDirectory, originBranch);
+            return new BinaryChopCompiler(appConfigurator, codeDirectory, targetDirectory, outputDirectory, originBranch);
         }
-      
+
         public BinaryChopCompiler(IAppConfigurator appConfigurator,
             DirectoryInfo codeDirectory,
             DirectoryInfo targetDirectory,
@@ -125,15 +125,34 @@ namespace CopyAfterCompileTool
                     Log($"开始 {commit} 二分，本次任务第{i}次构建，总共{commitList.Count}次构建");
                     CleanDirectory(commit);
 
-                    // 这里是代码里面自己带的构建配置文件
-                    var appConfigurator = GetCurrentBuildConfiguration();
+                    // 如果没有指定使用 bat 脚本构建，那么执行通用构建
 
-                    var currentBuildLogFile = GetCurrentBuildLogFile(appConfigurator);
+                    var compilerBatFile = BinaryChopCompileConfiguration.CompilerBatFile;
+                    if (string.IsNullOrEmpty(compilerBatFile) || !File.Exists(compilerBatFile))
+                    {
+                        Log($"找不到指定的 bat 构建脚本文件 {compilerBatFile} 将使用默认的方式构建");
 
-                    var msBuildCompiler = new MsBuild(appConfigurator);
-                    msBuildCompiler.Build();
+                        // 这里是代码里面自己带的构建配置文件
+                        var appConfigurator = GetCurrentBuildConfiguration();
 
-                    MoveFile(commit, currentBuildLogFile);
+                        var currentBuildLogFile1 = GetCurrentBuildLogFile(appConfigurator);
+
+                        var msBuildCompiler = new MsBuild(appConfigurator);
+                        msBuildCompiler.Build();
+                        var currentBuildLogFile = currentBuildLogFile1;
+
+                        MoveFile(commit, currentBuildLogFile);
+                    }
+                    else
+                    {
+                        Log($"开始执行 {compilerBatFile} 构建脚本文件");
+
+                        var (success, output) = ProcessCommand.ExecuteCommand(compilerBatFile, null);
+                        // 将输出写入到文件里面
+                        var logFile = Path.GetTempFileName();
+                        File.WriteAllText(logFile, output);
+                        MoveFile(commit, new FileInfo(logFile));
+                    }
 
                     LastCommit = commit;
                 }
@@ -175,7 +194,7 @@ namespace CopyAfterCompileTool
             return appConfigurator;
         }
 
-        private void MoveFile(string commit, FileInfo buildLogFile)
+        private void MoveFile(string commit, FileInfo? buildLogFile)
         {
             var outputDirectory = new DirectoryInfo(OutputDirectory.FullName);
 
@@ -184,7 +203,7 @@ namespace CopyAfterCompileTool
 
             PackageDirectory.Move(outputDirectory, new DirectoryInfo(moveDirectory));
 
-            if (File.Exists(buildLogFile.FullName))
+            if (buildLogFile is not null && File.Exists(buildLogFile.FullName))
             {
                 try
                 {
