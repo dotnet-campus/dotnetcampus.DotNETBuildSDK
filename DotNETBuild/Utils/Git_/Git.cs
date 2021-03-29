@@ -29,8 +29,6 @@ namespace dotnetCampus.GitCommand
             }
 
             Repo = repo;
-
-
         }
 
         /// <summary>
@@ -62,9 +60,9 @@ namespace dotnetCampus.GitCommand
             {
                 File.Delete(file);
             }
-            catch (Exception)
+            catch
             {
-
+                // 忽略
             }
 
             return commit;
@@ -73,7 +71,8 @@ namespace dotnetCampus.GitCommand
         public int GetGitCommitRevisionCount()
         {
             var control = Control("rev-list --count HEAD");
-            var str = control.Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(temp => temp.Replace("\r", "")).Where(temp => !string.IsNullOrEmpty(temp)).Reverse().FirstOrDefault();
+            var str = control.Split("\n", StringSplitOptions.RemoveEmptyEntries).Select(temp => temp.Replace("\r", ""))
+                .Where(temp => !string.IsNullOrEmpty(temp)).Reverse().FirstOrDefault();
 
             if (int.TryParse(str, out var count))
             {
@@ -90,6 +89,7 @@ namespace dotnetCampus.GitCommand
 
             return File.ReadAllLines(file);
         }
+
         public void Clone(string repoUrl)
         {
             Control($"clone {repoUrl}");
@@ -108,7 +108,7 @@ namespace dotnetCampus.GitCommand
 
             var processStartInfo = new ProcessStartInfo(git, command);
             var process = Process.Start(processStartInfo);
-            process.WaitForExit((int)TimeSpan.FromMinutes(10).TotalMilliseconds);
+            process.WaitForExit((int) TimeSpan.FromMinutes(10).TotalMilliseconds);
 
             return new Git(directory);
         }
@@ -227,14 +227,13 @@ namespace dotnetCampus.GitCommand
             //    line = reader.ReadLine();
             //}
 
-            p.WaitForExit((int)DefaultCommandTimeout.TotalMilliseconds); //等待程序执行完退出进程
+            p.WaitForExit((int) DefaultCommandTimeout.TotalMilliseconds); //等待程序执行完退出进程
             p.Close();
 
             exited = true;
 
             return output + "\r\n";
         }
-
 
         /// <summary>
         /// 默认命令的超时时间

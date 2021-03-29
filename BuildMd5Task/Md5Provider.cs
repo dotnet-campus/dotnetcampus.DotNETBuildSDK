@@ -68,7 +68,7 @@ namespace dotnetCampus.BuildMd5Task
             // 读取文件
             var xmlSerializer = new XmlSerializer(typeof(List<FileMd5Info>));
             using var fileStream = checksumFile.OpenRead();
-            var fileMd5InfoList = (List<FileMd5Info>)xmlSerializer.Deserialize(fileStream);
+            var fileMd5InfoList = (List<FileMd5Info>) xmlSerializer.Deserialize(fileStream);
 
             var verifyResult = new DirectoryCheckingResult();
             verifyResult.AreAllMatched = true;

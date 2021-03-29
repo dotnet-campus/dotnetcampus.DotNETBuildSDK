@@ -244,9 +244,9 @@ namespace dotnetCampus.CopyAfterCompileTool
                     buildLogFile.CopyTo(logFile);
                     File.Delete(buildLogFile.FullName);
                 }
-                catch (Exception)
+                catch
                 {
-
+                    // 忽略
                 }
             }
         }
