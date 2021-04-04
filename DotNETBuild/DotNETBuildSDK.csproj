@@ -20,19 +20,17 @@
     <EmbeddedResource Include="tools\nuget.exe" Pack="True" PackagePath="\tools\nuget.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-      <None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
   </ItemGroup>
 
   <ItemGroup>
-      <PackageReference Include="dotnetCampus.Configurations" Version="1.6.8">
-       
-      </PackageReference>
-  </ItemGroup>
-  <ItemGroup><!--<None Include="build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />-->
-  
-    <PackageReference Include="CommandLineParser" Version="2.8.0">
+    <PackageReference Include="dotnetCampus.Configurations" Version="1.6.8"/>
+    <PackageReference Include="Lindexi.Src.GitCommand.Source" Version="1.1.17">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
-  
+    <PackageReference Include="CommandLineParser" Version="2.8.0"/>
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
   </ItemGroup>
+
 </Project>

@@ -79,7 +79,6 @@ namespace dotnetCampus.CopyAfterCompileTool
             };
 
             _git = git;
-            //Compiler = compiler ?? new MsBuildCompiler();
 
             if (outputDirectory is null)
             {
