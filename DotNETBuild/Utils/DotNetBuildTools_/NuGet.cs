@@ -229,7 +229,6 @@ namespace dotnetCampus.DotNETBuild.Utils
                 $"push {temp} -Source {source} {(string.IsNullOrEmpty(apiKey) ? "" : $"-ApiKey {apiKey}")} {(skipDuplicate ? "-SkipDuplicate" : "")}");
         }
 
-
         private string FindNupkgDirectory()
         {
             var nupkgDirectory = CompileConfiguration.NupkgDirectory;
