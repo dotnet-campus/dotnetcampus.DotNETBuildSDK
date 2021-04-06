@@ -9,7 +9,7 @@ namespace PickTextValueTask
     {
         public static void Main(string[] args)
         {
-            Parser.Default.ParseArguments<PickTextValueOption>(args).WithParsed(option => 
+            Parser.Default.ParseArguments<PickTextValueOption>(args).WithParsed(option =>
             {
                 try
                 {

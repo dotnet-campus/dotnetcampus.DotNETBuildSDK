@@ -119,7 +119,7 @@ namespace dotnetCampus.CopyAfterCompileTool
                 var commit = commitList[i];
                 try
                 {
-                    Log($"开始 {commit} 二分，本次任务第{i+1}次构建，总共{commitList.Count}次构建");
+                    Log($"开始 {commit} 二分，本次任务第{i + 1}次构建，总共{commitList.Count}次构建");
 
                     if (!CheckNeedCompile(commit))
                     {
@@ -181,7 +181,7 @@ namespace dotnetCampus.CopyAfterCompileTool
             }
 
             // 如果有构建过的，那么就不再构建
-            var folder = Path.Combine(TargetDirectory.FullName,commit);
+            var folder = Path.Combine(TargetDirectory.FullName, commit);
             // 如果存在就是构建过的
             return !Directory.Exists(folder);
         }
