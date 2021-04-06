@@ -15,7 +15,6 @@ dotnet tool update -g dotnetCampus.CopyAfterCompileTool
 
 接着在当前工作文件夹下存放 Build.coin 配置文件，配置文件里面包含的项如下：
 
-
 ```
 > 代码文件夹
 CodeDirectory
