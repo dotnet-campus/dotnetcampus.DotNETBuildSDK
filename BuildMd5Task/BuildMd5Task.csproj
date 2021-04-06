@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <Compile Include="..\DotNETBuild\Assembly.cs" Link="Assembly.cs" />
-        <Compile Include="..\DotNETBuild\Utils\DirectoryInfoHelper.cs" Link="DirectoryInfoHelper.cs" />
+        <Compile Include="..\DotNETBuild\Utils\IO_\DirectoryInfoHelper.cs" Link="DirectoryInfoHelper.cs" />
     </ItemGroup>
 
     <ItemGroup>

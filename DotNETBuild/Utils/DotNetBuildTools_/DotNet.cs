@@ -30,7 +30,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 {
                     // 虽然下面信息应该是 Debug 级，但是考虑很少需要进行工具的安装，所以修改等级
                     Logger.LogInformation($"开始安装 {package}");
-                    InstallDotNETGloablTool(package);
+                    InstallDotNETGlobalTool(package);
                     Logger.LogInformation($"完成安装 {package}");
                 }
                 Logger.LogInformation("必备工具安装完成");
@@ -41,7 +41,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// 安装全局 dotnet 工具
         /// </summary>
         /// <param name="packageName"></param>
-        public void InstallDotNETGloablTool(string packageName) => InstallDotNETTool(packageName, isGlobalTool: true);
+        public void InstallDotNETGlobalTool(string packageName) => InstallDotNETTool(packageName, isGlobalTool: true);
 
         /// <summary>
         /// 安装 dotnet 工具
@@ -54,7 +54,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             // dotnet new tool-manifest 创建清单
             ExecuteCommand("dotnet", $"tool install {(isGlobalTool ? "-g" : "")} {packageName}");
         }
-
 
         public IEnumerable<string> GetNotInstalledToolList(List<string> packageNameList)
         {

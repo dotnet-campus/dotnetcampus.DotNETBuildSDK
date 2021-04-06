@@ -41,7 +41,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             return GetFileLog(logConfiguration.BuildLogFile);
         }
 
-        private readonly static Dictionary<string, WeakReference<FileLog>> _fileLogList =
+        private static readonly Dictionary<string, WeakReference<FileLog>> _fileLogList =
             new Dictionary<string, WeakReference<FileLog>>();
     }
 }

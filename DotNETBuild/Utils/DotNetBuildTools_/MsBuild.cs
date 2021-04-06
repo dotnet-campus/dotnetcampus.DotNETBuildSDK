@@ -4,11 +4,47 @@ using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
+    /// <summary>
+    /// 对 msbuild 命令行工具的封装
+    /// </summary>
     public class MsBuild : DotNetBuildTool
     {
         /// <inheritdoc />
         public MsBuild(IAppConfigurator appConfigurator) : base(appConfigurator)
         {
+        }
+
+        /// <summary>
+        /// 执行编译
+        /// </summary>
+        public void Build(MsBuildCommandOptions options)
+        {
+            var parallel = options.Parallel;
+            var configuration = options.MsBuildConfiguration;
+            var slnPath = options.SlnPath;
+            var msbuildPath = options.MsBuildPath;
+
+            var command = "";
+            if (parallel)
+            {
+                command = "/m";
+            }
+
+            command += $" /p:configuration={(configuration == MsBuildConfiguration.Release ? "release" : "debug")}";
+
+            if (options.ShouldRestore)
+            {
+                command += " -restore";
+            }
+
+            if (string.IsNullOrEmpty(slnPath))
+            {
+                slnPath = CompileConfiguration.SlnPath;
+            }
+
+            command += $" {ProcessCommand.ToArgumentPath(slnPath)}";
+
+            Build(command, msbuildPath);
         }
 
         /// <summary>
@@ -21,22 +57,13 @@ namespace dotnetCampus.DotNETBuild.Utils
         public void Build(bool parallel = true, MsBuildConfiguration configuration = MsBuildConfiguration.Release,
             string slnPath = "", string msbuildPath = "")
         {
-            var command = "";
-            if (parallel)
+            Build(new MsBuildCommandOptions()
             {
-                command = "/m";
-            }
-
-            command += $" /p:configuration={(configuration == MsBuildConfiguration.Release ? "release" : "debug")}";
-
-            if (string.IsNullOrEmpty(slnPath))
-            {
-                slnPath = CompileConfiguration.SlnPath;
-            }
-
-            command += $" {ProcessCommand.ToArgumentPath(slnPath)}";
-
-            Build(command, msbuildPath);
+                Parallel = parallel,
+                MsBuildConfiguration = configuration,
+                SlnPath = slnPath,
+                MsBuildPath = msbuildPath
+            });
         }
 
         /// <summary>
@@ -54,7 +81,10 @@ namespace dotnetCampus.DotNETBuild.Utils
             ExecuteCommand(msbuildPath, command);
         }
 
-
+        /// <summary>
+        /// 获取 msbuild 命令行工具路径
+        /// </summary>
+        /// <returns></returns>
         public string GetMsBuildFile()
         {
             if (!string.IsNullOrEmpty(CompileConfiguration.MsBuildFile))
@@ -94,12 +124,38 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
+        /// <summary>
+        /// 构建配置
+        /// </summary>
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
 
+        /// <summary>
+        /// 构建选项
+        /// </summary>
         public enum MsBuildConfiguration
         {
+            /// <summary>
+            /// 发布版
+            /// </summary>
             Release,
+            /// <summary>
+            /// 调试版
+            /// </summary>
             Debug,
         }
+    }
+
+#nullable enable
+    public class MsBuildCommandOptions
+    {
+        public bool Parallel { get; set; } = true;
+
+        public MsBuild.MsBuildConfiguration MsBuildConfiguration { get; set; } = MsBuild.MsBuildConfiguration.Release;
+
+        public string? SlnPath { get; set; }
+
+        public string? MsBuildPath { get; set; }
+
+        public bool ShouldRestore { set; get; } = false;
     }
 }

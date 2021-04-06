@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using dotnetCampus.DotNETBuild.Context;
+using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {

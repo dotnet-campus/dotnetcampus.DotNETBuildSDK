@@ -1,0 +1,13 @@
+﻿> 代码文件夹，下面的 CodeDirectoryPath 将在测试中进行替换
+CodeDirectory
+CodeDirectoryPath
+> 应用输出文件夹
+OutputDirectory
+CodeDirectoryPath\Bin\release
+> 保存构建完成的文件夹
+TargetDirectory
+TargetDirectoryPath
+>
+OriginBranch
+master
+>
