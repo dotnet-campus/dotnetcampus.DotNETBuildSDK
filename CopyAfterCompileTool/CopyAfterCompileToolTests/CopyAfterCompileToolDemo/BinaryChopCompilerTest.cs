@@ -34,7 +34,7 @@ namespace CopyAfterCompileToolDemo
                 var buildCoinText = originBuildCoinText.Replace("CodeDirectoryPath", codeDirectoryPath).Replace("TargetDirectoryPath", targetFolder);
                 // 设置可以再次构建
                 buildCoinText += "\n>\nOverwriteCompiledCommit\ntrue\n>";
-                
+
                 var buildCoinFile = Path.Combine(testCodeFolder.FullName, "Build.coin");
                 File.WriteAllText(buildCoinFile, buildCoinText);
 
