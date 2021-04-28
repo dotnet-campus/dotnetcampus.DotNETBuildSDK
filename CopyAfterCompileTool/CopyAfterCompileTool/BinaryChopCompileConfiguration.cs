@@ -46,5 +46,14 @@ namespace dotnetCampus.CopyAfterCompileTool
             set => SetValue(value);
             get => GetString();
         }
+
+        /// <summary>
+        /// 每次构建之后的休息时间，让磁盘休息一下，单位是秒。默认是休息5秒
+        /// </summary>
+        public int SecondTimeToRest
+        {
+            set => SetValue(value);
+            get => GetInt32() ?? 5;
+        }
     }
 }

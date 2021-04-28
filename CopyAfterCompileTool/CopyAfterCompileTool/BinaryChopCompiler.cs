@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.DotNETBuild.Context;
@@ -123,6 +124,7 @@ namespace dotnetCampus.CopyAfterCompileTool
 
                     if (!CheckNeedCompile(commit))
                     {
+                        Log($"已构建过 {commit} 无须再次运行，跳过此构建");
                         continue;
                     }
 
@@ -165,6 +167,10 @@ namespace dotnetCampus.CopyAfterCompileTool
                     }
 
                     LastCommit = commit;
+
+                    // 构建完成，休息一下
+                    // 同步的等待，这里是调度任务，不需要使用异步
+                    Task.Delay(TimeSpan.FromSeconds(BinaryChopCompileConfiguration.SecondTimeToRest)).Wait();
                 }
                 catch (Exception e)
                 {
