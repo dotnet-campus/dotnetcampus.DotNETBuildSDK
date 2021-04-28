@@ -168,6 +168,7 @@ namespace dotnetCampus.CopyAfterCompileTool
 
                     LastCommit = commit;
 
+                    Log($"构建 {commit} 完成，休息一下。休息 {BinaryChopCompileConfiguration.SecondTimeToRest} 秒中");
                     // 构建完成，休息一下
                     // 同步的等待，这里是调度任务，不需要使用异步
                     Task.Delay(TimeSpan.FromSeconds(BinaryChopCompileConfiguration.SecondTimeToRest)).Wait();
