@@ -245,6 +245,30 @@ BuildMd5 [参数]
 - `--overwrite [true|false]` 如果校验文件存在，那么将会被覆盖重写。默认值是 false 也就是说校验文件存在将会失败
 ```
 
+### RunWithConfigValueTask
+
+提供命令自动从配置获取替换符的任务方法，通过此命令行工具执行的命令，将会在执行命令时，将命令行传入的内容自动替换为配置文件里面的对应配置。同时支持在配置不存在时使用默认值的方式
+
+安装方法如下
+
+```
+dotnet tool install -g dotnetCampus.RunWithConfigValueTask
+```
+
+使用方法如下，假定配置文件里面已存在配置是 `Foo=doubi` 而调用命令行方式如下
+
+```
+RunWithConfigValueTask dotnetcampus.exe f1 $(Foo) $(F2)??lindexi
+```
+
+那么实际执行命令行将会是如下
+
+```
+dotnetcampus.exe f1 doubi lindexi
+```
+
+在传入 RunWithConfigValueTask 的命令，使用格式为 `$(配置的Key值)` 或者 `$(配置的Key值)??默认值` 的方式，即可在 RunWithConfigValueTask 替换为配置中对应的参数
+
 ## 相似的项目
 
 [dotnetcore/FlubuCore: A cross platform build and deployment automation system for building projects and executing deployment scripts using C# code.](https://github.com/dotnetcore/FlubuCore )
