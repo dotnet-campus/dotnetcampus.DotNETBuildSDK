@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net5.0</TargetFramework>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>RunWithConfigValueTask</ToolCommandName>
+    <AssemblyName>dotnetCampus.RunWithConfigValueTask</AssemblyName>
+    <RootNamespace>dotnetCampus.RunWithConfigValueTask</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.Configurations" Version="1.6.8" />
+    <PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="1.3.3"></PackageReference>
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
+  </ItemGroup>
+</Project>
