@@ -1,4 +1,4 @@
-using dotnetCampus.RunWithConfigValueTask;
+ï»¿using dotnetCampus.RunWithConfigValueTask;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
@@ -10,7 +10,7 @@ namespace RunWithConfigValueTask.Tests
         [ContractTestCase]
         public void ParseCommandlineValue()
         {
-            "ÔÚÃüÁîÐÐÖÐ¼ä°üº¬ -- µÄÄÚÈÝ£¬¿ÉÒÔ·Ö¸îÃüÁîÐÐ".Test(() =>
+            "åœ¨å‘½ä»¤è¡Œä¸­é—´åŒ…å« -- çš„å†…å®¹ï¼Œå¯ä»¥åˆ†å‰²å‘½ä»¤è¡Œ".Test(() =>
             {
                 var commandlineArgValue = new string[] { "foo", "lindexi", "--", "f1", "doubi" };
                 var (ownerCommand, runningCommand) = SubCommandParser.ParseCommandlineValue(commandlineArgValue);
@@ -19,7 +19,7 @@ namespace RunWithConfigValueTask.Tests
                 Assert.AreEqual(2, runningCommand.Count);
             });
 
-            "¶ÁÈ¡ÔÚÄ©Î²°üº¬ -- µÄÄÚÈÝ£¬¿ÉÒÔÍêÈ«ÊÓÎªÖ÷ÃüÁî".Test(() =>
+            "è¯»å–åœ¨æœ«å°¾åŒ…å« -- çš„å†…å®¹ï¼Œå¯ä»¥å®Œå…¨è§†ä¸ºä¸»å‘½ä»¤".Test(() =>
             {
                 var commandlineArgValue = new string[] { "foo", "lindexi", "--" };
                 var (ownerCommand, runningCommand) = SubCommandParser.ParseCommandlineValue(commandlineArgValue);
@@ -28,7 +28,7 @@ namespace RunWithConfigValueTask.Tests
                 Assert.AreEqual(0, runningCommand.Count);
             });
 
-            "¶ÁÈ¡²»°üº¬ -- µÄÄÚÈÝ£¬¿ÉÒÔÍêÈ«ÊÓÎª¾ßÌåÖ´ÐÐµÄÃüÁî".Test(() =>
+            "è¯»å–ä¸åŒ…å« -- çš„å†…å®¹ï¼Œå¯ä»¥å®Œå…¨è§†ä¸ºå…·ä½“æ‰§è¡Œçš„å‘½ä»¤".Test(() =>
             {
                 var commandlineArgValue = new string[] { "foo", "lindexi" };
                 var (ownerCommand, runningCommand) = SubCommandParser.ParseCommandlineValue(commandlineArgValue);
