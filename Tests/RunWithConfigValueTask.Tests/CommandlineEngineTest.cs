@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using dotnetCampus.RunWithConfigValueTask;
@@ -13,12 +13,12 @@ namespace RunWithConfigValueTask.Tests
         [ContractTestCase]
         public void FillCommandline()
         {
-            "´«ÈëµÄÅäÖÃ°üº¬Ä¬ÈÏÖµ£¬½«»áÔÚÅäÖÃ²»´æÔÚÊ±Ê¹ÓÃÄ¬ÈÏÖµ".Test(() =>
+            "ä¼ å…¥çš„é…ç½®åŒ…å«é»˜è®¤å€¼ï¼Œå°†ä¼šåœ¨é…ç½®ä¸å­˜åœ¨æ—¶ä½¿ç”¨é»˜è®¤å€¼".Test(() =>
             {
-                var commandline = new string[] { "lindexi", "$(´æÔÚÅäÖÃ)??F1", "$(²»´æÔÚÅäÖÃ)??F2" };
+                var commandline = new string[] { "lindexi", "$(å­˜åœ¨é…ç½®)??F1", "$(ä¸å­˜åœ¨é…ç½®)??F2" };
                 var memoryConfigurationRepo = new MemoryConfigurationRepo();
                 var defaultConfiguration = memoryConfigurationRepo.CreateAppConfigurator().Default;
-                defaultConfiguration["´æÔÚÅäÖÃ"] = "doubi";
+                defaultConfiguration["å­˜åœ¨é…ç½®"] = "doubi";
 
                 var result = CommandlineEngine.FillCommandline(commandline, defaultConfiguration);
 
@@ -32,7 +32,7 @@ namespace RunWithConfigValueTask.Tests
                 }
             });
 
-            "´«ÈëÅäÖÃÀïÃæ´æÔÚµÄÄÚÈÝ£¬½«±»Ìæ»»ÎªÅäÖÃÀïÃæµÄÄÚÈÝ".Test(() =>
+            "ä¼ å…¥é…ç½®é‡Œé¢å­˜åœ¨çš„å†…å®¹ï¼Œå°†è¢«æ›¿æ¢ä¸ºé…ç½®é‡Œé¢çš„å†…å®¹".Test(() =>
             {
                 var commandline = new string[] { "lindexi", "$(Foo)" };
 
@@ -52,7 +52,7 @@ namespace RunWithConfigValueTask.Tests
                 }
             });
 
-            "´«ÈëÅäÖÃÀïÃæ²»´æÔÚµÄÄÚÈÝ£¬½«»áÅ×³ö´íÎó".Test(() =>
+            "ä¼ å…¥é…ç½®é‡Œé¢ä¸å­˜åœ¨çš„å†…å®¹ï¼Œå°†ä¼šæŠ›å‡ºé”™è¯¯".Test(() =>
             {
                 var commandline = new string[] { "lindexi", "$(Foo)" };
 
@@ -64,7 +64,7 @@ namespace RunWithConfigValueTask.Tests
                 });
             });
 
-            "ÊäÈë²»°üº¬ÐèÒªÌæ»»µÄÃüÁî£¬Êä³öºÍÔ­ÓÐµÄÃüÁîÏàÍ¬".Test(() =>
+            "è¾“å…¥ä¸åŒ…å«éœ€è¦æ›¿æ¢çš„å‘½ä»¤ï¼Œè¾“å‡ºå’ŒåŽŸæœ‰çš„å‘½ä»¤ç›¸åŒ".Test(() =>
             {
                 var commandline = new string[] { "lindexi", "foo" };
 
