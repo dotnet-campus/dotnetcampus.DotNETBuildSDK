@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using dotnetCampus.DotNETBuild.Context;
 
@@ -12,7 +14,7 @@ namespace dotnetCampus.SendEmailTask
 
             var dictionary = commandLine.ToDictionary();
 
-            // 获取设备配置，要求执行 dotnet buildkit init 命令，执行之后才会将设备的配置和项目的配置 Merge 因此单独执行这个应用，也许会找不到用户名等
+            // 获取设备配置，要求执行 dotnet buildkit init 命令，执行之后才会将设备的配置和项目的配置进行合并。因此单独执行这个应用，也许会找不到用户名等
             var appConfigurator = AppConfigurator.GetAppConfigurator();
 
             appConfigurator.Merge(dictionary, "Email");
@@ -22,7 +24,8 @@ namespace dotnetCampus.SendEmailTask
             var smtpServer = emailConfiguration.SmtpServer;
             if (string.IsNullOrEmpty(smtpServer))
             {
-                throw new ArgumentException($"找不到邮件 smtp 服务器地址，是否忘记调用 dotnet buildkit init 读取设备的配置。可在命令行传入 --{nameof(Options.SmtpServer)} 指定邮件服务器地址");
+                throw new ArgumentException(
+                    $"找不到邮件 smtp 服务器地址，是否忘记调用 dotnet buildkit init 读取设备的配置。可在命令行传入 --{nameof(Options.SmtpServer)} 指定邮件服务器地址");
             }
 
             // 忽略了……
@@ -49,7 +52,24 @@ namespace dotnetCampus.SendEmailTask
 
             if (string.IsNullOrEmpty(options.Subject))
             {
-                throw new ArgumentException($"邮件主题不能为空，请使用 -{Options.SubjectCommand} 或 --{nameof(Options.Subject)}指定邮件主题");
+                throw new ArgumentException(
+                    $"邮件主题不能为空，请使用 -{Options.SubjectCommand} 或 --{nameof(Options.Subject)}指定邮件主题");
+            }
+
+            List<FileInfo>? attachmentFileList = null;
+            if (!string.IsNullOrEmpty(options.Files))
+            {
+                attachmentFileList = new List<FileInfo>();
+                foreach (string file in options.Files.Split('|').Where(temp => !string.IsNullOrEmpty(temp))
+                    .Select(Path.GetFullPath))
+                {
+                    if (!File.Exists(file))
+                    {
+                        throw new ArgumentException($"指定传入文件，但找不到 {file} 文件");
+                    }
+
+                    attachmentFileList.Add(new FileInfo(file));
+                }
             }
 
             var toList = to.Split(';')
@@ -61,7 +81,8 @@ namespace dotnetCampus.SendEmailTask
                 displayName!,
                 toList,
                 options.Subject!,
-                options.Body ?? string.Empty);
+                options.Body ?? string.Empty,
+                attachmentFileList);
         }
     }
 }

@@ -45,6 +45,12 @@ namespace dotnetCampus.SendEmailTask
         public string? Password { get; set; }
 
         /// <summary>
+        /// 附加的文件列表，多个文件之间使用 `|` 符号分割。如 C:\lindexi.txt|C:\doubi.txt 表示两个文件
+        /// </summary>
+        [Option(nameof(Files))]
+        public string? Files { get; set; }
+
+        /// <summary>
         /// 发送者显示的名字
         /// </summary>
         [Option(nameof(SenderDisplayName))]

@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Mail;
+using System.Net.Mime;
 
 namespace dotnetCampus.SendEmailTask
 {
@@ -13,7 +15,8 @@ namespace dotnetCampus.SendEmailTask
             string senderName,
             IEnumerable<string> toList,
             string subject,
-            string body)
+            string body,
+            IEnumerable<FileInfo>? attachmentFileList = null)
         {
             var networkCredential = new NetworkCredential()
             {
@@ -28,6 +31,14 @@ namespace dotnetCampus.SendEmailTask
                 Subject = subject,
                 Body = body,
             };
+
+            if (attachmentFileList != null)
+            {
+                foreach (var file in attachmentFileList)
+                {
+                    mailMessage.Attachments.Add(new Attachment(file.FullName));
+                }
+            }
 
             foreach (var to in toList)
             {

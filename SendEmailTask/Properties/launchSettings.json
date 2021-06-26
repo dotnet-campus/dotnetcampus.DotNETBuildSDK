@@ -2,7 +2,7 @@
   "profiles": {
     "SendEmailTask": {
       "commandName": "Project",
-      "commandLineArgs": "-t lindexi_gd@outlook.com --subject 测试 --SmtpServer smtp.yandex.com --SmtpServerPort 587 --UserName lindexi@yandex.com --Password miBN8dFLxdUs9d3"
+      "commandLineArgs": "-t lindexi_gd@outlook.com --subject 测试 --SmtpServer smtp.yandex.com --SmtpServerPort 587 --UserName lindexi@yandex.com --Password miBN8dFLxdUs9d3 --Files SendEmailTask.dll|SendEmailTask.pdb"
     }
   }
 }
