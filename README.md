@@ -208,6 +208,7 @@ SendEmail 参数
 - `--UserName` 发送邮件的登录用户名，对应配置文件 `Email.UserName` 内容
 - `--Password` 发送邮件的登录密码，对应配置文件 `Email.Password` 内容
 - `--SenderDisplayName` 发送邮件显示的发送者名字，对应配置文件 `Email.SenderDisplayName` 内容，默认和 `Email.UserName` 相同
+- `--Files` 附加的文件列表，多个文件使用 `|` 分割，如 `C:\lindexi.txt|C:\doubi.txt` 表示两个文件，可使用相对或绝对路径
 
 例子
 
