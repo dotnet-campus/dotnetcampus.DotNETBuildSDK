@@ -17,10 +17,22 @@ namespace dotnetCampus.DotNETBuild
         /// <summary>
         /// 在框架内执行实际的逻辑，框架将自动初始化日志和配置等功能
         /// </summary>
+        public static Task<int> Run(Action action, Assembly entryAssembly = null)
+        {
+            return Run(() =>
+            {
+                action();
+                return Task.FromResult(0);
+            }, entryAssembly);
+        }
+
+        /// <summary>
+        /// 在框架内执行实际的逻辑，框架将自动初始化日志和配置等功能
+        /// </summary>
         /// <param name="action"></param>
         /// <param name="entryAssembly"></param>
         /// <returns></returns>
-        public static async Task<int> Run(Func<Task<int>> action, Assembly entryAssembly=null)
+        public static async Task<int> Run(Func<Task<int>> action, Assembly entryAssembly = null)
         {
             entryAssembly ??= Assembly.GetEntryAssembly();
 
@@ -79,7 +91,7 @@ namespace dotnetCampus.DotNETBuild
         {
             var assemblyTitleAttribute = entryAssembly.GetCustomAttribute<AssemblyTitleAttribute>();
             if (assemblyTitleAttribute != null)
-            {               
+            {
                 Log.Info("ToolName: " + assemblyTitleAttribute.Title);
             }
 
