@@ -14,6 +14,17 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static LogLevel LogLevel { set; get; }
 
+        /// <summary>
+        /// 替换当前的日志
+        /// </summary>
+        /// <param name="logger"></param>
+        public static void SetLogger(ILogger logger)
+        {
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+
+            Logger.ActualLogger = logger;
+        }
+
         // Call by SDK
         internal static LazyInitLogger InitLazyLogger()
         {
