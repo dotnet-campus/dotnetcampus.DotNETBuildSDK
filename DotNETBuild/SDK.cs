@@ -46,15 +46,12 @@ namespace dotnetCampus.DotNETBuild
             Log.LogLevel = appConfigurator.Of<LogConfiguration>().LogLevel;
             AppConfigurator.SetAppConfigurator(appConfigurator);
 
-            // 在配置完成之后，才可以设置实际的日志
-            logger.ActualLogger = new CommonLogger();
-
             LogApplicationInfo(entryAssembly);
 
             SetCommonConfiguration(appConfigurator);
 
             // 完成框架，重新设置一下日志
-            Log.Logger.SwitchActualLogger();
+            Log.Logger.SwitchActualLogger(new CommonLogger());
 
             try
             {
@@ -73,7 +70,7 @@ namespace dotnetCampus.DotNETBuild
         }
 
         /// <summary>
-        /// 清空框架的日志内容
+        /// 清空框架的日志内容，此函数需要在业务代码的第一句通过 <see cref="Log"/> 日志输出之前调用，否则框架的日志将因为在业务日志输出之前输出而依然输出
         /// </summary>
         public static void CleanSdkLog()
         {
