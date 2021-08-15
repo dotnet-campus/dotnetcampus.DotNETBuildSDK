@@ -23,7 +23,7 @@ namespace DotNETBuildSDK.Demo
             // 应用启动，设置日志等级，可以让框架输出的日志设置等级
             // - 只是设置日志等级，不做任何输出
             // - 日志等级是最低，可以输出所有框架的日志
-            //"DotNETBuildSDK.Demo.FakeProgram3").Wait();
+            "DotNETBuildSDK.Demo.FakeProgram3").Wait();
 
             // 应用启动，设置日志等级，可以让框架输出的日志设置等级
             // - 只是设置日志等级，不做任何输出
@@ -36,7 +36,7 @@ namespace DotNETBuildSDK.Demo
             //"DotNETBuildSDK.Demo.FakeProgram5").Wait();
 
             // 应用启动，替换实际的日志为自己的日志
-            "DotNETBuildSDK.Demo.FakeProgram6").Wait();
+            //"DotNETBuildSDK.Demo.FakeProgram6").Wait();
         }
     }
 
