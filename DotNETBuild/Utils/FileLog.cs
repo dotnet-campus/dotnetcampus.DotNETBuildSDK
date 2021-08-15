@@ -13,6 +13,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         public FileLog(FileInfo logFile)
         {
             LogFile = logFile;
+            Directory.CreateDirectory(logFile.Directory.FullName);
             WriteToFile();
         }
 

@@ -24,7 +24,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Debug(string message)
         {
-            if (LogLevel >= LogLevel.Debug)
+            if (LogLevel > LogLevel.Debug)
             {
                 return;
             }
@@ -37,7 +37,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Warning(string message)
         {
-            if (LogLevel >= LogLevel.Warning)
+            if (LogLevel > LogLevel.Warning)
             {
                 return;
             }
@@ -49,7 +49,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         public static void Info(string message)
         {
-            if (LogLevel >= LogLevel.Information)
+            if (LogLevel > LogLevel.Information)
             {
                 return;
             }
@@ -97,7 +97,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
         {
             // 通过 Log.LogLevel 决定是否记录
-            if (dotnetCampus.DotNETBuild.Utils.Log.LogLevel >= logLevel)
+            if (dotnetCampus.DotNETBuild.Utils.Log.LogLevel > logLevel)
             {
                 return;
             }

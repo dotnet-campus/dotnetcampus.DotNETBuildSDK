@@ -39,7 +39,7 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             ////TODO The xml docs file name and location can be customized using <DocumentationFile> project property.
             //return await InvokeMethodAsync(args, entryMethod, xmlDocsFilePath, null, console);
 
-            SDK.Init();
+            SDK.Init(entryAssembly);
             var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
             // 全局可以配置日志输出
             var appConfigurator = currentConfiguration.CreateAppConfigurator();
