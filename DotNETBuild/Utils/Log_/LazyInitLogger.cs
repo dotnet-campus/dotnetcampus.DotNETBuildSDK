@@ -1,5 +1,8 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 
@@ -35,7 +38,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             if (_toActualLogger)
             {
                 // 如果当前切换到实际的日志模式了，而且还有缓存的话，那么调用记录到实际的日志里面
-                if (LogCacheList.Any())
+                if (LogCacheList != null)
                 {
                     LogCacheMessage();
                 }
@@ -46,21 +49,47 @@ namespace dotnetCampus.DotNETBuild.Utils
             {
                 var message = formatter(state, exception);
 
-                LogCacheList.Add((logLevel, message));
+                // 此时一定非空，因为还没有被清空调
+                LogCacheList!.Add((logLevel, message));
             }
         }
 
         public void LogCacheMessage()
         {
-            foreach (var (level, message) in LogCacheList)
+            var logCacheList = LogCacheList;
+
+            if (logCacheList == null)
             {
-                ActualLogger.Log(level, message);
+                return;
             }
 
-            LogCacheList.Clear();
+            lock (logCacheList)
+            {
+                // 再次判断属性是否是空，如果是空，那么已被清空
+                if (LogCacheList != null)
+                {
+                    foreach (var (level, message) in logCacheList)
+                    {
+                        ActualLogger.Log(level, message);
+                    }
+
+                    logCacheList.Clear();
+
+                    LogCacheList = null;
+                }
+            }
         }
 
-        private List<(LogLevel logLevel, string message)> LogCacheList { get; } = new List<(LogLevel logLevel, string message)>();
+        public void CleanLogCache()
+        {
+            // 此时一定非在框架内
+            Debug.Assert(_toActualLogger);
+
+            // 清空的方法就是清空此日志缓存
+            LogCacheList = null;
+        }
+
+        private List<(LogLevel logLevel, string message)>? LogCacheList { set; get; } = new List<(LogLevel logLevel, string message)>();
         //private List<(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)> LogCacheList { get; } = new List<(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)>();
     }
 }

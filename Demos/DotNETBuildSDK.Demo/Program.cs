@@ -1,4 +1,5 @@
-﻿using dotnetCampus.DotNETBuild.Utils;
+﻿using dotnetCampus.DotNETBuild;
+using dotnetCampus.DotNETBuild.Utils;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Diagnostics;
@@ -23,7 +24,7 @@ namespace DotNETBuildSDK.Demo
             // 应用启动，设置日志等级，可以让框架输出的日志设置等级
             // - 只是设置日志等级，不做任何输出
             // - 日志等级是最低，可以输出所有框架的日志
-            "DotNETBuildSDK.Demo.FakeProgram3").Wait();
+            //"DotNETBuildSDK.Demo.FakeProgram3").Wait();
 
             // 应用启动，设置日志等级，可以让框架输出的日志设置等级
             // - 只是设置日志等级，不做任何输出
@@ -37,6 +38,9 @@ namespace DotNETBuildSDK.Demo
 
             // 应用启动，替换实际的日志为自己的日志
             //"DotNETBuildSDK.Demo.FakeProgram6").Wait();
+
+            // 应用启动，清理框架先写入的日志，可以让框架先写入的日志不再输出
+            "DotNETBuildSDK.Demo.FakeProgram7").Wait();
         }
     }
 
@@ -102,7 +106,7 @@ namespace DotNETBuildSDK.Demo
             Log.Info("Foo");
         }
 
-        class FakeLogger : ILogger,IDisposable
+        class FakeLogger : ILogger, IDisposable
         {
             public IDisposable BeginScope<TState>(TState state)
             {
@@ -123,6 +127,16 @@ namespace DotNETBuildSDK.Demo
                 var message = formatter(state, exception);
                 Debug.WriteLine(message);
             }
+        }
+    }
+
+    class FakeProgram7
+    {
+        // 应用启动，清理框架先写入的日志，可以让框架先写入的日志不再输出
+        static void Main(string[] args)
+        {
+            SDK.CleanSdkLog();
+            Log.Info("Foo");
         }
     }
 }

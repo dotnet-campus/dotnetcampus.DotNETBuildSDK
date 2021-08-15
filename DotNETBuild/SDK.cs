@@ -9,8 +9,17 @@ using System.Threading.Tasks;
 
 namespace dotnetCampus.DotNETBuild
 {
-    internal static class SDK
+    /// <summary>
+    /// 提供构建的开发包
+    /// </summary>
+    public static class SDK
     {
+        /// <summary>
+        /// 在框架内执行实际的逻辑，框架将自动初始化日志和配置等功能
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="entryAssembly"></param>
+        /// <returns></returns>
         public static async Task<int> Run(Func<Task<int>> action, Assembly entryAssembly=null)
         {
             entryAssembly ??= Assembly.GetEntryAssembly();
@@ -51,14 +60,20 @@ namespace dotnetCampus.DotNETBuild
             }
         }
 
+        /// <summary>
+        /// 清空框架的日志内容
+        /// </summary>
+        public static void CleanSdkLog()
+        {
+            Log.Logger.CleanLogCache();
+        }
+
         private static void SetCommonConfiguration(IAppConfigurator appConfigurator)
         {
             var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
 
             compileConfiguration.SetCommonConfiguration();
         }
-
-      
 
         private static void LogApplicationInfo(Assembly entryAssembly)
         {
