@@ -35,10 +35,9 @@ namespace dotnetCampus.DotNETBuild
             }
             catch (Exception e)
             {
-                // 可能日志出现异常
+                // 可能日志出现异常，因此就不通过日志库输出
                 Console.WriteLine(e);
-
-                Log.FileLog?.WriteLine(e.ToString());
+                Log.Error(e.ToString());
 
                 Environment.Exit(-1);
             }
