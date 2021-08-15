@@ -39,7 +39,7 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
             ////TODO The xml docs file name and location can be customized using <DocumentationFile> project property.
             //return await InvokeMethodAsync(args, entryMethod, xmlDocsFilePath, null, console);
 
-            SDK.Init(LogLevel.Error);
+            SDK.Init();
             var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
             // 全局可以配置日志输出
             var appConfigurator = currentConfiguration.CreateAppConfigurator();
@@ -47,26 +47,38 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
 
             SetCommonConfiguration(appConfigurator);
 
+            // 完成框架，重新设置一下日志
+            Log.Logger.SwitchActualLogger();
+
             // 下面代码调用实际上代码里面的
             var returnObj = 0;
-            var obj = entryMethod.Invoke(null, new[] { args });
-            if (obj is Task task)
-            {
-                await task;
-            }
-            else if (obj is Task<int> taskObj)
-            {
-                await taskObj;
-                returnObj = taskObj.Result;
-            }
-            else if (obj is int n)
-            {
-                returnObj = n;
-            }
 
-            if (currentConfiguration is FileConfigurationRepo fileConfiguration)
+            try
             {
-                await fileConfiguration.SaveAsync();
+                var obj = entryMethod.Invoke(null, new[] { args });
+                if (obj is Task task)
+                {
+                    await task;
+                }
+                else if (obj is Task<int> taskObj)
+                {
+                    await taskObj;
+                    returnObj = taskObj.Result;
+                }
+                else if (obj is int n)
+                {
+                    returnObj = n;
+                }
+            }
+            finally
+            {
+                // 清空日志缓存
+                Log.Logger.LogCacheMessage();
+
+                if (currentConfiguration is FileConfigurationRepo fileConfiguration)
+                {
+                    await fileConfiguration.SaveAsync();
+                }
             }
 
             return returnObj;

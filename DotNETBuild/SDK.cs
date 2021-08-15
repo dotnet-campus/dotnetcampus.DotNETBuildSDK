@@ -5,13 +5,15 @@ using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild
 {
-    public static class SDK
+    internal static class SDK
     {
         public static IAppConfigurator Init(LogLevel logLevel = LogLevel.Information)
         {
             Log.LogLevel = logLevel;
-            var appConfigurator = AppConfigurator.GetAppConfigurator();
-            Log.InitFileLog();
+            var logger = Log.InitLazyLogger();
+
+            var appConfigurator = AppConfigurator.InitAppConfigurator();
+            logger.ActualLogger = new CommonLogger();
 
             return appConfigurator;
         }

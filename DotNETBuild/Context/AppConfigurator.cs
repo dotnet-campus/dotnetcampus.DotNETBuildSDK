@@ -38,6 +38,17 @@ namespace dotnetCampus.DotNETBuild.Context
             return _appConfigurator;
         }
 
+        internal static IAppConfigurator InitAppConfigurator()
+        {
+            if (_appConfigurator is null)
+            {
+                var fileConfigurationRepo = ConfigurationHelper.GetCurrentConfiguration();
+                _appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
+            }
+
+            return _appConfigurator;
+        }
+
         private static IAppConfigurator _appConfigurator;
     }
 }
