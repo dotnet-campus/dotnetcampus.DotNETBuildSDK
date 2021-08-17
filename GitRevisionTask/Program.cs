@@ -20,7 +20,7 @@ namespace dotnetCampus.GitRevisionTask
                 var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
 
                 Console.WriteLine(gitCommitRevisionCount);
-               
+
                 var appConfigurator = AppConfigurator.GetAppConfigurator();
                 var gitConfiguration = appConfigurator.Of<GitConfiguration>();
                 gitConfiguration.GitCount = gitCommitRevisionCount;
