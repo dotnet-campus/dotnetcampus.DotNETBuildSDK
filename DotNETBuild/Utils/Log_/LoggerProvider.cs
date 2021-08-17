@@ -21,7 +21,6 @@ namespace dotnetCampus.DotNETBuild.Utils
                     }
                 }
 
-
                 var fileLoggerProvider = new FileLoggerProvider(logConfiguration);
 
                 var loggerFactory = new LoggerFactory(new[] { fileLoggerProvider });

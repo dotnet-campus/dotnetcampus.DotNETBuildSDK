@@ -11,22 +11,22 @@ namespace dotnetCampus.GitRevisionTask
     {
         static void Main(string[] args)
         {
-            // 这个命令可以提供给其他命令作为控制台输出使用，此时需要减少输出内容
-            Log.LogLevel = LogLevel.Error;
+            SDK.Run(() =>
+            {
+                // 这个命令可以提供给其他命令作为控制台输出使用，此时需要减少输出内容
+                Log.LogLevel = LogLevel.Error;
 
-            var git = GitHelper.GetGitRepo();
-            var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
+                var git = GitHelper.GetGitRepo();
+                var gitCommitRevisionCount = git.GetGitCommitRevisionCount();
 
-            Console.WriteLine(gitCommitRevisionCount);
+                Console.WriteLine(gitCommitRevisionCount);
+               
+                var appConfigurator = AppConfigurator.GetAppConfigurator();
+                var gitConfiguration = appConfigurator.Of<GitConfiguration>();
+                gitConfiguration.GitCount = gitCommitRevisionCount;
 
-            var fileConfigurationRepo = ConfigurationHelper.GetCurrentConfiguration();
-            var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
-            var gitConfiguration = appConfigurator.Of<GitConfiguration>();
-            gitConfiguration.GitCount = gitCommitRevisionCount;
-
-            gitConfiguration.CurrentCommit = git.GetCurrentCommit();
-
-            fileConfigurationRepo.SaveAsync().Wait();
+                gitConfiguration.CurrentCommit = git.GetCurrentCommit();
+            }).Wait();
         }
     }
 }

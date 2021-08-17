@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29521.150
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31521.260
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuildSDK", "DotNETBuild\DotNETBuildSDK.csproj", "{FAC689A0-35C0-471A-9497-43007295DAC0}"
 EndProject
@@ -50,7 +50,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CopyAfterCompileToolDemo", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunWithConfigValueTask", "RunWithConfigValueTask\RunWithConfigValueTask.csproj", "{63186D20-82E3-4CE8-8398-32430C4D218C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RunWithConfigValueTask.Tests", "Tests\RunWithConfigValueTask.Tests\RunWithConfigValueTask.Tests.csproj", "{D479E4C6-90E7-47CE-BBBF-FCC192A9362E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RunWithConfigValueTask.Tests", "Tests\RunWithConfigValueTask.Tests\RunWithConfigValueTask.Tests.csproj", "{D479E4C6-90E7-47CE-BBBF-FCC192A9362E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{70C552C2-7246-45B3-8AD6-B8DCDFE4D574}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNETBuildSDK.Demo", "Demos\DotNETBuildSDK.Demo\DotNETBuildSDK.Demo.csproj", "{062C1A2E-3B40-4434-8330-19D217664E27}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -290,6 +294,18 @@ Global
 		{D479E4C6-90E7-47CE-BBBF-FCC192A9362E}.Release|x64.Build.0 = Release|Any CPU
 		{D479E4C6-90E7-47CE-BBBF-FCC192A9362E}.Release|x86.ActiveCfg = Release|Any CPU
 		{D479E4C6-90E7-47CE-BBBF-FCC192A9362E}.Release|x86.Build.0 = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|x64.Build.0 = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Debug|x86.Build.0 = Debug|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|x64.ActiveCfg = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|x64.Build.0 = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|x86.ActiveCfg = Release|Any CPU
+		{062C1A2E-3B40-4434-8330-19D217664E27}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -299,6 +315,7 @@ Global
 		{618A42C9-3871-48BC-95F1-01E332FE571E} = {76CE6A39-7E43-45D9-95F8-F2333DE02E4B}
 		{82A40E8A-999B-4D20-AF14-2808767650A4} = {76CE6A39-7E43-45D9-95F8-F2333DE02E4B}
 		{D479E4C6-90E7-47CE-BBBF-FCC192A9362E} = {2C43AF3C-C3B2-4B8A-81E2-DA6D8A53356A}
+		{062C1A2E-3B40-4434-8330-19D217664E27} = {70C552C2-7246-45B3-8AD6-B8DCDFE4D574}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6E377C6-EDE0-4135-951F-78C62B63DE96}

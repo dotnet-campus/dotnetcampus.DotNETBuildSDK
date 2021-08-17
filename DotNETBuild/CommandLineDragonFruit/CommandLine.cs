@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
-using dotnetCampus.Configurations;
-using dotnetCampus.Configurations.Core;
-using dotnetCampus.DotNETBuild.Context;
-using dotnetCampus.DotNETBuild.Utils;
-using Microsoft.Extensions.Logging;
 
 namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
 {
+    /// <summary>
+    /// 命令行辅助类，从 DragonFruit 命令行抄的代码，将被 build\package.targets 里面生成的主函数调用
+    /// </summary>
     public static class CommandLine
     {
         /// <summary>
@@ -31,52 +28,38 @@ namespace dotnetCampus.DotNETBuild.CommandLineDragonFruit
                 throw new ArgumentNullException(nameof(entryAssembly));
             }
 
-            args = args ?? Array.Empty<string>();
-            entryPointFullTypeName = entryPointFullTypeName?.Trim();
-
-            MethodInfo entryMethod = EntryPointDiscoverer.FindStaticEntryMethod(entryAssembly, entryPointFullTypeName);
-
-            ////TODO The xml docs file name and location can be customized using <DocumentationFile> project property.
-            //return await InvokeMethodAsync(args, entryMethod, xmlDocsFilePath, null, console);
-
-            SDK.Init(LogLevel.Error);
-            var currentConfiguration = ConfigurationHelper.GetCurrentConfiguration();
-            // 全局可以配置日志输出
-            var appConfigurator = currentConfiguration.CreateAppConfigurator();
-            Log.LogLevel = appConfigurator.Of<LogConfiguration>().LogLevel;
-
-            SetCommonConfiguration(appConfigurator);
-
-            // 下面代码调用实际上代码里面的
-            var returnObj = 0;
-            var obj = entryMethod.Invoke(null, new[] { args });
-            if (obj is Task task)
-            {
-                await task;
-            }
-            else if (obj is Task<int> taskObj)
-            {
-                await taskObj;
-                returnObj = taskObj.Result;
-            }
-            else if (obj is int n)
-            {
-                returnObj = n;
-            }
-
-            if (currentConfiguration is FileConfigurationRepo fileConfiguration)
-            {
-                await fileConfiguration.SaveAsync();
-            }
-
-            return returnObj;
+            return await SDK.Run(ExecuteAssemblyInnerAsync(entryAssembly, args, entryPointFullTypeName));
         }
 
-        private static void SetCommonConfiguration(IAppConfigurator appConfigurator)
+        private static Func<Task<int>> ExecuteAssemblyInnerAsync(Assembly entryAssembly, string[] args, string entryPointFullTypeName)
         {
-            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+            return async () =>
+            {
+                // 下面代码调用实际上代码里面的
+                var returnObj = 0;
 
-            compileConfiguration.SetCommonConfiguration();
+                args = args ?? Array.Empty<string>();
+                entryPointFullTypeName = entryPointFullTypeName?.Trim();
+
+                MethodInfo entryMethod = EntryPointDiscoverer.FindStaticEntryMethod(entryAssembly, entryPointFullTypeName);
+
+                var obj = entryMethod.Invoke(null, new[] { args });
+                if (obj is Task task)
+                {
+                    await task;
+                }
+                else if (obj is Task<int> taskObj)
+                {
+                    await taskObj;
+                    returnObj = taskObj.Result;
+                }
+                else if (obj is int n)
+                {
+                    returnObj = n;
+                }
+
+                return returnObj;
+            };
         }
     }
 }
