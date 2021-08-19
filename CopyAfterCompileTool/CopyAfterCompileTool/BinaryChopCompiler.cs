@@ -52,7 +52,6 @@ namespace dotnetCampus.CopyAfterCompileTool
             DirectoryInfo targetDirectory,
             DirectoryInfo? outputDirectory = null,
             string? originBranch = null,
-            //ICompiler compiler = null,
             ILogger? logger = null)
         {
             AppConfigurator = appConfigurator;
