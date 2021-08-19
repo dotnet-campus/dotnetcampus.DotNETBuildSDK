@@ -17,11 +17,11 @@ namespace dotnetCampus.DotNETBuild.Utils
     /// 另外，在业务代码中，可以通过 <see cref="SDK.CleanSdkLog"/> 方法进行清理框架输出的日志内容
     class LazyInitLogger : ILogger, IDisposable
     {
-        public ILogger ActualLogger { get => actualLogger; set => actualLogger = value ?? throw new ArgumentNullException(nameof(value)); }
+        public ILogger ActualLogger { get => _actualLogger; set => _actualLogger = value ?? throw new ArgumentNullException(nameof(value)); }
 
-        public void SwitchActualLogger(ILogger actualLogger)
+        public void SwitchActualLogger(ILogger? actualLogger = null)
         {
-            ActualLogger = actualLogger ?? throw new ArgumentNullException(nameof(actualLogger));
+            ActualLogger = actualLogger ?? new CommonLogger();
         }
 
         public IDisposable BeginScope<TState>(TState state)
@@ -94,7 +94,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             LogCacheList = null;
         }
 
-        private ILogger actualLogger = null!;
+        private ILogger _actualLogger = null!;
 
         private List<(LogLevel logLevel, string message)>? LogCacheList { set; get; } = new List<(LogLevel logLevel, string message)>();
         //private List<(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)> LogCacheList { get; } = new List<(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)>();

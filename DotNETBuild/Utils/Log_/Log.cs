@@ -1,5 +1,8 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Concurrent;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -10,7 +13,30 @@ namespace dotnetCampus.DotNETBuild.Utils
     /// </summary>
     public static class Log
     {
-        internal static LazyInitLogger Logger { set; get; }
+        private static ILogger? _logger;
+
+        internal static ILogger Logger
+        {
+            private set => _logger = value;
+            get
+            {
+                if (_logger is null)
+                {
+                    var logLevel = LogLevel;
+                    // 暂时禁用日志，解决堆栈炸掉问题
+                    LogLevel = LogLevel.None;
+
+                    // 这是在非 SDK 下执行的逻辑，此时需要分配默认的日志记录。为了让日志逻辑保持相同，因此采用相同的延迟日志
+                    var lazyInitLogger = new LazyInitLogger();
+                    // 自动切换为实际的日志
+                    lazyInitLogger.SwitchActualLogger();
+                    _logger = lazyInitLogger;
+
+                    LogLevel = logLevel;
+                }
+                return _logger;
+            }
+        }
 
         /// <summary>
         /// 日志等级
@@ -24,8 +50,10 @@ namespace dotnetCampus.DotNETBuild.Utils
         public static void SetLogger(ILogger logger)
         {
             if (logger == null) throw new ArgumentNullException(nameof(logger));
-
-            Logger.ActualLogger = logger;
+            if (Logger is LazyInitLogger lazyInitLogger)
+            {
+                lazyInitLogger.ActualLogger = logger;
+            }
         }
 
         /// <summary>
@@ -38,6 +66,16 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// Call by SDK
         internal static LazyInitLogger InitLazyLogger()
         {
+            if (_logger != null)
+            {
+#if DEBUG
+                if (Debugger.IsAttached)
+                {
+                    throw new InvalidOperationException("有逻辑在初始化日志之前，进行了日志记录，还请查阅日志干掉此逻辑。或者已重复调用初始化日志。仅调试下抛出");
+                }
+#endif
+            }
+
             var lazyLogger = new LazyInitLogger();
             Logger = lazyLogger;
             return lazyLogger;

@@ -51,7 +51,7 @@ namespace dotnetCampus.DotNETBuild
             SetCommonConfiguration(appConfigurator);
 
             // 完成框架，重新设置一下日志
-            Log.Logger.SwitchActualLogger(new CommonLogger());
+            logger.SwitchActualLogger();
 
             try
             {
@@ -60,7 +60,7 @@ namespace dotnetCampus.DotNETBuild
             finally
             {
                 // 清空日志缓存
-                Log.Logger.LogCacheMessage();
+                logger.LogCacheMessage();
 
                 if (currentConfiguration is FileConfigurationRepo fileConfiguration)
                 {
@@ -74,7 +74,11 @@ namespace dotnetCampus.DotNETBuild
         /// </summary>
         public static void CleanSdkLog()
         {
-            Log.Logger.CleanLogCache();
+            var logger = Log.Logger;
+            if (logger is LazyInitLogger lazyInitLogger)
+            {
+                lazyInitLogger.CleanLogCache();
+            }
         }
 
         private static void SetCommonConfiguration(IAppConfigurator appConfigurator)
