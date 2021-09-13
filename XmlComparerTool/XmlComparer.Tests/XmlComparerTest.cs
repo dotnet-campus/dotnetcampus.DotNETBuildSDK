@@ -43,6 +43,32 @@ namespace dotnetCampus.Comparison.Tests
         [ContractTestCase]
         public void VerifyXmlEquals()
         {
+            "传入列表元素数量不同的 XML 内容，抛出异常".Test(() =>
+            {
+                var xmlString1 = @"<Foo>
+<F2>1.123</F2>
+<F2>2.123</F2>
+<F2>3.123</F2>
+<F2>4.123</F2>
+<F2>5.123</F2>
+<F2>6.123</F2>
+</Foo>";
+                var xDocument1 = XDocument.Parse(xmlString1);
+                var xmlString2 = @"<Foo>
+<F2>1.123</F2>
+<F2>2.123</F2>
+<F2>3.123</F2>
+<F2>4.123</F2>
+<F2>5.123</F2>
+</Foo>";
+                var xDocument2 = XDocument.Parse(xmlString2);
+
+                Assert.ThrowsException<ElementNoMatchException>(() =>
+                {
+                    XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
+                });
+            });
+
             "传入有相同列表元素的 XML 内容，没有抛出不匹配异常".Test(() =>
             {
                 var xmlString = @"<Foo>
