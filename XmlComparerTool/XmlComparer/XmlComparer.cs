@@ -14,10 +14,8 @@ namespace dotnetCampus.Comparison
         /// <summary>
         /// 判断 XML 两个文件是否相等
         /// </summary>
-        /// <param name="file1"></param>
-        /// <param name="file2"></param>
         /// <exception cref="ElementNoMatchException"></exception>
-        public static void VerifyXmlEquals(FileInfo file1, FileInfo file2)
+        public static void VerifyXmlEquals(FileInfo file1, FileInfo file2, XmlComparerSettings? settings = null)
         {
             using var fileStream = file1.OpenRead();
             using var fileStream2 = file2.OpenRead();
@@ -25,13 +23,13 @@ namespace dotnetCampus.Comparison
             var xDocument1 = XDocument.Load(fileStream);
             var xDocument2 = XDocument.Load(fileStream2);
 
-            VerifyXmlEquals(xDocument1, xDocument2);
+            VerifyXmlEquals(xDocument1, xDocument2, settings);
         }
 
         /// <summary>
         /// 判断 XML 两个文档是否相等
         /// </summary>
-        public static void VerifyXmlEquals(XDocument xDocument1, XDocument xDocument2)
+        public static void VerifyXmlEquals(XDocument xDocument1, XDocument xDocument2, XmlComparerSettings? settings = null)
         {
             var xDocument1Root = xDocument1.Root;
             var xDocument2Root = xDocument2.Root;
@@ -45,14 +43,44 @@ namespace dotnetCampus.Comparison
                 throw new ArgumentException($"存在XML文档没有内容");
             }
 
-            VerifyXmlEquals(xDocument1Root, xDocument2Root);
+            VerifyXmlEquals(xDocument1Root, xDocument2Root, settings);
         }
 
         /// <summary>
         /// 判断 XML 两个元素是否相等
         /// </summary>
-        public static void VerifyXmlEquals(XElement xElement1, XElement xElement2)
+        public static void VerifyXmlEquals(XElement? xElement1, XElement? xElement2, XmlComparerSettings? settings = null)
         {
+            if (xElement1 is null && xElement2 is null)
+            {
+                return;
+            }
+            else if (xElement1 is null || xElement2 is null)
+            {
+                throw new ArgumentException($"存在元素没有内容");
+            }
+
+            settings ??= new XmlComparerSettings();
+
+            VerifyElementEquals(xElement1, xElement2, settings);
+        }
+
+
+        private static void VerifyElementEquals(XElement xElement1, XElement xElement2, XmlComparerSettings settings)
+        {
+            if (!string.Equals(xElement1.Name.LocalName, xElement2.Name.LocalName))
+            {
+                throw new ElementNoMatchException(
+                    $"元素名不同。xElement1.Name={xElement1.Name.LocalName} ; xElement2.Name={xElement2.Name.LocalName}",
+                    xElement1, xElement2);
+            }
+
+            if (CanIgnore(xElement1, xElement2, settings))
+            {
+                // 这是忽略的元素
+                return;
+            }
+
             if (xElement1.HasElements == xElement2.HasElements)
             {
                 if (xElement1.HasElements)
@@ -61,6 +89,11 @@ namespace dotnetCampus.Comparison
 
                     foreach (var subElement1 in xElement1.Elements())
                     {
+                        if (CanIgnore(subElement1, null, settings))
+                        {
+                            continue;
+                        }
+
                         XElement subElement2;
 
                         // 要求列表的元素顺序是相同的
@@ -89,7 +122,7 @@ namespace dotnetCampus.Comparison
                             elementCount[subElement1.Name] = count;
                         }
 
-                        VerifyXmlEquals(subElement1, subElement2);
+                        VerifyElementEquals(subElement1, subElement2, settings);
                     }
                 }
                 else
@@ -122,6 +155,31 @@ namespace dotnetCampus.Comparison
             {
                 throw new ElementNoMatchException(message, xElement1, xElement2);
             }
+        }
+
+        private static bool CanIgnore(XElement xElement1, XElement? xElement2, XmlComparerSettings settings)
+        {
+            if (settings.CanElementIgnore is not null)
+            {
+                if (settings.CanElementIgnore(xElement1))
+                {
+                    return true;
+                }
+
+                if (xElement2 is not null)
+                {
+                    return settings.CanElementIgnore(xElement2);
+                }
+
+                return false;
+            }
+
+            if (settings.IgnoreElementNameList is not null)
+            {
+                return settings.IgnoreElementNameList.Any(t => string.Equals(t, xElement1.Name.LocalName));
+            }
+
+            return false;
         }
     }
 }
