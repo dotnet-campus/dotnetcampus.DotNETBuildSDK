@@ -36,4 +36,4 @@ jobs:
     - name: Push generated package to GitHub registry
       run: |
         nuget push .\bin\Release\*.nupkg -Source github -SkipDuplicate
-        nuget push .\bin\Release\*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }} -NoSymbols 
+        nuget push .\bin\Release\*.nupkg -Source https://api.nuget.org/v3/index.json -SkipDuplicate -ApiKey ${{ secrets.NugetKey }}
