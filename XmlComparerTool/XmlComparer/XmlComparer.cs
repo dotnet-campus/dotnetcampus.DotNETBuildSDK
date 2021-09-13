@@ -86,43 +86,7 @@ namespace dotnetCampus.Comparison
                 {
                     var elementCount = new Dictionary<XName, int>();
 
-                    foreach (var subElement1 in xElement1.Elements())
-                    {
-                        if (CanIgnore(subElement1, null, settings))
-                        {
-                            continue;
-                        }
-
-                        XElement subElement2;
-
-                        // 要求列表的元素顺序是相同的
-                        var subElement2List = xElement2.Elements(subElement1.Name).ToList();
-                        if (subElement2List.Count == 1)
-                        {
-                            subElement2 = subElement2List[0];
-                        }
-                        else
-                        {
-                            if (!elementCount.TryGetValue(subElement1.Name, out var count))
-                            {
-                                count = 0;
-                            }
-
-                            if (count >= subElement2List.Count)
-                            {
-                                throw new ElementNoMatchException(
-                                    $"元素包含的子元素数量不同。xElement1.Count={count} ; xElement2.Count={subElement2List.Count}",
-                                    subElement1, null);
-                            }
-
-                            subElement2 = subElement2List[count];
-
-                            count++;
-                            elementCount[subElement1.Name] = count;
-                        }
-
-                        VerifyElementEquals(subElement1, subElement2, settings);
-                    }
+                    VerifyElementEquals(xElement1, xElement2, settings, elementCount);
                 }
                 else
                 {
@@ -153,6 +117,48 @@ namespace dotnetCampus.Comparison
             void Throw(string message)
             {
                 throw new ElementNoMatchException(message, xElement1, xElement2);
+            }
+        }
+
+        private static void VerifyElementEquals(XElement xElement1, XElement xElement2, XmlComparerSettings settings,
+            Dictionary<XName, int> elementCount)
+        {
+            foreach (var subElement1 in xElement1.Elements())
+            {
+                if (CanIgnore(subElement1, null, settings))
+                {
+                    continue;
+                }
+
+                XElement subElement2;
+
+                // 要求列表的元素顺序是相同的
+                var subElement2List = xElement2.Elements(subElement1.Name).ToList();
+                if (subElement2List.Count == 1)
+                {
+                    subElement2 = subElement2List[0];
+                }
+                else
+                {
+                    if (!elementCount.TryGetValue(subElement1.Name, out var count))
+                    {
+                        count = 0;
+                    }
+
+                    if (count >= subElement2List.Count)
+                    {
+                        throw new ElementNoMatchException(
+                            $"元素包含的子元素数量不同。xElement1.Count={count} ; xElement2.Count={subElement2List.Count}",
+                            subElement1, null);
+                    }
+
+                    subElement2 = subElement2List[count];
+
+                    count++;
+                    elementCount[subElement1.Name] = count;
+                }
+
+                VerifyElementEquals(subElement1, subElement2, settings);
             }
         }
 
