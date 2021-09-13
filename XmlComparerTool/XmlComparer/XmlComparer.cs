@@ -65,7 +65,6 @@ namespace dotnetCampus.Comparison
             VerifyElementEquals(xElement1, xElement2, settings);
         }
 
-
         private static void VerifyElementEquals(XElement xElement1, XElement xElement2, XmlComparerSettings settings)
         {
             if (!string.Equals(xElement1.Name.LocalName, xElement2.Name.LocalName))
