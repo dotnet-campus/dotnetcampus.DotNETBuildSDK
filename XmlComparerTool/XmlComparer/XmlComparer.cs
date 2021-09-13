@@ -6,6 +6,9 @@ using System.Xml.Linq;
 
 namespace dotnetCampus.Comparison
 {
+    /// <summary>
+    /// 对比 XML 的工具
+    /// </summary>
     public static class XmlComparer
     {
         /// <summary>
