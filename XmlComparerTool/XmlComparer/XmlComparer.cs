@@ -84,9 +84,9 @@ namespace dotnetCampus.Comparison
             {
                 if (xElement1.HasElements)
                 {
-                    var elementCount = new Dictionary<XName, int>();
+                    var elementCountDictionary = new Dictionary<XName, int>();
 
-                    VerifyElementEquals(xElement1, xElement2, settings, elementCount);
+                    VerifyElementEquals(xElement1, xElement2, settings, elementCountDictionary);
                 }
                 else
                 {
@@ -121,7 +121,7 @@ namespace dotnetCampus.Comparison
         }
 
         private static void VerifyElementEquals(XElement xElement1, XElement xElement2, XmlComparerSettings settings,
-            Dictionary<XName, int> elementCount)
+            Dictionary<XName, int> elementCountDictionary)
         {
             foreach (var subElement1 in xElement1.Elements())
             {
@@ -140,7 +140,7 @@ namespace dotnetCampus.Comparison
                 }
                 else
                 {
-                    if (!elementCount.TryGetValue(subElement1.Name, out var count))
+                    if (!elementCountDictionary.TryGetValue(subElement1.Name, out var count))
                     {
                         count = 0;
                     }
@@ -155,7 +155,7 @@ namespace dotnetCampus.Comparison
                     subElement2 = subElement2List[count];
 
                     count++;
-                    elementCount[subElement1.Name] = count;
+                    elementCountDictionary[subElement1.Name] = count;
                 }
 
                 VerifyElementEquals(subElement1, subElement2, settings);
