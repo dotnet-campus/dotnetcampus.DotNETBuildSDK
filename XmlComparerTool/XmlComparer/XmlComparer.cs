@@ -26,6 +26,9 @@ namespace dotnetCampus.Comparison
             VerifyXmlEquals(xDocument1, xDocument2);
         }
 
+        /// <summary>
+        /// 判断 XML 两个文档是否相等
+        /// </summary>
         public static void VerifyXmlEquals(XDocument xDocument1, XDocument xDocument2)
         {
             var xDocument1Root = xDocument1.Root;
@@ -43,6 +46,9 @@ namespace dotnetCampus.Comparison
             VerifyXmlEquals(xDocument1Root, xDocument2Root);
         }
 
+        /// <summary>
+        /// 判断 XML 两个元素是否相等
+        /// </summary>
         public static void VerifyXmlEquals(XElement xElement1, XElement xElement2)
         {
             if (xElement1.HasElements == xElement2.HasElements)
@@ -70,7 +76,9 @@ namespace dotnetCampus.Comparison
 
                             if (count >= subElement2List.Count)
                             {
-                                throw new ElementNoMatchException($"元素包含的子元素数量不同。xElement1.Count={count} ; xElement2.Count={subElement2List.Count}", subElement1, null);
+                                throw new ElementNoMatchException(
+                                    $"元素包含的子元素数量不同。xElement1.Count={count} ; xElement2.Count={subElement2List.Count}",
+                                    subElement1, null);
                             }
 
                             subElement2 = subElement2List[count];
@@ -115,8 +123,17 @@ namespace dotnetCampus.Comparison
         }
     }
 
+    /// <summary>
+    /// 元素不匹配异常
+    /// </summary>
     public class ElementNoMatchException : ArgumentException
     {
+        /// <summary>
+        /// 创建元素不匹配异常
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="element1"></param>
+        /// <param name="element2"></param>
         public ElementNoMatchException(string message, XElement element1, XElement? element2) : base(message)
         {
             Element1 = element1;
@@ -128,11 +145,22 @@ namespace dotnetCampus.Comparison
             }
         }
 
+        /// <summary>
+        /// 第一个 XML 元素
+        /// </summary>
         public XElement Element1 { get; }
+
+        /// <summary>
+        /// 第二个 XML 元素
+        /// </summary>
         public XElement? Element2 { get; }
 
+        /// <summary>
+        /// 行数
+        /// </summary>
         public int LineNumber { get; }
 
+        /// <inheritdoc />
         public override string ToString()
         {
             return $"ElementName:{Element1.Name};\r\nLineNumber:{LineNumber};\r\n{base.ToString()}";
