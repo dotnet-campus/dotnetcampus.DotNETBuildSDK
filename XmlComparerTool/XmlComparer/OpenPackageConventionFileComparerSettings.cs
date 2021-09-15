@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 
 namespace dotnetCampus.Comparison
 {
@@ -11,6 +12,11 @@ namespace dotnetCampus.Comparison
         /// 配置 XML 比较
         /// </summary>
         public XmlComparerSettings? XmlComparerSettings { set; get; }
+
+        /// <summary>
+        /// 被忽略文件的名字
+        /// </summary>
+        public IReadOnlyCollection<string>? IgnoreFileNameList { set; get; }
 
         /// <summary>
         /// 工作用的文件夹

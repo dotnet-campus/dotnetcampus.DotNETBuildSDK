@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 
 namespace dotnetCampus.Comparison
 {
@@ -30,6 +31,12 @@ namespace dotnetCampus.Comparison
             foreach (var xmlFile in Directory.EnumerateFiles(file1UnZipFolder.FullName,
                 "*.xml"))
             {
+                if (settings.IgnoreFileNameList?.Any(f => string.Equals(f, xmlFile, StringComparison.OrdinalIgnoreCase))
+                    is true)
+                {
+                    continue;
+                }
+
                 var fileName = MakeRelativePath(file1UnZipFolder.FullName, xmlFile);
                 CompareFile(fileName, file1UnZipFolder, file2UnZipFolder, file1.Name, settings);
             }
