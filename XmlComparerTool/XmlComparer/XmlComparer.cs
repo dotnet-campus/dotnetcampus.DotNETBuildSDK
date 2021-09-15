@@ -29,7 +29,8 @@ namespace dotnetCampus.Comparison
         /// <summary>
         /// 判断 XML 两个文档是否相等
         /// </summary>
-        public static void VerifyXmlEquals(XDocument xDocument1, XDocument xDocument2, XmlComparerSettings? settings = null)
+        public static void VerifyXmlEquals(XDocument xDocument1, XDocument xDocument2,
+            XmlComparerSettings? settings = null)
         {
             var xDocument1Root = xDocument1.Root;
             var xDocument2Root = xDocument2.Root;
@@ -49,7 +50,8 @@ namespace dotnetCampus.Comparison
         /// <summary>
         /// 判断 XML 两个元素是否相等
         /// </summary>
-        public static void VerifyXmlEquals(XElement? xElement1, XElement? xElement2, XmlComparerSettings? settings = null)
+        public static void VerifyXmlEquals(XElement? xElement1, XElement? xElement2,
+            XmlComparerSettings? settings = null)
         {
             if (xElement1 is null && xElement2 is null)
             {
