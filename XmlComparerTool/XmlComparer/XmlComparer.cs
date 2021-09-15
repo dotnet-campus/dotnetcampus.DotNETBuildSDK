@@ -99,14 +99,14 @@ namespace dotnetCampus.Comparison
                     {
                         if (Math.Abs(n1 - n2) > 0.001)
                         {
-                            Throw($"元素的值不匹配，分别是 {value1} 和 {value2}");
+                            Throw($"元素的值不匹配，Key 为 {xElement1.Name} 的值分别是 {value1} 和 {value2}");
                         }
                     }
                     else
                     {
                         if (!string.Equals(value1, value2))
                         {
-                            Throw($"元素的值不匹配，分别是 {value1} 和 {value2}");
+                            Throw($"元素的值不匹配，Key 为 {xElement1.Name} 的值分别是 {value1} 和 {value2}");
                         }
                     }
                 }
