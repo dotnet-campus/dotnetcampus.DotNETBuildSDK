@@ -17,7 +17,7 @@ namespace dotnetCampus.Comparison
         /// <param name="element2"></param>
         public ElementNotMatchException(string? message, XElement element1, XElement? element2) : base(message)
         {
-            Element1 = element1;
+            Element1 = element1 ?? throw new ArgumentNullException(nameof(element1));
             Element2 = element2;
 
             if (element1 is IXmlLineInfo xmlLineInfo)
