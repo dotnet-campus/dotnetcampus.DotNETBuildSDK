@@ -7,7 +7,7 @@ namespace dotnetCampus.Comparison
     /// <summary>
     /// 元素不匹配异常
     /// </summary>
-    public class ElementNoMatchException : ArgumentException
+    public class ElementNotMatchException : ArgumentException
     {
         /// <summary>
         /// 创建元素不匹配异常
@@ -15,7 +15,7 @@ namespace dotnetCampus.Comparison
         /// <param name="message"></param>
         /// <param name="element1"></param>
         /// <param name="element2"></param>
-        public ElementNoMatchException(string? message, XElement element1, XElement? element2) : base(message)
+        public ElementNotMatchException(string? message, XElement element1, XElement? element2) : base(message)
         {
             Element1 = element1;
             Element2 = element2;

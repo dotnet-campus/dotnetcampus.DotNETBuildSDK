@@ -14,7 +14,7 @@ namespace dotnetCampus.Comparison
         /// <summary>
         /// 判断 XML 两个文件是否相等
         /// </summary>
-        /// <exception cref="ElementNoMatchException"></exception>
+        /// <exception cref="ElementNotMatchException"></exception>
         public static void VerifyXmlEquals(FileInfo file1, FileInfo file2, XmlComparerSettings? settings = null)
         {
             using var fileStream = file1.OpenRead();
@@ -71,7 +71,7 @@ namespace dotnetCampus.Comparison
         {
             if (!string.Equals(xElement1.Name.LocalName, xElement2.Name.LocalName))
             {
-                throw new ElementNoMatchException(
+                throw new ElementNotMatchException(
                     $"元素名不同。xElement1.Name={xElement1.Name.LocalName} ; xElement2.Name={xElement2.Name.LocalName}",
                     xElement1, xElement2);
             }
@@ -118,7 +118,7 @@ namespace dotnetCampus.Comparison
 
             void Throw(string? message=null)
             {
-                throw new ElementNoMatchException(message, xElement1, xElement2);
+                throw new ElementNotMatchException(message, xElement1, xElement2);
             }
         }
 
@@ -149,7 +149,7 @@ namespace dotnetCampus.Comparison
 
                     if (count >= subElement2List.Count)
                     {
-                        throw new ElementNoMatchException(
+                        throw new ElementNotMatchException(
                             $"元素包含的子元素数量不同。xElement1.Count={count} ; xElement2.Count={subElement2List.Count}",
                             subElement1, null);
                     }

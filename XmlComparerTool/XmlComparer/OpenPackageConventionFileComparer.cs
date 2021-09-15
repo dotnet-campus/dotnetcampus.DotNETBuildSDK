@@ -69,7 +69,7 @@ namespace dotnetCampus.Comparison
             {
                 XmlComparer.VerifyXmlEquals(new FileInfo(file1), new FileInfo(file2), settings.XmlComparerSettings);
             }
-            catch (ElementNoMatchException e)
+            catch (ElementNotMatchException e)
             {
                 throw new OpenPackageConventionFileNoMatchException(e, xmlFileName, opcFile1, opcFile2);
             }
