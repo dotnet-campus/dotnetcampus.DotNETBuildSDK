@@ -15,7 +15,7 @@ namespace dotnetCampus.Comparison
         /// <param name="message"></param>
         /// <param name="element1"></param>
         /// <param name="element2"></param>
-        public ElementNoMatchException(string message, XElement element1, XElement? element2) : base(message)
+        public ElementNoMatchException(string? message, XElement element1, XElement? element2) : base(message)
         {
             Element1 = element1;
             Element2 = element2;
@@ -37,14 +37,11 @@ namespace dotnetCampus.Comparison
         public XElement? Element2 { get; }
 
         /// <summary>
-        /// 行数
+        /// 不匹配元素所在文档的行数
         /// </summary>
         public int LineNumber { get; }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return $"ElementName:{Element1.Name};\r\nLineNumber:{LineNumber};\r\n{base.ToString()}";
-        }
+        public override string Message => $"ElementName:{Element1.Name};\r\nLineNumber:{LineNumber};\r\nValue1:{Element1.Value};\r\nValue2:{Element2?.Value};\r\n{base.ToString()}";
     }
 }

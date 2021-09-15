@@ -31,14 +31,15 @@ namespace dotnetCampus.Comparison
             foreach (var xmlFile in Directory.EnumerateFiles(file1UnZipFolder.FullName,
                 "*.xml"))
             {
-                if (settings.IgnoreFileNameList?.Any(f => string.Equals(f, xmlFile, StringComparison.OrdinalIgnoreCase))
+                if (settings.IgnoreFileNameList?.Any(f => string.Equals(f, Path.GetFileName(xmlFile), StringComparison.OrdinalIgnoreCase))
                     is true)
                 {
                     continue;
                 }
 
                 var fileName = MakeRelativePath(file1UnZipFolder.FullName, xmlFile);
-                CompareFile(fileName, file1UnZipFolder, file2UnZipFolder, file1.Name, settings);
+
+                CompareFile(fileName, file1UnZipFolder, file2UnZipFolder, file1, file2, settings);
             }
         }
 
@@ -48,11 +49,11 @@ namespace dotnetCampus.Comparison
         /// <param name="xmlFileName">需要对比的 XML 文件</param>
         /// <param name="file1UnZipFolder"></param>
         /// <param name="file2UnZipFolder"></param>
-        /// <param name="compareOpcFileName">传入的待对比的 OPC 文件</param>
         /// <param name="settings"></param>
+        /// <exception cref="OpenPackageConventionFileNoMatchException"></exception>
         private static void CompareFile(string xmlFileName,
             DirectoryInfo file1UnZipFolder,
-            DirectoryInfo file2UnZipFolder, string compareOpcFileName,
+            DirectoryInfo file2UnZipFolder, FileInfo opcFile1, FileInfo opcFile2,
             OpenPackageConventionFileComparerSettings settings)
         {
             var file1 = Path.Combine(file1UnZipFolder.FullName, xmlFileName);
@@ -60,10 +61,18 @@ namespace dotnetCampus.Comparison
 
             if (!File.Exists(file2))
             {
+                var compareOpcFileName = opcFile1.Name;
                 throw new FileNotFoundException($"在新导入的 {compareOpcFileName} 文档，找不到 {xmlFileName} 文件");
             }
 
-            XmlComparer.VerifyXmlEquals(new FileInfo(file1), new FileInfo(file2), settings.XmlComparerSettings);
+            try
+            {
+                XmlComparer.VerifyXmlEquals(new FileInfo(file1), new FileInfo(file2), settings.XmlComparerSettings);
+            }
+            catch (ElementNoMatchException e)
+            {
+                throw new OpenPackageConventionFileNoMatchException(e, xmlFileName, opcFile1, opcFile2);
+            }
         }
 
         private static string MakeRelativePath(string fromPath, string toPath)

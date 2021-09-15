@@ -20,8 +20,8 @@ namespace dotnetCampus.Comparison
             using var fileStream = file1.OpenRead();
             using var fileStream2 = file2.OpenRead();
 
-            var xDocument1 = XDocument.Load(fileStream);
-            var xDocument2 = XDocument.Load(fileStream2);
+            var xDocument1 = XDocument.Load(fileStream, LoadOptions.SetLineInfo);
+            var xDocument2 = XDocument.Load(fileStream2, LoadOptions.SetLineInfo);
 
             VerifyXmlEquals(xDocument1, xDocument2, settings);
         }
@@ -99,14 +99,14 @@ namespace dotnetCampus.Comparison
                     {
                         if (Math.Abs(n1 - n2) > 0.001)
                         {
-                            Throw($"元素的值不匹配，Key 为 {xElement1.Name} 的值分别是 {value1} 和 {value2}");
+                            Throw();
                         }
                     }
                     else
                     {
                         if (!string.Equals(value1, value2))
                         {
-                            Throw($"元素的值不匹配，Key 为 {xElement1.Name} 的值分别是 {value1} 和 {value2}");
+                            Throw();
                         }
                     }
                 }
@@ -116,7 +116,7 @@ namespace dotnetCampus.Comparison
                 Throw($"元素包含的子元素数量不同");
             }
 
-            void Throw(string message)
+            void Throw(string? message=null)
             {
                 throw new ElementNoMatchException(message, xElement1, xElement2);
             }
