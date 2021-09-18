@@ -1,4 +1,4 @@
-using System.Xml.Linq;
+ï»¿using System.Xml.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 
@@ -10,7 +10,7 @@ namespace dotnetCampus.Comparison.Tests
         [ContractTestCase]
         public void IgnoreElement()
         {
-            "¼ÓÉÏºöÂÔµÄÔªËØÁÐ±í£¬¿ÉÒÔºöÂÔ´ËÔªËØµÄ²»Í¬£¬Ã»ÓÐÅ×³ö²»Æ¥ÅäÒì³£".Test(() =>
+            "åŠ ä¸Šå¿½ç•¥çš„å…ƒç´ åˆ—è¡¨ï¼Œå¯ä»¥å¿½ç•¥æ­¤å…ƒç´ çš„ä¸åŒï¼Œæ²¡æœ‰æŠ›å‡ºä¸åŒ¹é…å¼‚å¸¸".Test(() =>
             {
                 var xmlString1 = @"<Foo>
 <Id>123123</Id>
@@ -43,7 +43,7 @@ namespace dotnetCampus.Comparison.Tests
         [ContractTestCase]
         public void VerifyXmlEquals()
         {
-            "´«ÈëÁÐ±íÔªËØÊýÁ¿²»Í¬µÄ XML ÄÚÈÝ£¬Å×³öÒì³£".Test(() =>
+            "ä¼ å…¥åˆ—è¡¨å…ƒç´ æ•°é‡ä¸åŒçš„ XML å†…å®¹ï¼ŒæŠ›å‡ºå¼‚å¸¸".Test(() =>
             {
                 var xmlString1 = @"<Foo>
 <F2>1.123</F2>
@@ -69,7 +69,7 @@ namespace dotnetCampus.Comparison.Tests
                 });
             });
 
-            "´«ÈëÓÐÏàÍ¬ÁÐ±íÔªËØµÄ XML ÄÚÈÝ£¬Ã»ÓÐÅ×³ö²»Æ¥ÅäÒì³£".Test(() =>
+            "ä¼ å…¥æœ‰ç›¸åŒåˆ—è¡¨å…ƒç´ çš„ XML å†…å®¹ï¼Œæ²¡æœ‰æŠ›å‡ºä¸åŒ¹é…å¼‚å¸¸".Test(() =>
             {
                 var xmlString = @"<Foo>
 <F2>1.123</F2>
@@ -88,7 +88,7 @@ namespace dotnetCampus.Comparison.Tests
                 XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
             });
 
-            "´«ÈëÒ»¸öÇ¶Ì×Á½²ãºÍÒ»¸öÇ¶Ì×Ò»²ãµÄ XML ÄÚÈÝ£¬Å×³öÒì³£".Test(() =>
+            "ä¼ å…¥ä¸€ä¸ªåµŒå¥—ä¸¤å±‚å’Œä¸€ä¸ªåµŒå¥—ä¸€å±‚çš„ XML å†…å®¹ï¼ŒæŠ›å‡ºå¼‚å¸¸".Test(() =>
             {
                 var xmlString1 = @"<Foo><F2>1.123</F2></Foo>";
                 var xDocument1 = XDocument.Parse(xmlString1);
@@ -101,7 +101,7 @@ namespace dotnetCampus.Comparison.Tests
                 });
             });
 
-            "´«ÈëÇ¶Ì×¶à²ãµÄÁ½¸öÏàÍ¬µÄ XML ÄÚÈÝ£¬Ã»ÓÐÅ×³ö²»Æ¥ÅäÒì³£".Test(() =>
+            "ä¼ å…¥åµŒå¥—å¤šå±‚çš„ä¸¤ä¸ªç›¸åŒçš„ XML å†…å®¹ï¼Œæ²¡æœ‰æŠ›å‡ºä¸åŒ¹é…å¼‚å¸¸".Test(() =>
             {
                 var xmlString = @"<Foo><F2>1.123</F2></Foo>";
                 var xmlString1 = xmlString;
@@ -112,7 +112,7 @@ namespace dotnetCampus.Comparison.Tests
                 XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
             });
 
-            "´«Èë¸¡µãÖµ£¬´æÔÚ¾«¶ÈÎó²î£¬Ã»ÓÐÅ×³ö²»Æ¥ÅäÒì³£".Test(() =>
+            "ä¼ å…¥æµ®ç‚¹å€¼ï¼Œå­˜åœ¨ç²¾åº¦è¯¯å·®ï¼Œæ²¡æœ‰æŠ›å‡ºä¸åŒ¹é…å¼‚å¸¸".Test(() =>
             {
                 var xmlString1 = @"<Foo>1.123</Foo>";
                 var xDocument1 = XDocument.Parse(xmlString1);
@@ -122,7 +122,7 @@ namespace dotnetCampus.Comparison.Tests
                 XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
             });
 
-            "´«ÈëÖµ²»ÏàÍ¬µÄXMLÄÚÈÝ£¬Å×³öÒì³£".Test(() =>
+            "ä¼ å…¥å€¼ä¸ç›¸åŒçš„XMLå†…å®¹ï¼ŒæŠ›å‡ºå¼‚å¸¸".Test(() =>
             {
                 var xmlString1 = @"<Foo>Foo</Foo>";
                 var xDocument1 = XDocument.Parse(xmlString1);
@@ -135,7 +135,7 @@ namespace dotnetCampus.Comparison.Tests
                 });
             });
 
-            "´«ÈëÁ½¸öÍêÈ«ÏàÍ¬µÄXMLÄÚÈÝ£¬Ã»ÓÐÅ×³ö²»Æ¥ÅäÒì³£".Test(() =>
+            "ä¼ å…¥ä¸¤ä¸ªå®Œå…¨ç›¸åŒçš„XMLå†…å®¹ï¼Œæ²¡æœ‰æŠ›å‡ºä¸åŒ¹é…å¼‚å¸¸".Test(() =>
             {
                 var xmlString = @"<Foo>Foo</Foo>";
                 var xDocument1 = XDocument.Parse(xmlString);

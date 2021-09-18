@@ -116,7 +116,7 @@ namespace dotnetCampus.Comparison
                 Throw($"元素包含的子元素数量不同");
             }
 
-            void Throw(string? message=null)
+            void Throw(string? message = null)
             {
                 throw new ElementNotMatchException(message, xElement1, xElement2);
             }
