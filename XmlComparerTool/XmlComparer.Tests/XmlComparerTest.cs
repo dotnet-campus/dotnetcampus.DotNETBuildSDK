@@ -35,7 +35,7 @@ namespace dotnetCampus.Comparison.Tests
 
                 XmlComparer.VerifyXmlEquals(xDocument1, xDocument2, new XmlComparerSettings()
                 {
-                    IgnoreElementNameList = new [] { "Id" }
+                    IgnoreElementNameList = new[] { "Id" }
                 });
             });
         }
@@ -63,7 +63,7 @@ namespace dotnetCampus.Comparison.Tests
 </Foo>";
                 var xDocument2 = XDocument.Parse(xmlString2);
 
-                Assert.ThrowsException<ElementNoMatchException>(() =>
+                Assert.ThrowsException<ElementNotMatchException>(() =>
                 {
                     XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
                 });
@@ -95,7 +95,7 @@ namespace dotnetCampus.Comparison.Tests
                 var xmlString2 = @"<Foo>1.12301</Foo>";
                 var xDocument2 = XDocument.Parse(xmlString2);
 
-                Assert.ThrowsException<ElementNoMatchException>(() =>
+                Assert.ThrowsException<ElementNotMatchException>(() =>
                 {
                     XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
                 });
@@ -129,7 +129,7 @@ namespace dotnetCampus.Comparison.Tests
                 var xmlString2 = @"<Foo>F1</Foo>";
                 var xDocument2 = XDocument.Parse(xmlString2);
 
-                Assert.ThrowsException<ElementNoMatchException>(() =>
+                Assert.ThrowsException<ElementNotMatchException>(() =>
                 {
                     XmlComparer.VerifyXmlEquals(xDocument1, xDocument2);
                 });
