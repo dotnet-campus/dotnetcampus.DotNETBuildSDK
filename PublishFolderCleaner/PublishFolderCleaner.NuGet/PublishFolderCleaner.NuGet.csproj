@@ -3,7 +3,6 @@
   <PropertyGroup>
     <!-- 发布应用用到 AppHost 不包括 .NET 45 等框架版本 -->
     <TargetFrameworks>net5.0;netcoreapp3.1</TargetFrameworks>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>dotnetCampus.PublishFolderCleaner</PackageId>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <DevelopmentToolPath>..\PublishFolderCleaner\bin\$(Configuration)\</DevelopmentToolPath>
