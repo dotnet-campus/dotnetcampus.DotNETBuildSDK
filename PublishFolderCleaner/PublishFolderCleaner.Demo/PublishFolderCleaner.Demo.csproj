@@ -8,8 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!-- 还没正式发布，不能安装 -->
-    <!-- <PackageReference Include="dotnetCampus.PublishFolderCleaner" Version="1.0.11" /> -->
+    <PackageReference Include="dotnetCampus.PublishFolderCleaner" Version="1.0.12" />
   </ItemGroup>
 
 </Project>
