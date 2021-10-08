@@ -270,6 +270,18 @@ dotnetcampus.exe f1 doubi lindexi
 
 在传入 RunWithConfigValueTask 的命令，使用格式为 `$(配置的Key值)` 或者 `$(配置的Key值)??默认值` 的方式，即可在 RunWithConfigValueTask 替换为配置中对应的参数
 
+### PublishFolderCleaner
+
+让 .NET Core 或 .NET 5 或更高版本的 .NET 发布文件夹更简洁工具，将原本杂乱放在发布文件夹下的文件都放入到 lib 文件夹下，让发布文件夹只包含一个 exe 和一个 lib 文件夹
+
+使用方法是在入口程序集安装如下 NuGet 包
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.PublishFolderCleaner" Version="1.0.12" />
+  </ItemGroup>
+```
+
 ## 相似的项目
 
 [dotnetcore/FlubuCore: A cross platform build and deployment automation system for building projects and executing deployment scripts using C# code.](https://github.com/dotnetcore/FlubuCore )
