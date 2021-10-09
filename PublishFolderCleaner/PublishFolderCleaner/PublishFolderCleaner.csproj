@@ -1,14 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
-    <StartupObject>DotNETBuildSDK.Demo.Program</StartupObject>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\DotNETBuild\DotNETBuildSDK.csproj" />
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
   </ItemGroup>
-
 </Project>
