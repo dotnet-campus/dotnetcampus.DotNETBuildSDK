@@ -145,10 +145,13 @@ namespace dotnetCampus.CopyAfterCompileTool
                         var fileSniff = new FileSniff(appConfigurator);
                         fileSniff.Sniff();
 
+                        var msbuildConfiguration = AppConfigurator.Of<MsbuildConfiguration>();
+
                         var msBuildCompiler = new MsBuild(appConfigurator);
                         msBuildCompiler.Build(new MsBuildCommandOptions()
                         {
-                            ShouldRestore = true
+                            ShouldRestore = msbuildConfiguration.ShouldRestore,
+                            Parallel = msbuildConfiguration.ShouldParallel,
                         });
                         var currentBuildLogFile = currentBuildLogFile1;
 
