@@ -1,5 +1,4 @@
-﻿using System.Dynamic;
-using dotnetCampus.Configurations;
+﻿using dotnetCampus.Configurations;
 
 namespace dotnetCampus.CopyAfterCompileTool
 {
