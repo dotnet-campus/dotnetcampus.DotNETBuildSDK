@@ -6,14 +6,14 @@ namespace dotnetCampus.CopyAfterCompileTool
     {
         public bool ShouldRestore
         {
-            set => SetValue(value);
             get => GetBoolean() ?? true;
+            set => SetValue(value);
         }
 
-        public bool ShouldParallel
+        public int MaxCpuCount
         {
+            get => GetInt32() ?? 1;
             set => SetValue(value);
-            get => GetBoolean() ?? true;
         }
     }
 }

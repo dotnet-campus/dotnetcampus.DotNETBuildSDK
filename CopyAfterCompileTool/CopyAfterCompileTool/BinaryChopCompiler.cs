@@ -151,7 +151,7 @@ namespace dotnetCampus.CopyAfterCompileTool
                         msBuildCompiler.Build(new MsBuildCommandOptions()
                         {
                             ShouldRestore = msbuildConfiguration.ShouldRestore,
-                            Parallel = msbuildConfiguration.ShouldParallel,
+                            MaxCpuCount = msbuildConfiguration.MaxCpuCount,
                         });
                         var currentBuildLogFile = currentBuildLogFile1;
 
