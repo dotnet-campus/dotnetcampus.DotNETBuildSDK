@@ -139,18 +139,20 @@ namespace dotnetCampus.CopyAfterCompileTool
                         // 这里是代码里面自己带的构建配置文件
                         var appConfigurator = GetCurrentBuildConfiguration();
 
-                        var currentBuildLogFile1 = GetCurrentBuildLogFile(appConfigurator);
+                        var currentBuildLogFile = GetCurrentBuildLogFile(appConfigurator);
 
                         // 填充一下文件路径
                         var fileSniff = new FileSniff(appConfigurator);
                         fileSniff.Sniff();
 
+                        var msbuildConfiguration = AppConfigurator.Of<MsbuildConfiguration>();
+
                         var msBuildCompiler = new MsBuild(appConfigurator);
                         msBuildCompiler.Build(new MsBuildCommandOptions()
                         {
-                            ShouldRestore = true
+                            ShouldRestore = msbuildConfiguration.ShouldRestore,
+                            MaxCpuCount = msbuildConfiguration.MaxCpuCount,
                         });
-                        var currentBuildLogFile = currentBuildLogFile1;
 
                         MoveFile(commit, currentBuildLogFile);
                     }

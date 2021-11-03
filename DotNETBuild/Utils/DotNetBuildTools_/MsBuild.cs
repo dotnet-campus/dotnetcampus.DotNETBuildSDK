@@ -19,16 +19,11 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// </summary>
         public void Build(MsBuildCommandOptions options)
         {
-            var parallel = options.Parallel;
             var configuration = options.MsBuildConfiguration;
             var slnPath = options.SlnPath;
             var msbuildPath = options.MsBuildPath;
 
-            var command = "";
-            if (parallel)
-            {
-                command = "/m";
-            }
+            var command = $"/m:{options.MaxCpuCount}";
 
             command += $" /p:configuration={(configuration == MsBuildConfiguration.Release ? "release" : "debug")}";
 
@@ -59,7 +54,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         {
             Build(new MsBuildCommandOptions()
             {
-                Parallel = parallel,
+                MaxCpuCount = parallel ? 4 : 1,
                 MsBuildConfiguration = configuration,
                 SlnPath = slnPath,
                 MsBuildPath = msbuildPath
@@ -148,7 +143,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 #nullable enable
     public class MsBuildCommandOptions
     {
-        public bool Parallel { get; set; } = true;
+        public int MaxCpuCount { get; set; } = 1;
 
         public MsBuild.MsBuildConfiguration MsBuildConfiguration { get; set; } = MsBuild.MsBuildConfiguration.Release;
 
