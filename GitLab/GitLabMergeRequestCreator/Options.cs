@@ -2,6 +2,9 @@
 
 namespace dotnetCampus.GitLabMergeRequestCreator
 {
+    /// <summary>
+    /// 命令行选项
+    /// </summary>
     public class Options
     {
         /// <summary>
