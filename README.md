@@ -297,12 +297,12 @@ dotnet tool install -g dotnetCampus.GitLabMergeRequestCreator
 使用方法如下
 
 ```
-CreateGitLabMergeRequest -GitLab https://gitlab.lsj.com -Token sL5nY_aSNsY2FN9HYjuB -TargetBranch dev -ProjectId 99 -Title "Merge release to dev"
+CreateGitLabMergeRequest -GitLab https://gitlab.sdlsj.net -Token sL5nY_aSNsY2FN9HYjuB -TargetBranch dev -ProjectId 99 -Title "Merge release to dev"
 ```
 
 参数描述如下
 
-- `-GitLab`: GitLab 地址，如 `https://gitlab.lsj.com/`
+- `-GitLab`: GitLab 地址，如 `https://gitlab.sdlsj.net`
 - `-Token`: 拥有创建 MergeRequest 的 Token 值，可在 GitLab 上的 `profile/personal_access_tokens` 生成
 - `-ProjectId`: 将要创建 MergeRequest 的仓库项目 Id 值。推荐在 GitLab 的 CI 上使用 `$CI_PROJECT_ID` 常量传入
 - `-TargetBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认是 dev 分支
