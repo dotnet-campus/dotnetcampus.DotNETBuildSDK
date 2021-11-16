@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31521.260
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuildSDK", "DotNETBuild\DotNETBuildSDK.csproj", "{FAC689A0-35C0-471A-9497-43007295DAC0}"
 EndProject
@@ -72,6 +72,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.NuGet", "PublishFolderCleaner\PublishFolderCleaner.NuGet\PublishFolderCleaner.NuGet.csproj", "{4F37AC14-66D8-47F8-A809-6DA9F5B7B286}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.Demo", "PublishFolderCleaner\PublishFolderCleaner.Demo\PublishFolderCleaner.Demo.csproj", "{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLabMergeRequestCreator", "GitLabMergeRequestCreator\GitLabMergeRequestCreator\GitLabMergeRequestCreator.csproj", "{E4613580-5AAD-47C6-807B-6196A3CD7860}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -383,6 +385,18 @@ Global
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x64.Build.0 = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.ActiveCfg = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.Build.0 = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x64.Build.0 = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x86.Build.0 = Debug|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x64.ActiveCfg = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x64.Build.0 = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x86.ActiveCfg = Release|Any CPU
+		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
