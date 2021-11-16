@@ -2,7 +2,7 @@
 
 namespace dotnetCampus.GitLabMergeRequestCreator
 {
-    class Options
+    public class Options
     {
         [Option("Gitlab")]
         public string GitlabUrl { set; get; }
