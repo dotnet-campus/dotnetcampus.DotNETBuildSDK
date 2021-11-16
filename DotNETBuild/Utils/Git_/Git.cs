@@ -58,7 +58,7 @@ namespace dotnetCampus.GitCommand
             var (success, output) = ExecuteCommand("branch --show-current");
             if (success)
             {
-                return output;
+                return output.Trim('\n');
             }
             else
             {
