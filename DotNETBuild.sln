@@ -73,7 +73,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.NuGet"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.Demo", "PublishFolderCleaner\PublishFolderCleaner.Demo\PublishFolderCleaner.Demo.csproj", "{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLabMergeRequestCreator", "GitLabMergeRequestCreator\GitLabMergeRequestCreator\GitLabMergeRequestCreator.csproj", "{E4613580-5AAD-47C6-807B-6196A3CD7860}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitLab", "GitLab", "{CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabMergeRequestCreator", "GitLab\GitLabMergeRequestCreator\GitLabMergeRequestCreator.csproj", "{0026F307-CCAA-4C3A-847A-77239218A786}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -385,18 +387,18 @@ Global
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x64.Build.0 = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.ActiveCfg = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.Build.0 = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x64.Build.0 = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Debug|x86.Build.0 = Debug|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x64.ActiveCfg = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x64.Build.0 = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x86.ActiveCfg = Release|Any CPU
-		{E4613580-5AAD-47C6-807B-6196A3CD7860}.Release|x86.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x64.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x86.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x64.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x64.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x86.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -412,6 +414,7 @@ Global
 		{5FDA989C-CE59-4919-AAC2-3B2D07FC809A} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
 		{4F37AC14-66D8-47F8-A809-6DA9F5B7B286} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
+		{0026F307-CCAA-4C3A-847A-77239218A786} = {CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6E377C6-EDE0-4135-951F-78C62B63DE96}

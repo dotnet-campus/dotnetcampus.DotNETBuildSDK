@@ -38,5 +38,24 @@ namespace dotnetCampus.GitCommand
         {
             return ProcessCommand.ExecuteCommand("git", args, Repo.FullName);
         }
+
+        /// <summary>
+        /// 获取当前分支名
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentBranch()
+        {
+            // git rev-parse --abbrev-ref HEAD
+            // git branch --show-current （Git 2.22）
+            var (success, output) = ExecuteCommand("branch --show-current");
+            if (success)
+            {
+                return output;
+            }
+            else
+            {
+                return string.Empty;
+            }
+        }
     }
 }
