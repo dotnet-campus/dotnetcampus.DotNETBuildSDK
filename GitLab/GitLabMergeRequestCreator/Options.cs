@@ -7,14 +7,14 @@ namespace dotnetCampus.GitLabMergeRequestCreator
         /// <summary>
         /// 本机 GitLab 的地址
         /// </summary>
-        [Option("Gitlab")]
-        public string GitlabUrl { set; get; }
+        [Option("GitLab")]
+        public string GitLabUrl { set; get; }
 
         /// <summary>
         /// 拥有权限的 Token 值
         /// </summary>
         [Option("Token")]
-        public string GitlabToken { set; get; }
+        public string GitLabToken { set; get; }
 
         /// <summary>
         /// 从 <see cref="SourceBranch"/> 合并到 <see cref="TargetBranch"/> 分支。可选，默认是 dev 分支
