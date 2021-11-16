@@ -29,7 +29,7 @@ namespace dotnetCampus.GitLabMergeRequestCreator
             var git = new Git();
             var currentBranch = git.GetCurrentBranch();
 
-            var (success, output) = git.ExecuteCommand($"diff {targetBranch} --name-only");
+            var (success, output) = git.ExecuteCommand($"diff origin/{targetBranch} --name-only");
             if (success is false || string.IsNullOrEmpty(output))
             {
                 Console.WriteLine($"There is no difference CurrentBranch({currentBranch}) and TargetBranch({targetBranch}).");
