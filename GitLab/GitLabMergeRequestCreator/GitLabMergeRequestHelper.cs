@@ -38,8 +38,9 @@ namespace dotnetCampus.GitLabMergeRequestCreator
 
             var gitLabClient = new GitLabClient(options.GitlabUrl, options.GitlabToken);
 
+            Console.WriteLine($"Create MergeRequest: {currentBranch} to {targetBranch}");
             await gitLabClient.MergeRequests.CreateAsync(options.ProjectId,
-                new CreateMergeRequest(currentBranch, options.TargetBranch, title));
+                new CreateMergeRequest(currentBranch, targetBranch, title));
         }
     }
 }
