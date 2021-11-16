@@ -40,6 +40,14 @@ namespace dotnetCampus.GitCommand
         }
 
         /// <summary>
+        /// 创建新分支，使用 checkout -b <paramref name="branchName"/> 命令
+        /// </summary>
+        public void CheckoutNewBranch(string branchName, bool force)
+        {
+            ExecuteCommand($"checkout -{(force ? "B" : "b")} {branchName}");
+        }
+
+        /// <summary>
         /// 获取当前分支名
         /// </summary>
         /// <returns></returns>
