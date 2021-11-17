@@ -304,9 +304,9 @@ CreateGitLabMergeRequest -GitLab https://gitlab.sdlsj.net -Token sL5nY_aSNsY2FN9
 
 - `-GitLab`: GitLab 地址，如 `https://gitlab.sdlsj.net`
 - `-Token`: 拥有创建 MergeRequest 的 Token 值，可在 GitLab 上的 `profile/personal_access_tokens` 生成
-- `-ProjectId`: 将要创建 MergeRequest 的仓库项目 Id 值。推荐在 GitLab 的 CI 上使用 `$CI_PROJECT_ID` 常量传入
-- `-TargetBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认是 dev 分支
-- `-SourceBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认是当前分支。推荐在 GitLab 的 CI 上使用 `$CI_COMMIT_BRANCH` 常量传入
+- `-ProjectId`: 将要创建 MergeRequest 的仓库项目 Id 值。可选，默认将通过环境变量获取 GitLab 的 `$CI_PROJECT_ID` 常量
+- `-TargetBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认将通过环境变量获取 GitLab 的 `$CI_DEFAULT_BRANCH` 分支，也就是仓库的默认分支
+- `-SourceBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认将通过环境变量获取 GitLab 的 `$CI_COMMIT_BRANCH` 分支，也就是当前 CI 正在运行分支
 - `-Title`: 提交 MergeRequest 的标题。可选，默认是 "[Bot] Automated PR to fix formatting errors" 字符串
 
 ## 相似的项目
