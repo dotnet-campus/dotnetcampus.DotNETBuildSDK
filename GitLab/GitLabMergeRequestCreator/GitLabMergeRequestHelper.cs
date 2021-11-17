@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using dotnetCampus.GitCommand;
 using GitLabApiClient;
@@ -46,11 +47,26 @@ namespace dotnetCampus.GitLabMergeRequestCreator
             var gitLabClient = new GitLabClient(options.GitLabUrl, options.GitLabToken);
 
             Console.WriteLine($"Create MergeRequest: {currentBranch} to {targetBranch}");
-            await gitLabClient.MergeRequests.CreateAsync(options.ProjectId,
-                new CreateMergeRequest(currentBranch, targetBranch, title)
-                {
+            try
+            {
+                await gitLabClient.MergeRequests.CreateAsync(options.ProjectId,
+                    new CreateMergeRequest(currentBranch, targetBranch, title)
+                    {
                      
-                });
+                    });
+            }
+            catch (GitLabException e)
+            {
+                if (e.HttpStatusCode == HttpStatusCode.Conflict)
+                {
+                    // {"message":["Another open merge request already exists for this source branch: !10"]}
+                    // 已经创建了 MR 过了，此时啥都不做
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+
+                throw;
+            }
         }
     }
 }
