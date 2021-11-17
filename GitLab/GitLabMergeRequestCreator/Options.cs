@@ -1,4 +1,5 @@
 ﻿using dotnetCampus.Cli;
+using System;
 
 namespace dotnetCampus.GitLabMergeRequestCreator
 {
@@ -42,6 +43,42 @@ namespace dotnetCampus.GitLabMergeRequestCreator
         /// </summary>
         [Option("Title")]
         public string Title { set; get; }
+
+        public void FixWithDefaultValue()
+        {
+            if (string.IsNullOrEmpty(GitLabUrl))
+            {
+                // CI_SERVER_URL 是 GitLab 的常量，大部分机器上的值格式如下
+                // https://gitlab.sdlsj.net
+                GitLabUrl = Environment.GetEnvironmentVariable("CI_SERVER_URL");
+            }
+
+            if (string.IsNullOrEmpty(GitLabToken))
+            {
+                // 这里的 Token 需要自己配置。可以在 CI/CD Settings 里面配置 Variables 的值
+                GitLabToken = Environment.GetEnvironmentVariable("Token");
+            }
+
+            if (string.IsNullOrEmpty(ProjectId))
+            {
+                ProjectId = Environment.GetEnvironmentVariable("CI_PROJECT_ID");
+            }
+
+            if (string.IsNullOrEmpty(TargetBranch))
+            {
+                TargetBranch = Environment.GetEnvironmentVariable("CI_DEFAULT_BRANCH");
+            }
+
+            if (string.IsNullOrEmpty(SourceBranch))
+            {
+                SourceBranch = Environment.GetEnvironmentVariable("CI_COMMIT_BRANCH");
+            }
+
+            if (string.IsNullOrEmpty(Title))
+            {
+                Title = "[Bot] Automated PR to fix formatting errors";
+            }
+        }
 
         public override string ToString()
         {
