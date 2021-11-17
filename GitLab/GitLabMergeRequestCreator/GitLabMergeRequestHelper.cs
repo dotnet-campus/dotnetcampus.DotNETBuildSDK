@@ -16,8 +16,10 @@ namespace dotnetCampus.GitLabMergeRequestCreator
         public static async Task TryCreateMergeRequest(Options options)
         {
             if (string.IsNullOrEmpty(options.GitLabUrl)
-                || string.IsNullOrEmpty(options.GitLabToken))
+                || string.IsNullOrEmpty(options.GitLabToken)
+                || string.IsNullOrEmpty(options.ProjectId))
             {
+                Console.WriteLine($"Can not find GitLabUrl or GitLabToken or ProjectId.");
                 return;
             }
 
@@ -45,7 +47,10 @@ namespace dotnetCampus.GitLabMergeRequestCreator
 
             Console.WriteLine($"Create MergeRequest: {currentBranch} to {targetBranch}");
             await gitLabClient.MergeRequests.CreateAsync(options.ProjectId,
-                new CreateMergeRequest(currentBranch, targetBranch, title));
+                new CreateMergeRequest(currentBranch, targetBranch, title)
+                {
+                     
+                });
         }
     }
 }
