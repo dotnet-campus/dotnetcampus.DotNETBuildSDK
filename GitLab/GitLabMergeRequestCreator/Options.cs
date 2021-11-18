@@ -44,7 +44,7 @@ namespace dotnetCampus.GitLabMergeRequestCreator
         [Option("Title")]
         public string Title { set; get; }
 
-        public void FixWithDefaultValue()
+        public virtual void FixWithDefaultValue()
         {
             if (string.IsNullOrEmpty(GitLabUrl))
             {

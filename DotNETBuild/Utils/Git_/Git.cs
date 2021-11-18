@@ -48,6 +48,31 @@ namespace dotnetCampus.GitCommand
         }
 
         /// <summary>
+        /// 调用 git add . 命令
+        /// </summary>
+        public void AddAll()
+        {
+            ExecuteCommand("add .");
+        }
+
+        /// <summary>
+        /// 调用 git commit -m message 命令
+        /// </summary>
+        /// <param name="message"></param>
+        public void Commit(string message)
+        {
+            ExecuteCommand($"commit -m \"{message}\"");
+        }
+
+        /// <summary>
+        /// 推送代码到仓库
+        /// </summary>
+        public (bool success, string output) Push(string repository,string branchOrTag)
+        {
+           return ExecuteCommand($"push \"{repository}\" \"{branchOrTag}\"");
+        }
+
+        /// <summary>
         /// 获取当前分支名
         /// </summary>
         /// <returns></returns>
@@ -65,5 +90,7 @@ namespace dotnetCampus.GitCommand
                 return string.Empty;
             }
         }
+
+       
     }
 }
