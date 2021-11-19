@@ -17,7 +17,7 @@ namespace dotnetCampus.GitLabCodeFormatBot
 
             // 如果 TargetBranch 是空，那就是在当前分支基础上进行代码格式化
             var git = new Git();
-          
+
             // 强行切到此分支，优势在于忘记合自动格式化分支的时候
             // 不会在仓库放入大量的垃圾分支
             git.CheckoutNewBranch(options.CodeFormatBranch, force: true);
@@ -26,7 +26,7 @@ namespace dotnetCampus.GitLabCodeFormatBot
 
             git.AddAll();
             git.Commit(options.Title);
-            git.Push(options.GitLabPushUrl, options.CodeFormatBranch);
+            git.Push(options.GitLabPushUrl, options.CodeFormatBranch, force: true);
 
             GitLabMergeRequestHelper.TryCreateMergeRequest(options)
                 // 这里没有 UI 线程，不怕 wait 方法

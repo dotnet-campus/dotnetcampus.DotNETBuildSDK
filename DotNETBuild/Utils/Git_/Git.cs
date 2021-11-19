@@ -67,9 +67,9 @@ namespace dotnetCampus.GitCommand
         /// <summary>
         /// 推送代码到仓库
         /// </summary>
-        public (bool success, string output) Push(string repository,string branchOrTag)
+        public (bool success, string output) Push(string repository, string branchOrTag, bool force = false)
         {
-           return ExecuteCommand($"push \"{repository}\" \"{branchOrTag}\"");
+            return ExecuteCommand($"push \"{repository}\" \"{branchOrTag}\" {(force ? "-f" : "")}");
         }
 
         /// <summary>
@@ -91,6 +91,6 @@ namespace dotnetCampus.GitCommand
             }
         }
 
-       
+
     }
 }
