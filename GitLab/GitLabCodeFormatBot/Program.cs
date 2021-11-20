@@ -41,8 +41,9 @@ namespace dotnetCampus.GitLabCodeFormatBot
             Console.WriteLine(output);
 
             // dotnet format
-            (_, output) = ProcessCommand.ExecuteCommand("dotnet", "format");
-            Console.WriteLine(output);
+            Console.WriteLine($"Start dotnet format");
+            ProcessCommand.ExecuteCommand("dotnet", "format");
+            Console.WriteLine($"Finish dotnet format");
         }
     }
 
@@ -55,7 +56,7 @@ namespace dotnetCampus.GitLabCodeFormatBot
         public string CodeFormatBranch { set; get; }
 
         /// <summary>
-        /// 用于上传代码的 GitLab 地址，格式如 git@gitlab.sdlsj.net:lindexi/foo.git 地址。可选，默认将通过环境变量拼接 git@$CI_SERVER_URL:$CI_PROJECT_PATH.git 地址
+        /// 用于上传代码的 GitLab 地址，格式如 git@gitlab.sdlsj.net:lindexi/foo.git 地址。可选，默认将通过环境变量拼接 git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git 地址
         /// </summary>
         [Option("GitLabPushUrl")]
         public string GitLabPushUrl { set; get; }
@@ -70,7 +71,7 @@ namespace dotnetCampus.GitLabCodeFormatBot
             if (string.IsNullOrEmpty(GitLabPushUrl))
             {
                 GitLabPushUrl =
-                    $"git@{Environment.GetEnvironmentVariable("CI_SERVER_URL")}:{Environment.GetEnvironmentVariable("CI_PROJECT_PATH")}.git";
+                    $"git@{Environment.GetEnvironmentVariable("CI_SERVER_HOST")}:{Environment.GetEnvironmentVariable("CI_PROJECT_PATH")}.git";
             }
 
             // 设置上传分支为代码分支
