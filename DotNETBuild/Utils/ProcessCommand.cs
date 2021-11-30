@@ -32,6 +32,13 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
         }
 
+        /// <summary>
+        /// 执行命令
+        /// </summary>
+        /// <param name="exeName"></param>
+        /// <param name="arguments"></param>
+        /// <param name="workingDirectory"></param>
+        /// <returns></returns>
         public static (bool success, string output) ExecuteCommand(string exeName, string arguments, string workingDirectory = "")
         {
             if (string.IsNullOrEmpty(workingDirectory))

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.31521.260
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuildSDK", "DotNETBuild\DotNETBuildSDK.csproj", "{FAC689A0-35C0-471A-9497-43007295DAC0}"
 EndProject
@@ -72,6 +72,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.NuGet", "PublishFolderCleaner\PublishFolderCleaner.NuGet\PublishFolderCleaner.NuGet.csproj", "{4F37AC14-66D8-47F8-A809-6DA9F5B7B286}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PublishFolderCleaner.Demo", "PublishFolderCleaner\PublishFolderCleaner.Demo\PublishFolderCleaner.Demo.csproj", "{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitLab", "GitLab", "{CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabMergeRequestCreator", "GitLab\GitLabMergeRequestCreator\GitLabMergeRequestCreator.csproj", "{0026F307-CCAA-4C3A-847A-77239218A786}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabCodeFormatBot", "GitLab\GitLabCodeFormatBot\GitLabCodeFormatBot.csproj", "{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -383,6 +389,30 @@ Global
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x64.Build.0 = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.ActiveCfg = Release|Any CPU
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C}.Release|x86.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x64.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Debug|x86.Build.0 = Debug|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x64.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x64.Build.0 = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x86.ActiveCfg = Release|Any CPU
+		{0026F307-CCAA-4C3A-847A-77239218A786}.Release|x86.Build.0 = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|x64.Build.0 = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Debug|x86.Build.0 = Debug|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x64.ActiveCfg = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x64.Build.0 = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x86.ActiveCfg = Release|Any CPU
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -398,6 +428,8 @@ Global
 		{5FDA989C-CE59-4919-AAC2-3B2D07FC809A} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
 		{4F37AC14-66D8-47F8-A809-6DA9F5B7B286} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
 		{5393C23E-9C6B-4C23-99AD-D0CE4971F37C} = {7ED9CDAF-DBD5-48BD-A3E9-94E3A9D4FC4D}
+		{0026F307-CCAA-4C3A-847A-77239218A786} = {CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}
+		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A} = {CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6E377C6-EDE0-4135-951F-78C62B63DE96}
