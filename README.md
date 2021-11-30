@@ -302,12 +302,72 @@ CreateGitLabMergeRequest -GitLab https://gitlab.sdlsj.net -Token sL5nY_aSNsY2FN9
 
 参数描述如下
 
-- `-GitLab`: GitLab 地址，如 `https://gitlab.sdlsj.net`
-- `-Token`: 拥有创建 MergeRequest 的 Token 值，可在 GitLab 上的 `profile/personal_access_tokens` 生成
+- `-GitLab`: GitLab 地址，如 `https://gitlab.sdlsj.net` 。可选，默认将通过环境变量获取 GitLab 的 `$CI_SERVER_URL` 变量
+- `-Token`: 拥有创建 MergeRequest 的 Token 值，可在 GitLab 上的 `profile/personal_access_tokens` 生成。可选，默认将通过环境变量获取 GitLab 的 `Token` 变量。此变量需要运维手动设置才有
 - `-ProjectId`: 将要创建 MergeRequest 的仓库项目 Id 值。可选，默认将通过环境变量获取 GitLab 的 `$CI_PROJECT_ID` 常量
 - `-TargetBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认将通过环境变量获取 GitLab 的 `$CI_DEFAULT_BRANCH` 分支，也就是仓库的默认分支
 - `-SourceBranch`: 将从 SourceBranch 合并到 TargetBranch 分支。可选，默认将通过环境变量获取 GitLab 的 `$CI_COMMIT_BRANCH` 分支，也就是当前 CI 正在运行分支
 - `-Title`: 提交 MergeRequest 的标题。可选，默认是 "[Bot] Automated PR to fix formatting errors" 字符串
+
+放在 `.gitlab-ci.yml` 文件例子如下：
+
+```yml
+stages:
+  - build
+
+ReleaseToDev:
+  # 自动从 release 分支合并到 dev 分支的工具
+  stage: build
+  script:
+    - "chcp 65001"
+    - 'dotnet tool update -g dotnetCampus.GitLabMergeRequestCreator' # 安装或更新工具
+    - 'CreateGitLabMergeRequest -Title "Merge release to dev"' # 自动创建合并 Release 分支到 Dev 分支
+  only:
+    - release
+```
+
+### AutomateFormatCodeAndCreateGitLabMergeRequest
+
+自动格式化代码，格式化完成之后自动提 GitLab 的 MergeRequest 工具
+
+格式化代码使用 `dotnet format` 命令，受仓库的 `.editorconfig` 文件影响
+
+安装方法如下
+
+```
+dotnet tool install -g dotnetCampus.GitLabCodeFormatBot
+```
+
+使用方法如下
+
+```
+AutomateFormatCodeAndCreateGitLabMergeRequest -Token sL5nY_aSNsY2FN9HYjuB 
+```
+
+参数完全包含 GitLabMergeRequestCreator 的参数，特有的参数描述如下
+
+
+- `-CodeFormatBranch`: 用于给格式化代码使用的分支，默认是 t/bot/FixCodeFormatting 分支
+- `-GitLabPushUrl`: 用于上传代码的 GitLab 地址，格式如 `git@gitlab.sdlsj.net:lindexi/foo.git` 地址。可选，默认将通过环境变量拼接 `git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git` 地址
+- 其他参数，参阅 GitLabMergeRequestCreator 的参数
+
+放在 `.gitlab-ci.yml` 文件例子如下：
+
+```yml
+stages:
+  - build
+
+FormatCode:
+  # 自动格式化代码机器人，将使用 dotnet format 格式化
+  # 格式化规则参阅 .editorconfig 文件
+  stage: build
+  script:
+    - "chcp 65001"
+    - "dotnet tool update -g dotnetCampus.GitLabCodeFormatBot"
+    - "AutomateFormatCodeAndCreateGitLabMergeRequest"
+  only:
+    - dev
+```
 
 ## 相似的项目
 
