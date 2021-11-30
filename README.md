@@ -372,3 +372,9 @@ FormatCode:
 ## 相似的项目
 
 [dotnetcore/FlubuCore: A cross platform build and deployment automation system for building projects and executing deployment scripts using C# code.](https://github.com/dotnetcore/FlubuCore )
+
+## 感谢
+
+排名无先后
+
+- [nmklotas/GitLabApiClient: GitLab API client](https://github.com/nmklotas/GitLabApiClient )
