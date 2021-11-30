@@ -52,7 +52,7 @@ namespace dotnetCampus.GitLabMergeRequestCreator
                 await gitLabClient.MergeRequests.CreateAsync(options.ProjectId,
                     new CreateMergeRequest(currentBranch, targetBranch, title)
                     {
-                     
+
                     });
             }
             catch (GitLabException e)
