@@ -114,6 +114,44 @@ namespace dotnetCampus.DotNETBuild.Utils
             return false;
         }
 
+        private FileInfo FindSlnOrCsprojFile(DirectoryInfo directory)
+        {
+            // 优先找 sln 文件
+            // 如果找不到，找 csproj 文件
+            // 如果找不到，返回空
+            // 如果找到大于一个文件，异常
+
+            var slnFileList = Directory.GetFiles(directory.FullName, "*.sln");
+            if (slnFileList.Length > 1)
+            {
+                throw new ArgumentException(
+                    $"在{directory}找到大于一个 sln 文件，找到的文件如下：{string.Join(';', slnFileList)}");
+            }
+            else if (slnFileList.Length == 1)
+            {
+                return new FileInfo(slnFileList[0]);
+            }
+            else
+            {
+                // 再试试找找 csproj 文件，有些项目是不存在 sln 文件的
+                var csprojFileList = Directory.GetFiles(directory.FullName, "*.csproj");
+                if (csprojFileList.Length > 1)
+                {
+                    throw new ArgumentException(
+                        $"在{directory.FullName}找不到一个 sln 文件，但找到多个 csproj 文件，找到的文件如下：{string.Join(';', csprojFileList)}");
+                }
+                else if (csprojFileList.Length == 1)
+                {
+                    return new FileInfo(csprojFileList[0]);
+                }
+                else
+                {
+                    // 什么都没找到
+                    return null;
+                }
+            }
+        }
+
         private void FindSlnFile()
         {
             var codeConfiguration = CompileConfiguration;
@@ -125,42 +163,34 @@ namespace dotnetCampus.DotNETBuild.Utils
 
                 var directory = Environment.CurrentDirectory;
 
-                if (!string.IsNullOrEmpty(codeConfiguration.CodeDirectory))
+                // 先在当前工作路径寻找，如果找不到，再去代码文件夹找
+                // 解决 sln 没有放在代码文件夹
+                var slnOrCsprojFile = FindSlnOrCsprojFile(new DirectoryInfo(directory));
+                if (slnOrCsprojFile != null)
                 {
-                    directory = codeConfiguration.CodeDirectory;
-                }
-
-                var slnFileList = Directory.GetFiles(directory, "*.sln");
-
-                if (slnFileList.Length > 1)
-                {
-                    throw new ArgumentException(
-                        $"在{Environment.CurrentDirectory}找到大于一个 sln 文件，找到的文件如下：{string.Join(';', slnFileList)}");
-                }
-                else if (slnFileList.Length == 1)
-                {
-                    slnFile = slnFileList[0];
-                    codeConfiguration.SlnPath = slnFile;
-                    Logger.LogInformation($"找到sln文件 {slnFile}");
+                    codeConfiguration.SlnPath = slnOrCsprojFile.FullName;
+                    Logger.LogInformation($"找到项目文件：{slnOrCsprojFile.FullName}");
                 }
                 else
                 {
-                    // 再试试找找 csproj 文件，有些项目是不存在 sln 文件的
-                    var csprojFileList = Directory.GetFiles(directory, "*.csproj");
-                    if (csprojFileList.Length > 1)
+                    // 试试代码文件夹
+                    directory = codeConfiguration.CodeDirectory;
+                    if (string.IsNullOrEmpty(directory))
                     {
-                        throw new ArgumentException(
-                            $"在{Environment.CurrentDirectory}找不到一个 sln 文件，但找到多个 csproj 文件，找到的文件如下：{string.Join(';', csprojFileList)}");
-                    }
-                    else if (csprojFileList.Length == 1)
-                    {
-                        slnFile = csprojFileList[0];
-                        codeConfiguration.SlnPath = slnFile;
-                        Logger.LogInformation($"找不到sln文件，但找到一个 csproj 文件 {slnFile}");
+                        throw new ArgumentException($"没有在{Environment.CurrentDirectory}找到sln文件或 csproj 文件");
                     }
                     else
                     {
-                        throw new ArgumentException($"没有在{Environment.CurrentDirectory}找到sln文件或 csproj 文件");
+                        slnOrCsprojFile = FindSlnOrCsprojFile(new DirectoryInfo(directory));
+                        if (slnOrCsprojFile != null)
+                        {
+                            codeConfiguration.SlnPath = slnOrCsprojFile.FullName;
+                            Logger.LogInformation($"找到项目文件：{slnOrCsprojFile.FullName}");
+                        }
+                        else
+                        {
+                            throw new ArgumentException($"没有在{Environment.CurrentDirectory}和{directory}找到sln文件或 csproj 文件");
+                        }
                     }
                 }
             }
