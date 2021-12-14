@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.IO;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 using dotnetCampus.Cli;
-
-using System;
 
 namespace dotnetCampus.RegexReplaceTask
 {
