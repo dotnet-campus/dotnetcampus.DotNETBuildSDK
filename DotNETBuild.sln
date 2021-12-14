@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31729.503
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNETBuildSDK", "DotNETBuild\DotNETBuildSDK.csproj", "{FAC689A0-35C0-471A-9497-43007295DAC0}"
 EndProject
@@ -78,6 +78,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabMergeRequestCreator", "GitLab\GitLabMergeRequestCreator\GitLabMergeRequestCreator.csproj", "{0026F307-CCAA-4C3A-847A-77239218A786}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabCodeFormatBot", "GitLab\GitLabCodeFormatBot\GitLabCodeFormatBot.csproj", "{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexReplaceTask", "RegexReplaceTask\RegexReplaceTask.csproj", "{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -413,6 +415,18 @@ Global
 		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x64.Build.0 = Release|Any CPU
 		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x86.ActiveCfg = Release|Any CPU
 		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A}.Release|x86.Build.0 = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|x64.Build.0 = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Debug|x86.Build.0 = Debug|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|x64.ActiveCfg = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|x64.Build.0 = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|x86.ActiveCfg = Release|Any CPU
+		{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
