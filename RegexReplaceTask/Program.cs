@@ -24,6 +24,11 @@ namespace dotnetCampus.RegexReplaceTask
                     $"Can not match regex={options.ReplaceRegex} in OutputFile={options.FilePath} \r\n The file content is\r\n {text}");
             }
 
+            if (string.IsNullOrEmpty(matchOutputText.Groups[1].Value))
+            {
+                throw new ArgumentException($"Can not find the first match item. 找不到第一个正则匹配项，是否忘记加上括号");
+            }
+
             var replaceText = matchOutputText.Groups[0].Value.Replace(matchOutputText.Groups[1].Value, options.Value);
             Console.WriteLine($"Replace {matchOutputText.Groups[0].Value} to {replaceText}");
             text = text.Replace(matchOutputText.Groups[0].Value, replaceText);
