@@ -3,6 +3,8 @@ using System.Text.RegularExpressions;
 
 using dotnetCampus.Cli;
 
+using System;
+
 namespace dotnetCampus.RegexReplaceTask
 {
     public class Program
