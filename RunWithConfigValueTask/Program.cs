@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
 
@@ -26,10 +27,15 @@ namespace dotnetCampus.RunWithConfigValueTask
             for (var i = 1; i < actualCommandline.Length; i++)
             {
                 var arg = actualCommandline[i];
+                Console.WriteLine($"[{i}] = {arg}");
                 commandlineArgString.Append(ProcessCommand.ToArgumentPath(arg));
+                commandlineArgString.Append(' ');
             }
 
-            ProcessCommand.ExecuteCommand(actualCommandline[0], commandlineArgString.ToString());
+            var arguments = commandlineArgString.ToString();
+            Console.WriteLine($"Command = {actualCommandline[0]} {arguments}");
+            var (success, output) = ProcessCommand.ExecuteCommand(actualCommandline[0], arguments);
+            Console.WriteLine(output);
         }
     }
 }
