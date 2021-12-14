@@ -5,8 +5,10 @@
     <TargetFramework>net5.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>RegexReplaceTask</ToolCommandName>
     <AssemblyName>dotnetCampus.RegexReplaceTask</AssemblyName>
-
+    <RootNamespace>dotnetCampus.RegexReplaceTask</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
