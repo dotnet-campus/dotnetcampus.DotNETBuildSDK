@@ -270,6 +270,46 @@ dotnetcampus.exe f1 doubi lindexi
 
 在传入 RunWithConfigValueTask 的命令，使用格式为 `$(配置的Key值)` 或者 `$(配置的Key值)??默认值` 的方式，即可在 RunWithConfigValueTask 替换为配置中对应的参数
 
+### RegexReplaceTask
+
+使用正则表达式替换文件内容的工具。可以将文件的内容，用正则表达式替换为输入的指定字符串
+
+安装方法如下
+
+```
+dotnet tool install -g dotnetCampus.RegexReplaceTask
+```
+
+使用方法如下
+
+```
+RegexReplaceTask -v "替换为的字符串" -r "正则表达式" -f "Foo.cs"
+```
+
+参数含义如下
+
+- `-v` 将替换为的内容
+- `-r` 用于替换的正则表达式，其中 `match.Groups[1].Value` 将被替换为 `-v` 的参数值。格式如 `\d+\.(\d+)` 的正则，要求包含一个括号，括号内的匹配内容将会被替换
+- `-f` 替换内容的文件，要求文件一定存在
+
+可以配合 `RunWithConfigValueTask` 工具使用，达到读取配置文件的内容，使用此内容用正则替换文件内容。如读取配置文件的由 `GitRevisionTask` 写入的 `$(GitCount)` 数据，写入替换到 AssemblyInfo.cs 里面的 `$GitRevisionNumber$` 字符串内容，可用如下代码
+
+```
+RunWithConfigValueTask RegexReplaceTask -v $(GitCount) -r "(\$GitRevisionNumber\$)" -f "AssemblyInfo.cs"
+```
+
+替换前的 AssemblyInfo.cs 文件内容如下
+
+```
+[assembly: AssemblyFileVersion("2.2.0.$GitRevisionNumber$")]
+```
+
+假设 `$(GitCount)` 的值为 123 那么替换后的 AssemblyInfo.cs 文件内容如下
+
+```
+[assembly: AssemblyFileVersion("2.2.0.123")]
+```
+
 ### PublishFolderCleaner
 
 让 .NET Core 或 .NET 5 或更高版本的 .NET 发布文件夹更简洁工具，将原本杂乱放在发布文件夹下的文件都放入到 lib 文件夹下，让发布文件夹只包含一个 exe 和一个 lib 文件夹
