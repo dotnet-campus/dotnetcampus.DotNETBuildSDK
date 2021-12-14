@@ -1,4 +1,4 @@
-using System.IO;
+ï»¿using System.IO;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -12,7 +12,7 @@ namespace RegexReplaceTask.Tests
         [ContractTestCase]
         public void RegexReplace()
         {
-            "´«ÈëÎÄ¼þºÍÕýÔòÌæ»»ÄÚÈÝ£¬¿ÉÒÔ½«ÄÚÈÝ½øÐÐÌæ»»".Test(() =>
+            "ä¼ å…¥æ–‡ä»¶å’Œæ­£åˆ™æ›¿æ¢å†…å®¹ï¼Œå¯ä»¥å°†å†…å®¹è¿›è¡Œæ›¿æ¢".Test(() =>
             {
                 var content = "1.2.$GitRevision$";
                 var file = Path.GetTempFileName();
