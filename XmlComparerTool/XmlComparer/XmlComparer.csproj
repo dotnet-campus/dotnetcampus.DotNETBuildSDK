@@ -4,6 +4,7 @@
     <TargetFrameworks>net45;net5.0</TargetFrameworks>
     <RootNamespace>dotnetCampus.Comparison</RootNamespace>
     <Nullable>enable</Nullable>
+    <AssemblyName>dotnetCampus.Comparison.XmlComparer</AssemblyName>
     <PackageId>dotnetCampus.Comparison.XmlComparer</PackageId>
     <Description>提供XML的比较功能</Description>
 

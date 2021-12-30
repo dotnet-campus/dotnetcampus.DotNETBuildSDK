@@ -142,6 +142,13 @@ namespace dotnetCampus.Comparison
                 }
                 else
                 {
+                    if (subElement2List.Count == 0)
+                    {
+                        throw new ElementNotMatchException(
+                            $"元素2 <{xElement2.Name}> 中不包含元素1存在的 <{subElement1.Name}> 子元素。元素2：{xElement2}\r\n子元素：{subElement1}",
+                            subElement1, null);
+                    }
+
                     if (!elementCountDictionary.TryGetValue(subElement1.Name, out var count))
                     {
                         count = 0;
