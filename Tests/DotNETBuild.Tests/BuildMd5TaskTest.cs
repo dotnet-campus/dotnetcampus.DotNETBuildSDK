@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Xml.Serialization;
 using dotnetCampus.BuildMd5Task;
+using dotnetCampus.DotNETBuild.Utils.BuildMd5Tools;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MSTest.Extensions.Contracts;
 

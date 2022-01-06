@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace dotnetCampus.BuildMd5Task
+namespace dotnetCampus.DotNETBuild.Utils.BuildMd5Tools
 {
     public class DirectoryCheckingResult
     {

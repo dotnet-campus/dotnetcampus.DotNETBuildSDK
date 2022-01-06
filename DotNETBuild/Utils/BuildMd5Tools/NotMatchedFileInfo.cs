@@ -1,4 +1,4 @@
-﻿namespace dotnetCampus.BuildMd5Task
+﻿namespace dotnetCampus.DotNETBuild.Utils.BuildMd5Tools
 {
     /// <summary>
     ///     未匹配的文件信息

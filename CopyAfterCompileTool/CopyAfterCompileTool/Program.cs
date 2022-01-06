@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace dotnetCampus.CopyAfterCompileTool
 {
@@ -12,5 +13,20 @@ namespace dotnetCampus.CopyAfterCompileTool
             var binaryChopCompiler = BinaryChopCompiler.CreateInstance();
             binaryChopCompiler.CompileAllCommitAndCopy();
         }
+
+        private void X()
+        {
+            var xmlSerializer = new XmlSerializer(typeof(Foo));
+            var xmlSerializer2 = new XmlSerializer(typeof(MsbuildConfiguration));
+
+        }
     }
+
+    public class Foo
+    {
+        public string Name { get; set; }
+    }
+
+
+
 }

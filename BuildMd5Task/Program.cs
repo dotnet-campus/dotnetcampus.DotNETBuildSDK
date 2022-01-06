@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using dotnetCampus.Cli;
+using dotnetCampus.DotNETBuild.Utils.BuildMd5Tools;
 
 namespace dotnetCampus.BuildMd5Task
 {

@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
-using dotnetCampus.DotNETBuild.Utils;
 
-namespace dotnetCampus.BuildMd5Task
+namespace dotnetCampus.DotNETBuild.Utils.BuildMd5Tools
 {
     public class Md5Provider
     {
