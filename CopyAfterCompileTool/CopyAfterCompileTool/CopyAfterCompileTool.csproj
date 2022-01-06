@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -18,10 +18,4 @@
   <ItemGroup>
     <ProjectReference Include="..\..\DotNETBuild\DotNETBuildSDK.csproj" />
   </ItemGroup>
-    <ItemGroup>
-        <PackageReference Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
-    </ItemGroup>
-    <ItemGroup>
-        <DotNetCliToolReference Include="Microsoft.XmlSerializer.Generator" Version="6.0.0" />
-    </ItemGroup>
 </Project>
