@@ -70,7 +70,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         {
             if (string.IsNullOrEmpty(msbuildPath))
             {
-                msbuildPath = CompileConfiguration.MsBuildFile;
+                msbuildPath = CompileConfiguration.MSBuildFile;
             }
 
             ExecuteCommand(msbuildPath, command);
@@ -82,14 +82,14 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <returns></returns>
         public string GetMsBuildFile()
         {
-            if (!string.IsNullOrEmpty(CompileConfiguration.MsBuildFile))
+            if (!string.IsNullOrEmpty(CompileConfiguration.MSBuildFile))
             {
-                return CompileConfiguration.MsBuildFile;
+                return CompileConfiguration.MSBuildFile;
             }
 
             FindMsBuildFile();
 
-            return CompileConfiguration.MsBuildFile;
+            return CompileConfiguration.MSBuildFile;
         }
 
         internal void FindMsBuildFile()

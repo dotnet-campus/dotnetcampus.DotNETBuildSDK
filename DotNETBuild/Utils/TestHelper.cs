@@ -35,7 +35,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 return CompileConfiguration.VSTestFile;
             }
 
-            var msBuildFile = CompileConfiguration.MsBuildFile;
+            var msBuildFile = CompileConfiguration.MSBuildFile;
             if (string.IsNullOrEmpty(msBuildFile))
             {
                 return msBuildFile;
