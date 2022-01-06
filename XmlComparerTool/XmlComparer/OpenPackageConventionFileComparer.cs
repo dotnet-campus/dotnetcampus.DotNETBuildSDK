@@ -29,7 +29,7 @@ namespace dotnetCampus.Comparison
             ZipFile.ExtractToDirectory(file2.FullName, file2UnZipFolder.FullName);
 
             foreach (var xmlFile in Directory.EnumerateFiles(file1UnZipFolder.FullName,
-                "*.xml"))
+                "*.xml", SearchOption.AllDirectories))
             {
                 if (settings.IgnoreFileNameList?.Any(f => string.Equals(f, Path.GetFileName(xmlFile), StringComparison.OrdinalIgnoreCase))
                     is true)

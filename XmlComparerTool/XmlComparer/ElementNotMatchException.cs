@@ -42,6 +42,6 @@ namespace dotnetCampus.Comparison
         public int LineNumber { get; }
 
         /// <inheritdoc />
-        public override string Message => $"ElementName:{Element1.Name};\r\nLineNumber:{LineNumber};\r\nValue1:{Element1.Value};\r\nValue2:{Element2?.Value};\r\n{base.ToString()}";
+        public override string Message => $"ElementName:{Element1.Name};\r\nLineNumber:{LineNumber};\r\nValue1:{Element1.Value};\r\nValue2:{Element2?.Value}";
     }
 }
