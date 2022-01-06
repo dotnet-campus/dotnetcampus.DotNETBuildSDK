@@ -84,7 +84,7 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Obsolete("大小写命名错误，请使用 Vs2019ProfessionalMsBuild 代替")]
+        [Obsolete("大小写命名错误，请使用 VS2019ProfessionalMSBuild 代替")]
         public string Vs2019ProfessionalMsBuild
         {
             set => SetValue(value);

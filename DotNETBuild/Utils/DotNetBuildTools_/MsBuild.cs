@@ -99,7 +99,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (File.Exists(vs2019Community))
             {
-                CompileConfiguration.Vs2019CommunityMsBuild = vs2019Community;
+                CompileConfiguration.VS2019CommunityMSBuild = vs2019Community;
             }
 
             var vs2019Enterprise =
@@ -107,7 +107,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (File.Exists(vs2019Enterprise))
             {
-                CompileConfiguration.Vs2019EnterpriseMsBuild = vs2019Enterprise;
+                CompileConfiguration.VS2019EnterpriseMSBuild = vs2019Enterprise;
             }
 
             var vs2019Professional =
@@ -115,7 +115,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
             if (File.Exists(vs2019Professional))
             {
-                CompileConfiguration.Vs2019ProfessionalMsBuild = vs2019Professional;
+                CompileConfiguration.VS2019ProfessionalMSBuild = vs2019Professional;
             }
         }
 
