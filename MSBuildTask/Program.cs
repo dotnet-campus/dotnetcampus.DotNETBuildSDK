@@ -8,7 +8,7 @@ namespace MSBuildTask
     {
         static void Main(string[] args)
         {
-            var msBuild = new MsBuild(AppConfigurator.GetAppConfigurator());
+            var msBuild = new MSBuild(AppConfigurator.GetAppConfigurator());
             msBuild.Build();
         }
     }

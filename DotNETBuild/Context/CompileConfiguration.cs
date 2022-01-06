@@ -1,4 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.ComponentModel;
+using System.IO;
+
 using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Context
@@ -14,7 +17,7 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 获取 sln 文件路径
+        /// 获取或设置 sln 文件路径
         /// </summary>
         public string SlnPath
         {
@@ -25,6 +28,19 @@ namespace dotnetCampus.DotNETBuild.Context
             get { return GetString(); }
         }
 
+        /// <summary>
+        /// 获取或设置 MSBuild 文件路径，可自动寻找本机的 MSBuild 路径
+        /// </summary>
+        public string MSBuildFile
+        {
+#pragma warning disable CS0618
+            get => MsBuildFile;
+            set => MsBuildFile = value;
+#pragma warning restore CS0618
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 MSBuildFile 代替")]
         public string MsBuildFile
         {
             set
@@ -59,18 +75,56 @@ namespace dotnetCampus.DotNETBuild.Context
             }
         }
 
+        public string VS2019ProfessionalMSBuild
+        {
+#pragma warning disable CS0618
+            get => Vs2019ProfessionalMsBuild;
+            set => Vs2019ProfessionalMsBuild = value;
+#pragma warning restore CS0618
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 VS2019ProfessionalMSBuild 代替")]
         public string Vs2019ProfessionalMsBuild
         {
             set => SetValue(value);
             get => GetString();
         }
 
+        public string VS2019EnterpriseMSBuild
+        {
+#pragma warning disable CS0618
+            get => Vs2019EnterpriseMsBuild;
+            set => Vs2019EnterpriseMsBuild = value;
+#pragma warning restore CS0618
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 VS2019EnterpriseMSBuild 代替")]
         public string Vs2019EnterpriseMsBuild
         {
             set => SetValue(value);
             get => GetString();
         }
 
+        public string VS2019CommunityMSBuild
+        {
+            set
+            {
+#pragma warning disable CS0618
+                Vs2019CommunityMsBuild = value;
+#pragma warning restore CS0618
+            }
+            get
+            {
+#pragma warning disable CS0618
+                return Vs2019CommunityMsBuild;
+#pragma warning restore CS0618
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 VS2019CommunityMSBuild 代替")]
         public string Vs2019CommunityMsBuild
         {
             set
@@ -84,12 +138,25 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 获取 vstest.console.exe 文件
+        /// 获取 vstest.console.exe 文件路径
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 VSTestFile 代替")]
         public string VsTestFile
         {
             set => SetValue(value);
             get => GetString();
+        }
+
+        /// <summary>
+        /// 获取 vstest.console.exe 文件路径
+        /// </summary>
+        public string VSTestFile
+        {
+#pragma warning disable CS0618
+            get => VsTestFile;
+            set => VsTestFile = value;
+#pragma warning restore CS0618
         }
 
         public string CurrentCommit

@@ -30,12 +30,12 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <returns></returns>
         public string GetVsTest()
         {
-            if (!string.IsNullOrEmpty(CompileConfiguration.VsTestFile))
+            if (!string.IsNullOrEmpty(CompileConfiguration.VSTestFile))
             {
-                return CompileConfiguration.VsTestFile;
+                return CompileConfiguration.VSTestFile;
             }
 
-            var msBuildFile = CompileConfiguration.MsBuildFile;
+            var msBuildFile = CompileConfiguration.MSBuildFile;
             if (string.IsNullOrEmpty(msBuildFile))
             {
                 return msBuildFile;
@@ -45,7 +45,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 @"..\..\..\..\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe");
             file = Path.GetFullPath(file);
 
-            CompileConfiguration.VsTestFile = file;
+            CompileConfiguration.VSTestFile = file;
 
             return file;
         }
