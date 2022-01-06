@@ -1,11 +1,9 @@
-﻿using System.Xml.Serialization;
-using dotnetCampus.Configurations;
+﻿using dotnetCampus.Configurations;
 
 namespace dotnetCampus.CopyAfterCompileTool
 {
-  public  class MsbuildConfiguration : Configuration
+    class MsbuildConfiguration : Configuration
     {
-        [XmlElement]
         public bool ShouldRestore
         {
             get => GetBoolean() ?? true;
