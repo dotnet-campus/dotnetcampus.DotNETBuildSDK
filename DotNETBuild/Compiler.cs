@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
@@ -20,7 +21,10 @@ namespace dotnetCampus.DotNETBuild
             Init();
 
             Nuget = new NuGet(AppConfigurator);
+#pragma warning disable CS0618
             MsBuild = new MsBuild(AppConfigurator);
+#pragma warning restore CS0618
+            MSBuild = new MSBuild(AppConfigurator);
             TestHelper = new TestHelper(AppConfigurator);
 
             //_logger = logger ?? AppConfigurator.Of<LogConfiguration>().GetLogger();
@@ -57,7 +61,11 @@ namespace dotnetCampus.DotNETBuild
 
         public NuGet Nuget { get; }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Obsolete("大小写命名错误，请使用 MSBuild 代替")]
         public MsBuild MsBuild { get; }
+
+        public MSBuild MSBuild { get; }
 
         public TestHelper TestHelper { get; }
 

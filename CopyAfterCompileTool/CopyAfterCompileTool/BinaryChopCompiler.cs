@@ -147,8 +147,8 @@ namespace dotnetCampus.CopyAfterCompileTool
 
                         var msbuildConfiguration = AppConfigurator.Of<MsbuildConfiguration>();
 
-                        var msBuildCompiler = new MsBuild(appConfigurator);
-                        msBuildCompiler.Build(new MsBuildCommandOptions()
+                        var msBuildCompiler = new MSBuild(appConfigurator);
+                        msBuildCompiler.Build(new MSBuildCommandOptions()
                         {
                             ShouldRestore = msbuildConfiguration.ShouldRestore,
                             MaxCpuCount = msbuildConfiguration.MaxCpuCount,
