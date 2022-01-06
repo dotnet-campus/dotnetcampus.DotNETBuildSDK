@@ -81,7 +81,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLabCodeFormatBot", "GitL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegexReplaceTask", "RegexReplaceTask\RegexReplaceTask.csproj", "{CEEC79FA-3FEE-4A36-81D3-818BAC81071C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RegexReplaceTask.Tests", "Tests\RegexReplaceTask.Tests\RegexReplaceTask.Tests.csproj", "{E252DBCC-6FC9-42FF-86DB-E31D076F954F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RegexReplaceTask.Tests", "Tests\RegexReplaceTask.Tests\RegexReplaceTask.Tests.csproj", "{E252DBCC-6FC9-42FF-86DB-E31D076F954F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PickTextValueTask.Tests", "Tests\PickTextValueTask.Tests\PickTextValueTask.Tests.csproj", "{93037B85-0A27-4A6E-B485-2F4544ABEFDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -441,6 +443,18 @@ Global
 		{E252DBCC-6FC9-42FF-86DB-E31D076F954F}.Release|x64.Build.0 = Release|Any CPU
 		{E252DBCC-6FC9-42FF-86DB-E31D076F954F}.Release|x86.ActiveCfg = Release|Any CPU
 		{E252DBCC-6FC9-42FF-86DB-E31D076F954F}.Release|x86.Build.0 = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|x64.Build.0 = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Debug|x86.Build.0 = Debug|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|x64.ActiveCfg = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|x64.Build.0 = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|x86.ActiveCfg = Release|Any CPU
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -459,6 +473,7 @@ Global
 		{0026F307-CCAA-4C3A-847A-77239218A786} = {CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}
 		{EDD3B583-C7DD-4464-9E71-1B5E7D52D16A} = {CE23B8C9-8DE5-47EF-B30D-B55EF3C3E6C7}
 		{E252DBCC-6FC9-42FF-86DB-E31D076F954F} = {2C43AF3C-C3B2-4B8A-81E2-DA6D8A53356A}
+		{93037B85-0A27-4A6E-B485-2F4544ABEFDF} = {2C43AF3C-C3B2-4B8A-81E2-DA6D8A53356A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A6E377C6-EDE0-4135-951F-78C62B63DE96}

@@ -11,7 +11,7 @@ namespace PickTextValueTask.Tests
         [TestMethod]
         public void MainTest()
         {
-            var folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!;
 
             var inputFilePath = Path.Combine(folder, "input file.txt");
             var outputFilePath = Path.Combine(folder, "output file.txt");
