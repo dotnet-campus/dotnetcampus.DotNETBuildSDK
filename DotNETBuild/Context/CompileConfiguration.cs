@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
-
+using System.Linq;
 using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Context
@@ -49,32 +49,31 @@ namespace dotnetCampus.DotNETBuild.Context
             }
             get
             {
+                // 如果有定义过采用哪个 MSBuild 文件，那就优先使用定义的
+                // 否则使用本机安装的最高版本的 VS 作为返回值
                 var msbuild = GetString();
 
-                if (!string.IsNullOrEmpty(msbuild))
-                {
-                    return msbuild;
-                }
+                return GetMSBuildPath
+                (
+                    msbuild,
+                    VS2022EnterpriseMSBuild,
+                    VS2022ProfessionalMSBuild,
+                    VS2022CommunityMSBuild,
+                    Vs2019EnterpriseMsBuild,
+                    Vs2019ProfessionalMsBuild,
+                    Vs2019CommunityMsBuild
+                );
 
-                if (!string.IsNullOrEmpty(Vs2019EnterpriseMsBuild))
+                static string GetMSBuildPath(params string[] paths)
                 {
-                    return Vs2019EnterpriseMsBuild;
+                    return paths.FirstOrDefault(path => !string.IsNullOrEmpty(path));
                 }
-
-                if (!string.IsNullOrEmpty(Vs2019ProfessionalMsBuild))
-                {
-                    return Vs2019ProfessionalMsBuild;
-                }
-
-                if (!string.IsNullOrEmpty(Vs2019CommunityMsBuild))
-                {
-                    return Vs2019CommunityMsBuild;
-                }
-
-                return msbuild;
             }
         }
 
+        /// <summary>
+        /// VisualStudio 2019 专业版的 MSBuild.exe 文件所在路径
+        /// </summary>
         public string VS2019ProfessionalMSBuild
         {
 #pragma warning disable CS0618
@@ -83,6 +82,9 @@ namespace dotnetCampus.DotNETBuild.Context
 #pragma warning restore CS0618
         }
 
+        /// <summary>
+        /// VisualStudio 2019 专业版的 MSBuild.exe 文件所在路径
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("大小写命名错误，请使用 VS2019ProfessionalMSBuild 代替")]
         public string Vs2019ProfessionalMsBuild
@@ -91,6 +93,9 @@ namespace dotnetCampus.DotNETBuild.Context
             get => GetString();
         }
 
+        /// <summary>
+        /// VisualStudio 2019 企业版的 MSBuild.exe 文件所在路径
+        /// </summary>
         public string VS2019EnterpriseMSBuild
         {
 #pragma warning disable CS0618
@@ -99,6 +104,9 @@ namespace dotnetCampus.DotNETBuild.Context
 #pragma warning restore CS0618
         }
 
+        /// <summary>
+        /// VisualStudio 2019 企业版的 MSBuild.exe 文件所在路径
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("大小写命名错误，请使用 VS2019EnterpriseMSBuild 代替")]
         public string Vs2019EnterpriseMsBuild
@@ -107,6 +115,9 @@ namespace dotnetCampus.DotNETBuild.Context
             get => GetString();
         }
 
+        /// <summary>
+        /// VisualStudio 2019 社区版的 MSBuild.exe 文件所在路径
+        /// </summary>
         public string VS2019CommunityMSBuild
         {
             set
@@ -123,6 +134,9 @@ namespace dotnetCampus.DotNETBuild.Context
             }
         }
 
+        /// <summary>
+        /// VisualStudio 2019 社区版的 MSBuild.exe 文件所在路径
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Obsolete("大小写命名错误，请使用 VS2019CommunityMSBuild 代替")]
         public string Vs2019CommunityMsBuild
@@ -135,6 +149,33 @@ namespace dotnetCampus.DotNETBuild.Context
             {
                 return GetString();
             }
+        }
+
+        /// <summary>
+        /// VisualStudio 2022 企业版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2022EnterpriseMSBuild
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// VisualStudio 2022 专业版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2022ProfessionalMSBuild
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// VisualStudio 2022 社区版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2022CommunityMSBuild
+        {
+            set => SetValue(value);
+            get => GetString();
         }
 
         /// <summary>
@@ -159,6 +200,9 @@ namespace dotnetCampus.DotNETBuild.Context
 #pragma warning restore CS0618
         }
 
+        /// <summary>
+        /// 当前的 commit 号
+        /// </summary>
         public string CurrentCommit
         {
             set => SetValue(value);

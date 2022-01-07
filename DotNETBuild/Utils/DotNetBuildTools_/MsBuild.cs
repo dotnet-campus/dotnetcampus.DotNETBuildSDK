@@ -259,6 +259,24 @@ namespace dotnetCampus.DotNETBuild.Utils
             {
                 CompileConfiguration.VS2019ProfessionalMSBuild = vs2019Professional;
             }
+
+            var vs2022EnterpriseMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022EnterpriseMSBuild))
+            {
+                CompileConfiguration.VS2022EnterpriseMSBuild = vs2022EnterpriseMSBuild;
+            }
+
+            var vs2022ProfessionalMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022ProfessionalMSBuild))
+            {
+                CompileConfiguration.VS2022ProfessionalMSBuild = vs2022ProfessionalMSBuild;
+            }
+
+            var vs2022CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022CommunityMSBuild))
+            {
+                CompileConfiguration.VS2022CommunityMSBuild = vs2022CommunityMSBuild;
+            }
         }
 
         /// <summary>
