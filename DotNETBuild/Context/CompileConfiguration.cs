@@ -264,7 +264,7 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 项目的 Build 配置
+        /// 项目的 Build 配置文件夹，默认是当前工作路径下的 Build 文件夹
         /// </summary>
         /// \Build
         public string BuildConfigurationDirectory
@@ -275,7 +275,7 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 混淆配置文件夹，包含 saproj 文件
+        /// 混淆配置文件夹，包含 saproj 文件，默认是 <value>build\obfuscation</value> 文件夹
         /// </summary>
         /// \Build\obfuscation
         public string ObfuscationConfigurationSaprojDirectory
@@ -295,7 +295,7 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 安装包工作文件夹
+        /// 安装包工作文件夹 默认是 <value>build\working</value> 文件夹
         /// </summary>
         /// \Build\working
         public string InstallerWorkingDirectory
