@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
+using dotnetCampus.DotNETBuild.Context.Exceptions;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
@@ -77,7 +78,11 @@ namespace dotnetCampus.DotNETBuild.Utils
                 msbuildPath = CompileConfiguration.MSBuildFile;
             }
 
-            ExecuteCommand(msbuildPath, command);
+            var (success, output) = ExecuteCommand(msbuildPath, command);
+            if (!success)
+            {
+                throw new MSBuildCompileException(output);
+            }
         }
 
         /// <summary>
