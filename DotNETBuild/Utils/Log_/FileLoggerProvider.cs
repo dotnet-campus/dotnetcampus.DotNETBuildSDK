@@ -49,7 +49,10 @@ namespace dotnetCampus.DotNETBuild.Utils
             public void Log<TState>(Microsoft.Extensions.Logging.LogLevel logLevel, EventId eventId, TState state,
                 Exception exception, Func<TState, Exception, string> formatter)
             {
-                var str = $"[{logLevel}][{_categoryName}] {eventId} {formatter?.Invoke(state, exception)}";
+                var categoryName = string.IsNullOrEmpty(_categoryName) ? string.Empty : $"[{_categoryName}]";
+                var eventIdText = eventId.Id == 0 ? string.Empty : $" {eventId}";
+
+                var str = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss,fff}][{logLevel}]{categoryName}{eventIdText} {formatter?.Invoke(state, exception)}";
                 _fileLoggerProvider.WriteLine(str);
             }
 
