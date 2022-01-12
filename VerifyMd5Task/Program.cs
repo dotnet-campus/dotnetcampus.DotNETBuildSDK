@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using dotnetCampus.BuildMd5Task;
 using dotnetCampus.Cli;
+using dotnetCampus.DotNETBuild.Utils.BuildMd5Tools;
 
 namespace dotnetCampus.VerifyMd5Task
 {

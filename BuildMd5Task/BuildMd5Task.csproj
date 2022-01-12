@@ -12,12 +12,15 @@
 
     <ItemGroup>
         <Compile Include="..\DotNETBuild\Assembly.cs" Link="Assembly.cs" />
-        <Compile Include="..\DotNETBuild\Utils\IO_\DirectoryInfoHelper.cs" Link="DirectoryInfoHelper.cs" />
     </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
         <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
     </ItemGroup>
 
 </Project>

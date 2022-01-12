@@ -1,17 +1,27 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Xml.Serialization;
-using dotnetCampus.DotNETBuild.Utils;
 
-namespace dotnetCampus.BuildMd5Task
+namespace dotnetCampus.DotNETBuild.Utils.BuildMd5Tools
 {
-    public class Md5Provider
+    /// <summary>
+    /// 提供 Md5 校验辅助方法
+    /// </summary>
+    public static class Md5Provider
     {
+        /// <summary>
+        /// 将 <paramref name="directory"/> 里所有文件，包括里层文件夹的文件，进行计算出 md5 值，作为 XML 格式，输出到 <paramref name="outputFile"/> 文件里面
+        /// </summary>
+        /// <param name="directory">遍历生成 md5 的文件夹</param>
+        /// <param name="outputFile">输出的文件</param>
+        /// <param name="multiSearchPattern">文件夹里的文件搜寻通配符匹配字符串，默认是 `*` 字符串</param>
+        /// <param name="ignoreList">忽略文件列表，暂不支持通配符，需要使用相对路径，路径相对于 Path 路径。多个相对路径使用 `|` 字符分割，此属性仅在 Path 为文件夹时使用</param>
+        /// <param name="overwrite">是否覆盖输出文件</param>
         public static void BuildFolderAllFilesMd5(DirectoryInfo directory, string outputFile,
             string? multiSearchPattern = null,
             string? ignoreList = null, bool overwrite = false)
@@ -45,6 +55,12 @@ namespace dotnetCampus.BuildMd5Task
             WriteToFile(fileMd5List, outputFile, overwrite);
         }
 
+        /// <summary>
+        /// 将 <paramref name="file"/> 计算出 md5 值，序列化为 XML 格式，输出到 <paramref name="outputFile"/> 文件
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="outputFile"></param>
+        /// <param name="overwrite"></param>
         public static void BuildFileMd5(FileInfo file, string outputFile, bool overwrite)
         {
             var hash = GetMd5Hash(file);
@@ -63,6 +79,12 @@ namespace dotnetCampus.BuildMd5Task
             WriteToFile(fileMd5List, outputFile, overwrite);
         }
 
+        /// <summary>
+        /// 判断 <paramref name="directory"/> 里的文件是否匹配 <paramref name="checksumFile"/> 里的值
+        /// </summary>
+        /// <param name="directory"></param>
+        /// <param name="checksumFile"></param>
+        /// <returns></returns>
         public static DirectoryCheckingResult VerifyFolderMd5(DirectoryInfo directory, FileInfo checksumFile)
         {
             // 读取文件
