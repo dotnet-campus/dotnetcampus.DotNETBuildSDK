@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Context
@@ -23,7 +24,7 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set
             {
-                SetValue(value);
+                SetFullPath(value);
             }
             get { return GetString(); }
         }
@@ -45,7 +46,7 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set
             {
-                SetValue(value);
+                SetFullPath(value);
             }
             get
             {
@@ -89,7 +90,7 @@ namespace dotnetCampus.DotNETBuild.Context
         [Obsolete("大小写命名错误，请使用 VS2019ProfessionalMSBuild 代替")]
         public string Vs2019ProfessionalMsBuild
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -111,7 +112,7 @@ namespace dotnetCampus.DotNETBuild.Context
         [Obsolete("大小写命名错误，请使用 VS2019EnterpriseMSBuild 代替")]
         public string Vs2019EnterpriseMsBuild
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -143,7 +144,7 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set
             {
-                SetValue(value);
+                SetFullPath(value);
             }
             get
             {
@@ -156,7 +157,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// </summary>
         public string VS2022EnterpriseMSBuild
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -165,7 +166,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// </summary>
         public string VS2022ProfessionalMSBuild
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -174,7 +175,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// </summary>
         public string VS2022CommunityMSBuild
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -185,7 +186,7 @@ namespace dotnetCampus.DotNETBuild.Context
         [Obsolete("大小写命名错误，请使用 VSTestFile 代替")]
         public string VsTestFile
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -214,7 +215,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// </summary>
         public string OutputDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -259,7 +260,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// </summary>
         public string CodeDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString();
         }
 
@@ -269,7 +270,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build
         public string BuildConfigurationDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             // 这里特意不相对于 CodeDirectory 路径，解决在仓库里面打包某个项目找错路径
             get => GetString() ?? Path.GetFullPath("Build");
         }
@@ -280,7 +281,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build\obfuscation
         public string ObfuscationConfigurationSaprojDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "obfuscation");
         }
 
@@ -290,7 +291,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build\Setup
         public string SetupConfigurationDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "Setup");
         }
 
@@ -300,7 +301,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build\working
         public string InstallerWorkingDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString() ?? Path.Combine(BuildConfigurationDirectory, "working");
         }
 
@@ -310,7 +311,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build\working\compiling
         public string InstallerCompilingDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString() ?? Path.Combine(InstallerWorkingDirectory, "compiling");
         }
 
@@ -320,8 +321,14 @@ namespace dotnetCampus.DotNETBuild.Context
         /// \Build\working\packing
         public string InstallerPackingDirectory
         {
-            set => SetValue(value);
+            set => SetFullPath(value);
             get => GetString() ?? Path.Combine(InstallerWorkingDirectory, "packing");
+        }
+
+        private void SetFullPath(string path, [CallerMemberName] string key = "")
+        {
+            var value = string.IsNullOrEmpty(path) ? path : Path.GetFullPath(path);
+            SetValue(value, key);
         }
     }
 }
