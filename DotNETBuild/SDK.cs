@@ -83,9 +83,13 @@ namespace dotnetCampus.DotNETBuild
 
         private static void SetCommonConfiguration(IAppConfigurator appConfigurator)
         {
-            var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
+            var sdkConfiguration = appConfigurator.Of<DotNETBuildSDKConfiguration>();
+            if (sdkConfiguration.EnableSetCommonConfiguration)
+            {
+                var compileConfiguration = appConfigurator.Of<CompileConfiguration>();
 
-            compileConfiguration.SetCommonConfiguration();
+                compileConfiguration.SetCommonConfiguration();
+            }
         }
 
         private static void LogApplicationInfo(Assembly entryAssembly)
