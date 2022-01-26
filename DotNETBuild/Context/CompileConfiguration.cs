@@ -286,9 +286,8 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
-        /// 安装包配置文件夹
+        /// 安装包配置文件夹，默认是 <value>\Build\Setup</value> 文件夹
         /// </summary>
-        /// \Build\Setup
         public string SetupConfigurationDirectory
         {
             set => SetFullPath(value);
