@@ -2,6 +2,9 @@
 
 namespace dotnetCampus.DotNETBuild.Context
 {
+    /// <summary>
+    /// 表示 Git 相关信息
+    /// </summary>
     public class GitConfiguration : Configuration
     {
         /// <inheritdoc />
@@ -18,6 +21,9 @@ namespace dotnetCampus.DotNETBuild.Context
             get => GetInt32();
         }
 
+        /// <summary>
+        /// 当前的 commit 号
+        /// </summary>
         public string CurrentCommit
         {
             set => SetValue(value);
