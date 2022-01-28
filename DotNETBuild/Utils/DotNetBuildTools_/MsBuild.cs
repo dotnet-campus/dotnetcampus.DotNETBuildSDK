@@ -78,7 +78,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 msbuildPath = CompileConfiguration.MSBuildFile;
             }
 
-            var (success, output) = ExecuteCommand(msbuildPath, command);
+            var (success, output) = ExecuteProcessCommand(msbuildPath, command);
             if (!success)
             {
                 throw new MSBuildCompileException(output);
@@ -103,29 +103,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         internal void FindMSBuildFile()
         {
-            var vs2019Community =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Community))
-            {
-                CompileConfiguration.VS2019CommunityMSBuild = vs2019Community;
-            }
-
-            var vs2019Enterprise =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Enterprise))
-            {
-                CompileConfiguration.VS2019EnterpriseMSBuild = vs2019Enterprise;
-            }
-
-            var vs2019Professional =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Professional))
-            {
-                CompileConfiguration.VS2019ProfessionalMSBuild = vs2019Professional;
-            }
+            MSBuildFileFinder.FindInstalledMSBuildFilePath(CompileConfiguration);
         }
 
         /// <summary>
@@ -146,6 +124,58 @@ namespace dotnetCampus.DotNETBuild.Utils
             /// 调试版
             /// </summary>
             Debug,
+        }
+    }
+
+    internal static class MSBuildFileFinder
+    {
+        /// <summary>
+        /// 寻找本机安装的 MSBuild 文件路径，填充到 <paramref name="compileConfiguration"/> 里
+        /// </summary>
+        /// <param name="compileConfiguration"></param>
+        public static void FindInstalledMSBuildFilePath(CompileConfiguration compileConfiguration)
+        {
+            var vs2019Community =
+                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
+
+            if (File.Exists(vs2019Community))
+            {
+                compileConfiguration.VS2019CommunityMSBuild = vs2019Community;
+            }
+
+            var vs2019Enterprise =
+                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
+
+            if (File.Exists(vs2019Enterprise))
+            {
+                compileConfiguration.VS2019EnterpriseMSBuild = vs2019Enterprise;
+            }
+
+            var vs2019Professional =
+                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe";
+
+            if (File.Exists(vs2019Professional))
+            {
+                compileConfiguration.VS2019ProfessionalMSBuild = vs2019Professional;
+            }
+
+            var vs2022EnterpriseMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022EnterpriseMSBuild))
+            {
+                compileConfiguration.VS2022EnterpriseMSBuild = vs2022EnterpriseMSBuild;
+            }
+
+            var vs2022ProfessionalMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022ProfessionalMSBuild))
+            {
+                compileConfiguration.VS2022ProfessionalMSBuild = vs2022ProfessionalMSBuild;
+            }
+
+            var vs2022CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe";
+            if (File.Exists(vs2022CommunityMSBuild))
+            {
+                compileConfiguration.VS2022CommunityMSBuild = vs2022CommunityMSBuild;
+            }
         }
     }
 
@@ -220,7 +250,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 msbuildPath = CompileConfiguration.MSBuildFile;
             }
 
-            ExecuteCommand(msbuildPath, command);
+            ExecuteProcessCommand(msbuildPath, command);
         }
 
         /// <summary>
@@ -241,47 +271,7 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         internal void FindMsBuildFile()
         {
-            var vs2019Community =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Community))
-            {
-                CompileConfiguration.VS2019CommunityMSBuild = vs2019Community;
-            }
-
-            var vs2019Enterprise =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Enterprise))
-            {
-                CompileConfiguration.VS2019EnterpriseMSBuild = vs2019Enterprise;
-            }
-
-            var vs2019Professional =
-                @"C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\MSBuild\Current\Bin\MSBuild.exe";
-
-            if (File.Exists(vs2019Professional))
-            {
-                CompileConfiguration.VS2019ProfessionalMSBuild = vs2019Professional;
-            }
-
-            var vs2022EnterpriseMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Msbuild\Current\Bin\MSBuild.exe";
-            if (File.Exists(vs2022EnterpriseMSBuild))
-            {
-                CompileConfiguration.VS2022EnterpriseMSBuild = vs2022EnterpriseMSBuild;
-            }
-
-            var vs2022ProfessionalMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Professional\Msbuild\Current\Bin\MSBuild.exe";
-            if (File.Exists(vs2022ProfessionalMSBuild))
-            {
-                CompileConfiguration.VS2022ProfessionalMSBuild = vs2022ProfessionalMSBuild;
-            }
-
-            var vs2022CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\MSBuild.exe";
-            if (File.Exists(vs2022CommunityMSBuild))
-            {
-                CompileConfiguration.VS2022CommunityMSBuild = vs2022CommunityMSBuild;
-            }
+            MSBuildFileFinder.FindInstalledMSBuildFilePath(CompileConfiguration);
         }
 
         /// <summary>
