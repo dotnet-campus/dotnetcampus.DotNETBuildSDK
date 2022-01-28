@@ -82,7 +82,8 @@ namespace dotnetCampus.DotNETBuild
                 command = $" {ProcessCommand.ToArgumentPath(CompileConfiguration.SlnPath)}";
             }
 
-            return ExecuteCommand("dotnet", $"build {command}");
+            (bool success, string output) = ExecuteProcessCommand("dotnet", $"build {command}");
+            return (success, output);
         }
 
         protected void WriteLog(string message)
@@ -98,7 +99,8 @@ namespace dotnetCampus.DotNETBuild
         /// <returns></returns>
         protected (bool success, string output) Command(string str, string workingDirectory = "")
         {
-            return ExecuteCommand("cmd.exe", $"/c {str}", workingDirectory);
+            (bool success, string output) = ExecuteProcessCommand("cmd.exe", $"/c {str}", workingDirectory);
+            return (success, output);
         }
     }
 }

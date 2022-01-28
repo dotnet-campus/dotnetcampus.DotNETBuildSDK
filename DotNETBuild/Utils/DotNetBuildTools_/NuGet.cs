@@ -30,7 +30,8 @@ namespace dotnetCampus.DotNETBuild.Utils
                 command = ProcessCommand.ToArgumentPath(CompileConfiguration.SlnPath);
             }
 
-            return ExecuteCommand(GetNugetFile(), $"restore {command}");
+            (bool success, string output) = ExecuteProcessCommand(GetNugetFile(), $"restore {command}");
+            return (success, output);
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             var command =
                 $"restore {ProcessCommand.ToArgumentPath(slnPath.FullName)} -MSBuildPath {ProcessCommand.ToArgumentPath(msbuildPath)}";
 
-            ExecuteCommand(GetNugetFile(), command);
+            ExecuteProcessCommand(GetNugetFile(), command);
         }
 
         /// <summary>
@@ -225,7 +226,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             bool skipDuplicate = true)
         {
             var temp = ProcessCommand.ToArgumentPath(nupkgFile);
-            ExecuteCommand(nugetToolPath,
+            ExecuteProcessCommand(nugetToolPath,
                 $"push {temp} -Source {source} {(string.IsNullOrEmpty(apiKey) ? "" : $"-ApiKey {apiKey}")} {(skipDuplicate ? "-SkipDuplicate" : "")}");
         }
 
