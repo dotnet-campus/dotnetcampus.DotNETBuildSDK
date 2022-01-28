@@ -27,6 +27,7 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// 日志
         /// </summary>
         protected ILogger Logger { get; }
+
         /// <summary>
         /// 配置
         /// </summary>
