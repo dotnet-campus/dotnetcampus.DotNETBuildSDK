@@ -49,6 +49,8 @@ namespace dotnetCampus.Comparison
         /// <param name="xmlFileName">需要对比的 XML 文件</param>
         /// <param name="file1UnZipFolder"></param>
         /// <param name="file2UnZipFolder"></param>
+        /// <param name="opcFile1"></param>
+        /// <param name="opcFile2"></param>
         /// <param name="settings"></param>
         /// <exception cref="OpenPackageConventionFileNoMatchException"></exception>
         private static void CompareFile(string xmlFileName,
@@ -56,10 +58,10 @@ namespace dotnetCampus.Comparison
             DirectoryInfo file2UnZipFolder, FileInfo opcFile1, FileInfo opcFile2,
             OpenPackageConventionFileComparerSettings settings)
         {
-            var file1 = Path.Combine(file1UnZipFolder.FullName, xmlFileName);
-            var file2 = Path.Combine(file2UnZipFolder.FullName, xmlFileName);
+            var xmlFile1 = new FileInfo(Path.Combine(file1UnZipFolder.FullName, xmlFileName));
+            var xmlFile2 = new FileInfo(Path.Combine(file2UnZipFolder.FullName, xmlFileName));
 
-            if (!File.Exists(file2))
+            if (!File.Exists(xmlFile2.FullName))
             {
                 var compareOpcFileName = opcFile1.Name;
                 throw new FileNotFoundException($"在新导入的 {compareOpcFileName} 文档，找不到 {xmlFileName} 文件");
@@ -67,11 +69,12 @@ namespace dotnetCampus.Comparison
 
             try
             {
-                XmlComparer.VerifyXmlEquals(new FileInfo(file1), new FileInfo(file2), settings.XmlComparerSettings);
+                XmlComparer.VerifyXmlEquals(xmlFile1, xmlFile2, settings.XmlComparerSettings);
             }
             catch (ElementNotMatchException e)
             {
-                throw new OpenPackageConventionFileNoMatchException(e, xmlFileName, opcFile1, opcFile2);
+                throw new OpenPackageConventionFileNoMatchException(e, xmlFileName, opcFile1, opcFile2, xmlFile1,
+                    xmlFile2);
             }
         }
 
