@@ -94,6 +94,9 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             Logger.LogInformation($"找不到 {file} 文件，从资源拿到文件");
+            var directory = Path.GetDirectoryName(file);
+            Directory.CreateDirectory(directory);
+
             using var manifestResourceStream = assembly.GetManifestResourceStream("dotnetCampus.DotNETBuild.tools.nuget.exe");
             if (manifestResourceStream != null)
             {
@@ -104,9 +107,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             Logger.LogInformation($"从服务器下载 nuget 文件");
-
-            var directory = Path.GetDirectoryName(file);
-            Directory.CreateDirectory(directory);
 
             var webClient = new WebClient();
             webClient.DownloadFile(new Uri("https://dist.nuget.org/win-x86-commandline/latest/nuget.exe"), file);
