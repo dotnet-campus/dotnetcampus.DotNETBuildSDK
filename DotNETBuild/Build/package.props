@@ -1,0 +1,7 @@
+﻿<Project>
+    <ItemGroup>
+      <None Include="$(MSBuildThisFileDirectory)..\tools\nuget.exe" Link="Tools\nuget.exe">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+</Project>
