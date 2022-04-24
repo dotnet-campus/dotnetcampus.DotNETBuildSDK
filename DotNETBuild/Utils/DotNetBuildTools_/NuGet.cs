@@ -82,7 +82,8 @@ namespace dotnetCampus.DotNETBuild.Utils
             //    return;
             //}
 
-            var folder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            var assembly = Assembly.GetExecutingAssembly();
+            var folder = Path.GetDirectoryName(assembly.Location);
             var file = Path.Combine(folder, "tools", "nuget.exe");
 
             if (File.Exists(file))
@@ -93,6 +94,14 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             Logger.LogInformation($"找不到 {file} 文件，从资源拿到文件");
+            using var manifestResourceStream = assembly.GetManifestResourceStream("dotnetCampus.DotNETBuild.tools.nuget.exe");
+            if (manifestResourceStream != null)
+            {
+                using var fileStream = new FileStream(file, FileMode.Create);
+                manifestResourceStream.CopyTo(fileStream);
+                Logger.LogInformation($"从资源拿到 NuGet 文件 File={file}");
+                return;
+            }
 
             Logger.LogInformation($"从服务器下载 nuget 文件");
 
