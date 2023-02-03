@@ -6,7 +6,7 @@ using System.Net.Mail;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
-    static class EmailHelper
+    public static class EmailHelper
     {
         public static void SendEmail(string smtpServeHost,
             int serverPort, string userName,
