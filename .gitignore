@@ -342,3 +342,6 @@ healthchecksdb
 /WriteAppVersionTask/Properties/launchSettings.json
 /GitLab/GitLabMergeRequestCreator/Properties/launchSettings.json
 /GitLab/GitLabCodeFormatBot/Properties/launchSettings.json
+/GitRevisionTask/Properties/launchSettings.json
+/RunWithConfigValueTask/Properties/launchSettings.json
+/RegexReplaceTask/Properties/launchSettings.json
