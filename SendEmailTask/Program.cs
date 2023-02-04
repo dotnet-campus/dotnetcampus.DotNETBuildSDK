@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using dotnetCampus.DotNETBuild.Context;
+using dotnetCampus.DotNETBuild.Utils;
 
 namespace dotnetCampus.SendEmailTask
 {
