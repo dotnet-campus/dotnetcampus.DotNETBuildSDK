@@ -14,7 +14,7 @@ internal class Program
     private static void Main(string[] args)
     {
         var options = CommandLine.Parse(args).As<Options>();
-
+        if (options.PublishSingleFile) return;
         const string libFolderName = "lib";
         var publishFolder = options.PublishFolder.Trim();
         var libFolder = Path.GetFullPath(Path.Combine(publishFolder, libFolderName));
