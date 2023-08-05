@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+#if NETCOREAPP3_1
 using System.Runtime.InteropServices.WindowsRuntime;
+#endif
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 
