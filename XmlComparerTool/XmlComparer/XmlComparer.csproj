@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;net7.0</TargetFrameworks>
+    <TargetFrameworks>net45;net6.0</TargetFrameworks>
     <RootNamespace>dotnetCampus.Comparison</RootNamespace>
     <Nullable>enable</Nullable>
     <AssemblyName>dotnetCampus.Comparison.XmlComparer</AssemblyName>
