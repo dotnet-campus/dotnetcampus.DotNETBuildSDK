@@ -89,7 +89,7 @@ internal class ServeOptions
                 return Results.NotFound();
             }
 
-            if (currentFolderInfo.SyncFileDictionary.TryGetValue(request.RelativePath,out var value))
+            if (currentFolderInfo.SyncFileDictionary.TryGetValue(request.RelativePath, out var value))
             {
                 var file = Path.Join(syncFolder, value.RelativePath);
                 return Results.File(file, MediaTypeNames.Application.Octet);
@@ -151,7 +151,7 @@ record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList)
             // 这里不怕多线程问题。多线程问题只会多创建一次对象，不会有其他影响
             return _syncFileDictionary ??= SyncFileList.ToDictionary(t => t.RelativePath);
         }
-    } 
+    }
 
     private Dictionary<string /*RelativePath*/, SyncFileInfo>? _syncFileDictionary;
 }
@@ -340,7 +340,7 @@ internal class SyncOptions
                 var relativePath = remoteSyncFileInfo.RelativePath;
                 // 用来兼容 Linux 系统
                 relativePath = relativePath.Replace('\\', '/');
-               
+
                 var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
                 // 下载之前先确保文件夹存在，防止下载炸了
                 Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
@@ -362,7 +362,7 @@ internal class SyncOptions
                     try
                     {
                         var localFilePath = Path.Join(syncFolder, relativePath);
-                        File.Move(downloadFilePath, localFilePath);
+                        File.Move(downloadFilePath, localFilePath, overwrite: true);
                         break;
                     }
                     catch
@@ -383,7 +383,7 @@ internal class SyncOptions
                 updatedList.Add(syncFileInfo.RelativePath);
             }
 
-            foreach (var file in Directory.GetFiles(syncFolder,"*",SearchOption.AllDirectories))
+            foreach (var file in Directory.GetFiles(syncFolder, "*", SearchOption.AllDirectories))
             {
                 if (version != currentVersion)
                 {
@@ -392,7 +392,7 @@ internal class SyncOptions
 
                 try
                 {
-                    var relativePath = Path.GetRelativePath(syncFolder,file);
+                    var relativePath = Path.GetRelativePath(syncFolder, file);
                     if (!updatedList.Contains(relativePath))
                     {
                         // 本地存在，远端不存在，删除
