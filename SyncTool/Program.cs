@@ -273,16 +273,6 @@ internal class SyncOptions
         ulong currentVersion = 0;
         while (true)
         {
-            while (currentVersion==0)
-            {
-                await Task.Delay(1000);
-            }
-
-            await httpClient.PostAsJsonAsync("/Download", new DownloadFileRequest("xxxx"));
-
-            var stringContent = new StringContent("Keyxxx",MediaTypeHeaderValue.Parse(MediaTypeNames.Application.Json));
-            await httpClient.PostAsync("/Download", stringContent);
-
             try
             {
                 var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
