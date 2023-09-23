@@ -1,7 +1,7 @@
 ﻿using System.Net.Mime;
 using Microsoft.AspNetCore.StaticFiles;
 
-namespace SyncTool;
+namespace SyncTool.Server;
 
 /// <summary>
 /// 内容类型提供器，用于让所有的文件都可以被下载

@@ -1,4 +1,4 @@
-﻿namespace SyncTool;
+﻿namespace SyncTool.Server;
 /// <summary>
 /// 静态文件配置
 /// </summary>

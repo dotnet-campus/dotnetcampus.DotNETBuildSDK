@@ -1,4 +1,4 @@
-﻿namespace SyncTool;
+﻿namespace SyncTool.Context;
 record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList)
 {
     public Dictionary<string /*RelativePath*/, SyncFileInfo> SyncFileDictionary

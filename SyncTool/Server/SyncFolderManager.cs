@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
+using SyncTool.Context;
 
-namespace SyncTool;
+namespace SyncTool.Server;
 
 class SyncFolderManager
 {

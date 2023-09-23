@@ -5,8 +5,9 @@ using dotnetCampus.Cli;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+using SyncTool.Context;
 
-namespace SyncTool;
+namespace SyncTool.Server;
 
 /// <summary>
 /// 服务端的参数

@@ -11,6 +11,8 @@ using System.Text.Encodings.Web;
 using dotnetCampus.FileDownloader;
 using Microsoft.AspNetCore.Mvc.Routing;
 using SyncTool;
+using SyncTool.Client;
+using SyncTool.Server;
 
 #if DEBUG
 // 调试代码，用来配置客户端同步到本地的路径

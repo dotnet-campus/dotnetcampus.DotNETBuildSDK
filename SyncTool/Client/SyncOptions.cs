@@ -1,6 +1,7 @@
 ﻿using dotnetCampus.Cli;
+using SyncTool.Context;
 
-namespace SyncTool;
+namespace SyncTool.Client;
 
 /// <summary>
 /// 客户端的同步命令行参数
