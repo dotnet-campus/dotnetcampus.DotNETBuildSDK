@@ -370,14 +370,18 @@ internal class SyncOptions
                         // 忽略
                     }
                 }
+            }
 
-                // 更新本地信息
-                local[remoteSyncFileInfo.RelativePath] = remoteSyncFileInfo;
+            // 完成之后，更新 local 的信息
+            local.Clear();
+            foreach (var syncFileInfo in remote)
+            {
+                local[syncFileInfo.RelativePath] = syncFileInfo;
             }
 
             // 删除多余的文件，也就是本地存在但是远程不存在的文件
             // 记录已经更新的 RelativePath 哈希，用来记录哪些存在
-            var updatedList = new HashSet<string>();
+            var updatedList = new HashSet<string>(remote.Count);
             foreach (var syncFileInfo in remote)
             {
                 // 用来兼容 Linux 系统
