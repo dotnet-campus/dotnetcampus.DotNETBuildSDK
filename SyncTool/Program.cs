@@ -83,7 +83,19 @@ internal class ServeOptions
         webApplication.MapGet("/", () => syncFolderManager.CurrentFolderInfo);
         webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request) =>
         {
+            var currentFolderInfo = syncFolderManager.CurrentFolderInfo;
+            if (currentFolderInfo == null)
+            {
+                return Results.NotFound();
+            }
 
+            if (currentFolderInfo.SyncFileDictionary.TryGetValue(request.RelativePath,out var value))
+            {
+                var file = Path.Join(syncFolder, value.RelativePath);
+                return Results.File(file, MediaTypeNames.Application.Octet);
+            }
+
+            return Results.NotFound();
         });
         webApplication.UseStaticFiles(new StaticFileOptions()
         {
@@ -316,26 +328,30 @@ internal class SyncOptions
                     }
                 }
 
-                var relativePath = remoteSyncFileInfo.RelativePath;
-                relativePath = relativePath.Replace('\\', '/');
-                var encode = UrlEncoder.Create().Encode(relativePath);
-                relativePath = encode;
-                var downloadUrl = $"{StaticFileConfiguration.RequestPath}/{relativePath}";
-
                 // 先下载到一个新的文件，然后再重命名替换
                 // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
                 // 那如果下载失败呢？大概需要重新开始同步了
-                var downloadFilePath = Path.Join(syncFolder, $"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
-                await DownloadFile(downloadFilePath, downloadUrl);
 
-                if (!File.Exists(downloadFilePath))
+                // 发起请求，使用 Post 的方式，解决 GetURL 的字符不支持
+                var request = new DownloadFileRequest(remoteSyncFileInfo.RelativePath);
+                var response = await httpClient.PostAsJsonAsync("/Download", request);
+                await using var stream = await response.Content.ReadAsStreamAsync();
+
+                var relativePath = remoteSyncFileInfo.RelativePath;
+                // 用来兼容 Linux 系统
+                relativePath = relativePath.Replace('\\', '/');
+               
+                var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
+                // 下载之前先确保文件夹存在，防止下载炸了
+                Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
+
+                await using (var fileStream = File.Create(downloadFilePath))
                 {
-                    // 下载失败了？理论上不会进入此分支
-                    // 重新等待下一次
-                    return;
+                    // 这里必须使用 using 包括起来，因为接下来就需要移动这个下载文件了，必须确保此时已经完成文件写入不占用文件
+                    await stream.CopyToAsync(fileStream);
                 }
 
-                // 完成下载，移动下载的文件到新的
+                // 完成下载，移动下载的文件作为正式需要的文件
                 while (true)
                 {
                     if (version != currentVersion)
@@ -345,7 +361,7 @@ internal class SyncOptions
 
                     try
                     {
-                        var localFilePath = Path.Join(syncFolder, remoteSyncFileInfo.RelativePath);
+                        var localFilePath = Path.Join(syncFolder, relativePath);
                         File.Move(downloadFilePath, localFilePath);
                         break;
                     }
@@ -369,6 +385,11 @@ internal class SyncOptions
 
             foreach (var file in Directory.GetFiles(syncFolder,"*",SearchOption.AllDirectories))
             {
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
                 try
                 {
                     var relativePath = Path.GetRelativePath(syncFolder,file);
@@ -385,13 +406,6 @@ internal class SyncOptions
 
             Console.WriteLine($"[{version}] 同步完成");
             Console.WriteLine("==========");
-        }
-
-        async Task DownloadFile(string downloadFilePath, string downloadUrl)
-        {
-            await using var stream = await httpClient.GetStreamAsync(downloadUrl);
-            await using var fileStream = File.Create(downloadFilePath);
-            await stream.CopyToAsync(fileStream);
         }
     }
 }
