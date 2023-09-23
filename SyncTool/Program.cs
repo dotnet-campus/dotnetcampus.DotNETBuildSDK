@@ -14,14 +14,15 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 using System.Net.Http.Json;
+using System.Text.Encodings.Web;
 using dotnetCampus.FileDownloader;
 
 #if DEBUG
-
+// 调试代码，用来配置客户端同步到本地的路径
 var syncFolder = Path.Join(Path.GetTempPath(),$"SyncTool_{Path.GetRandomFileName()}");
 var syncOptions = new SyncOptions()
 {
-    Address = "http://127.0.0.1:56621",
+    Address = "http://127.0.0.1:56621", // 在调试启动参数固定了 56621 当成了端口
     SyncFolder = syncFolder,
 };
 syncOptions.Run();
@@ -36,6 +37,9 @@ CommandLine.Parse(args)
 
 Console.WriteLine("Hello, World!");
 
+/// <summary>
+/// 服务端的参数
+/// </summary>
 [Verb("serve")]
 internal class ServeOptions
 {
@@ -97,6 +101,9 @@ internal class ServeOptions
     }
 }
 
+/// <summary>
+/// 内容类型提供器，用于让所有的文件都可以被下载
+/// </summary>
 class ContentTypeProvider : IContentTypeProvider
 {
     public bool TryGetContentType(string subpath, out string contentType)
@@ -106,6 +113,9 @@ class ContentTypeProvider : IContentTypeProvider
     }
 }
 
+/// <summary>
+/// 静态文件配置
+/// </summary>
 static class StaticFileConfiguration
 {
     public const string RequestPath = "/File";
@@ -200,6 +210,9 @@ class SyncFolderManager
     }
 }
 
+/// <summary>
+/// 客户端的同步命令行参数
+/// </summary>
 
 [Verb("sync")]
 internal class SyncOptions
@@ -249,8 +262,8 @@ internal class SyncOptions
                 {
                     continue;
                 }
-
-                await SyncFolderAsync(syncFolderInfo.SyncFileList);
+                currentVersion = syncFolderInfo.Version;
+                await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
             }
             catch (Exception e)
             {
@@ -258,7 +271,7 @@ internal class SyncOptions
             }
         }
 
-        async Task SyncFolderAsync(List<SyncFileInfo> remote)
+        async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
         {
             Dictionary<string, SyncFileInfo> local = syncFileDictionary;
             // 记录已经更新的 RelativePath 哈希，用来记录哪些已被删除
@@ -266,8 +279,55 @@ internal class SyncOptions
 
             foreach (var remoteSyncFileInfo in remote)
             {
-               
+                // ReSharper disable AccessToModifiedClosure
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
+                var relativePath = remoteSyncFileInfo.RelativePath;
+                relativePath = relativePath.Replace('\\', '/');
+                var encode = UrlEncoder.Create().Encode(relativePath);
+                var downloadUrl = $"{StaticFileConfiguration.RequestPath}/{encode}";
+
+                // 先下载到一个新的文件，然后再重命名替换
+                // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
+                // 那如果下载失败呢？大概需要重新开始同步了
+                var downloadFilePath = Path.Join(syncFolder,$"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
+                await DownloadFile(downloadFilePath, downloadUrl);
+
+                if (File.Exists(downloadFilePath))
+                {
+                    // 下载失败了？理论上不会进入此分支
+                    // 重新等待下一次
+                    return;
+                }
+
+                while(true)
+                {
+                    if (version != currentVersion)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                       
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
             }
+        }
+
+        async Task DownloadFile(string downloadFilePath, string downloadUrl)
+        {
+            await using var stream = await httpClient.GetStreamAsync(downloadUrl);
+            await using var fileStream = File.Create(downloadFilePath);
+            await stream.CopyToAsync(fileStream);
         }
     }
 }
