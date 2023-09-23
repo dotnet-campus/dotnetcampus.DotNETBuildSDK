@@ -1,0 +1,182 @@
+﻿using dotnetCampus.Cli;
+
+namespace SyncTool;
+
+/// <summary>
+/// 客户端的同步命令行参数
+/// </summary>
+
+[Verb("sync")]
+internal class SyncOptions
+{
+    [Option('a', "Address")]
+    public string? Address { set; get; }
+
+    [Option('f', "Folder")]
+    public string? SyncFolder { set; get; }
+
+    public async void Run()
+    {
+        if (string.IsNullOrEmpty(Address))
+        {
+            Console.WriteLine($"找不到同步地址，请确保传入 Address 参数");
+            return;
+        }
+
+        var syncFolder = SyncFolder;
+        if (string.IsNullOrEmpty(syncFolder))
+        {
+            syncFolder = Environment.CurrentDirectory;
+        }
+
+        Directory.CreateDirectory(syncFolder);
+
+        using var httpClient = new HttpClient();
+        httpClient.BaseAddress = new Uri(Address);
+
+        // 记录本地的字典值
+        var syncFileDictionary = new Dictionary<string/*RelativePath*/, SyncFileInfo>();
+        foreach (var file in Directory.EnumerateFiles(syncFolder, "*", SearchOption.AllDirectories))
+        {
+            var fileInfo = new FileInfo(file);
+            var relativePath = Path.GetRelativePath(syncFolder, file);
+            var syncFileInfo = new SyncFileInfo(relativePath, fileInfo.Length, fileInfo.LastWriteTimeUtc);
+            syncFileDictionary[relativePath] = syncFileInfo;
+        }
+
+        ulong currentVersion = 0;
+        while (true)
+        {
+            try
+            {
+                var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
+                if (syncFolderInfo is null || syncFolderInfo.Version == currentVersion)
+                {
+                    continue;
+                }
+                currentVersion = syncFolderInfo.Version;
+                await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
+            }
+            catch (Exception e)
+            {
+                // 大不了下次再继续
+            }
+        }
+
+        async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
+        {
+            Dictionary<string/*RelativePath*/, SyncFileInfo> local = syncFileDictionary;
+
+            foreach (var remoteSyncFileInfo in remote)
+            {
+                // ReSharper disable AccessToModifiedClosure
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
+                if (local.TryGetValue(remoteSyncFileInfo.RelativePath, out var localInfo))
+                {
+                    // 如果能拿到本地的记录，判断一下是否需要更新
+                    var localFilePath = Path.Join(syncFolder, localInfo.RelativePath);
+                    var localFile = new FileInfo(localFilePath);
+                    if (localFile.Exists
+                        // 时间不能取本地时间，因为必定存在时间差
+                        && localInfo.LastWriteTimeUtc == remoteSyncFileInfo.LastWriteTimeUtc
+                        && localFile.Length == remoteSyncFileInfo.FileSize)
+                    {
+                        // 如果本地的记录不需要更新，那就跳过
+                        continue;
+                    }
+                }
+
+                // 先下载到一个新的文件，然后再重命名替换
+                // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
+                // 那如果下载失败呢？大概需要重新开始同步了
+
+                // 发起请求，使用 Post 的方式，解决 GetURL 的字符不支持
+                var request = new DownloadFileRequest(remoteSyncFileInfo.RelativePath);
+                var response = await httpClient.PostAsJsonAsync("/Download", request);
+                await using var stream = await response.Content.ReadAsStreamAsync();
+
+                var relativePath = remoteSyncFileInfo.RelativePath;
+                // 用来兼容 Linux 系统
+                relativePath = relativePath.Replace('\\', '/');
+
+                var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
+                // 下载之前先确保文件夹存在，防止下载炸了
+                Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
+
+                await using (var fileStream = File.Create(downloadFilePath))
+                {
+                    // 这里必须使用 using 包括起来，因为接下来就需要移动这个下载文件了，必须确保此时已经完成文件写入不占用文件
+                    await stream.CopyToAsync(fileStream);
+                }
+
+                // 完成下载，移动下载的文件作为正式需要的文件
+                while (true)
+                {
+                    if (version != currentVersion)
+                    {
+                        return;
+                    }
+
+                    try
+                    {
+                        var localFilePath = Path.Join(syncFolder, relativePath);
+                        File.Move(downloadFilePath, localFilePath, overwrite: true);
+                        break;
+                    }
+                    catch
+                    {
+                        // 忽略
+                    }
+                }
+            }
+
+            // 完成之后，更新 local 的信息
+            local.Clear();
+            foreach (var syncFileInfo in remote)
+            {
+                local[syncFileInfo.RelativePath] = syncFileInfo;
+            }
+
+            // 删除多余的文件，也就是本地存在但是远程不存在的文件
+            // 记录已经更新的 RelativePath 哈希，用来记录哪些存在
+            var updatedList = new HashSet<string>(remote.Count);
+            foreach (var syncFileInfo in remote)
+            {
+                // 用来兼容 Linux 系统
+                var relativePath = syncFileInfo.RelativePath;
+                relativePath = relativePath.Replace('\\', '/');
+                updatedList.Add(relativePath);
+            }
+
+            foreach (var file in Directory.GetFiles(syncFolder, "*", SearchOption.AllDirectories))
+            {
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
+                try
+                {
+                    var relativePath = Path.GetRelativePath(syncFolder, file);
+                    // 用来兼容 Linux 系统
+                    relativePath = relativePath.Replace('\\', '/');
+                    if (!updatedList.Contains(relativePath))
+                    {
+                        // 本地存在，远端不存在，删除
+                        File.Delete(file);
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine("==========");
+        }
+    }
+}
