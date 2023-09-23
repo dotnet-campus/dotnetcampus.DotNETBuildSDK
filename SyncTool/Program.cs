@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
 using System.Net.Http.Json;
+using dotnetCampus.FileDownloader;
 
 #if DEBUG
 
@@ -238,10 +239,9 @@ internal class SyncOptions
             syncFileDictionary[relativePath] = syncFileInfo;
         }
 
+        ulong currentVersion = 0;
         while (true)
         {
-            ulong currentVersion = 0;
-
             try
             {
                 var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
@@ -250,23 +250,24 @@ internal class SyncOptions
                     continue;
                 }
 
-                await SyncFolderAsync(syncFileDictionary, syncFolderInfo.SyncFileList);
+                await SyncFolderAsync(syncFolderInfo.SyncFileList);
             }
             catch (Exception e)
             {
                 // 大不了下次再继续
             }
         }
-    }
 
-    private async Task SyncFolderAsync(Dictionary<string, SyncFileInfo> local, List<SyncFileInfo> remote)
-    {
-        // 记录已经更新的 RelativePath 哈希，用来记录哪些已被删除
-        var updatedList = new HashSet<string>();
-
-        foreach (var remoteSyncFileInfo in remote)
+        async Task SyncFolderAsync(List<SyncFileInfo> remote)
         {
-            
+            Dictionary<string, SyncFileInfo> local = syncFileDictionary;
+            // 记录已经更新的 RelativePath 哈希，用来记录哪些已被删除
+            var updatedList = new HashSet<string>();
+
+            foreach (var remoteSyncFileInfo in remote)
+            {
+               
+            }
         }
     }
 }
