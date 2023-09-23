@@ -132,10 +132,7 @@ internal class SyncOptions
             var updatedList = new HashSet<string>(remote.Count);
             foreach (var syncFileInfo in remote)
             {
-                // 用来兼容 Linux 系统
-                var relativePath = syncFileInfo.RelativePath;
-                relativePath = relativePath.Replace('\\', '/');
-                updatedList.Add(relativePath);
+                updatedList.Add(syncFileInfo.RelativePath);
             }
 
             foreach (var file in Directory.GetFiles(syncFolder, "*", SearchOption.AllDirectories))
@@ -169,9 +166,7 @@ internal class SyncOptions
             var response = await httpClient.PostAsJsonAsync("/Download", request);
             await using var stream = await response.Content.ReadAsStreamAsync();
 
-            var relativePath = remoteSyncFileInfo.RelativePath;
-
-            var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
+            var downloadFilePath = Path.Join(syncFolder, $"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
             // 下载之前先确保文件夹存在，防止下载炸了
             Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
 

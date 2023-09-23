@@ -65,6 +65,8 @@ class SyncFolderManager
 
                     var fileInfo = new FileInfo(file);
                     var relativePath = Path.GetRelativePath(watchFolder, file);
+                    // 用来兼容 Linux 系统
+                    relativePath = relativePath.Replace('\\', '/');
                     var syncFileInfo = new SyncFileInfo(relativePath, fileInfo.Length, fileInfo.LastWriteTimeUtc);
                     syncFileList.Add(syncFileInfo);
                 }
