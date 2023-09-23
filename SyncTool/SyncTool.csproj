@@ -12,7 +12,5 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
-    <PackageReference Include="dotnetCampus.FileDownloader" Version="2.2.1" />
-
   </ItemGroup>
 </Project>

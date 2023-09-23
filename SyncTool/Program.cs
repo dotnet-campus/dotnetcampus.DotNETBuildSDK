@@ -1,16 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
-using System.Buffers;
 using dotnetCampus.Cli;
 using dotnetCampus.Cli.Standard;
-using System.Net.Http.Headers;
-using System.Text.Json;
-using Microsoft.AspNetCore.StaticFiles.Infrastructure;
-using System.Net.Http.Json;
-using System.Text.Encodings.Web;
-using dotnetCampus.FileDownloader;
-using Microsoft.AspNetCore.Mvc.Routing;
-using SyncTool;
 using SyncTool.Client;
 using SyncTool.Server;
 
