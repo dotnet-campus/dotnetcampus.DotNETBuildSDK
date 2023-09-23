@@ -92,11 +92,13 @@ internal class SyncOptions
                     }
                 }
 
+                Console.WriteLine($"正在同步 {remoteSyncFileInfo.RelativePath}");
+
                 // 先下载到一个新的文件，然后再重命名替换
                 // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
                 // 那如果下载失败呢？大概需要重新开始同步了
 
-                var downloadFilePath =  await DownloadFile(remoteSyncFileInfo);
+                var downloadFilePath = await DownloadFile(remoteSyncFileInfo);
 
                 // 完成下载，移动下载的文件作为正式需要的文件
                 while (true)
@@ -115,7 +117,10 @@ internal class SyncOptions
                     catch
                     {
                         // 忽略
+                        Console.WriteLine($"同步 {remoteSyncFileInfo.RelativePath} 失败，正在重试");
                     }
+
+                    await Task.Delay(200);
                 }
             }
 
@@ -149,6 +154,7 @@ internal class SyncOptions
                     relativePath = relativePath.Replace('\\', '/');
                     if (!updatedList.Contains(relativePath))
                     {
+                        Console.WriteLine($"删除 {relativePath}");
                         // 本地存在，远端不存在，删除
                         File.Delete(file);
                     }

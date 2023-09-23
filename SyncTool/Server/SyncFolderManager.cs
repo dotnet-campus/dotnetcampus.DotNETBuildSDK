@@ -6,13 +6,19 @@ namespace SyncTool.Server;
 class SyncFolderManager
 {
     public SyncFolderInfo? CurrentFolderInfo { get; private set; }
+    private FileSystemWatcher? _watcher;
 
     public void Run(string watchFolder)
     {
         UpdateChange(watchFolder);
 
-        var fileSystemWatcher = new FileSystemWatcher(watchFolder, "*");
-        fileSystemWatcher.EnableRaisingEvents = true;
+        var fileSystemWatcher = _watcher = new FileSystemWatcher(watchFolder)
+        {
+            EnableRaisingEvents = true,
+            NotifyFilter = NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.DirectoryName |
+                           NotifyFilters.FileName | NotifyFilters.LastWrite
+        };
+
         fileSystemWatcher.Changed += (sender, args) =>
         {
             UpdateChangeInner();
@@ -78,6 +84,8 @@ class SyncFolderManager
                 // 可以忽略，因为可以在读取文件时，文件被删掉
                 Debug.WriteLine(e);
             }
+
+            Console.WriteLine($"检测到更新");
         });
 
         bool Enable() => Interlocked.Read(ref _currentVersion) == currentVersion;

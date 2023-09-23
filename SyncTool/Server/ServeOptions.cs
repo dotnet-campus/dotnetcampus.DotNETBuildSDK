@@ -43,6 +43,12 @@ internal class ServeOptions
         builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
         builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore"] = "Debug";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Routing.EndpointMiddleware"] = "Warning";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Server.Kestrel.Connections"] = "Warning";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware"] = "Warning";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Hosting.Diagnostics"] = "Warning";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Routing.Matching.DfaMatcher"] = "Warning";
+        builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.StaticFiles.StaticFileMiddleware"] = "Warning";
         builder.Services.ConfigureHttpJsonOptions(options =>
         {
             options.SerializerOptions.PropertyNameCaseInsensitive = false;
@@ -50,7 +56,7 @@ internal class ServeOptions
 
         var webApplication = builder.Build();
         webApplication.MapGet("/", () => syncFolderManager.CurrentFolderInfo);
-        webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request) =>
+        webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request, [FromServices] ILogger<ServeOptions> logger) =>
         {
             var currentFolderInfo = syncFolderManager.CurrentFolderInfo;
             if (currentFolderInfo == null)
@@ -60,10 +66,12 @@ internal class ServeOptions
 
             if (currentFolderInfo.SyncFileDictionary.TryGetValue(request.RelativePath, out var value))
             {
+                logger.LogInformation($"Download {request.RelativePath}");
                 var file = Path.Join(syncFolder, value.RelativePath);
                 return Results.File(file, MediaTypeNames.Application.Octet);
             }
 
+            logger.LogInformation($"Download NotFound {request.RelativePath}");
             return Results.NotFound();
         });
         webApplication.UseStaticFiles(new StaticFileOptions()
