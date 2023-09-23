@@ -175,11 +175,8 @@ internal class SyncOptions
             // 下载之前先确保文件夹存在，防止下载炸了
             Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
 
-            await using (var fileStream = File.Create(downloadFilePath))
-            {
-                // 这里必须使用 using 包括起来，因为接下来就需要移动这个下载文件了，必须确保此时已经完成文件写入不占用文件
-                await stream.CopyToAsync(fileStream);
-            }
+            await using var fileStream = File.Create(downloadFilePath);
+            await stream.CopyToAsync(fileStream);
 
             return downloadFilePath;
         }
