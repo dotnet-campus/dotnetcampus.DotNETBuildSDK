@@ -380,7 +380,10 @@ internal class SyncOptions
             var updatedList = new HashSet<string>();
             foreach (var syncFileInfo in remote)
             {
-                updatedList.Add(syncFileInfo.RelativePath);
+                // 用来兼容 Linux 系统
+                var relativePath = syncFileInfo.RelativePath;
+                relativePath = relativePath.Replace('\\', '/');
+                updatedList.Add(relativePath);
             }
 
             foreach (var file in Directory.GetFiles(syncFolder, "*", SearchOption.AllDirectories))
@@ -393,6 +396,8 @@ internal class SyncOptions
                 try
                 {
                     var relativePath = Path.GetRelativePath(syncFolder, file);
+                    // 用来兼容 Linux 系统
+                    relativePath = relativePath.Replace('\\', '/');
                     if (!updatedList.Contains(relativePath))
                     {
                         // 本地存在，远端不存在，删除
