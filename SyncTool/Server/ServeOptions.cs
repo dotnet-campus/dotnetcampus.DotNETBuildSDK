@@ -15,6 +15,9 @@ namespace SyncTool.Server;
 [Verb("serve")]
 internal class ServeOptions
 {
+    /// <summary>
+    /// 开放监听的端口。不填将会自己随便找一个可用端口
+    /// </summary>
     [Option('p', "Port")]
     public int? Port { set; get; }
 

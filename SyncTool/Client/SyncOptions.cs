@@ -7,13 +7,18 @@ namespace SyncTool.Client;
 /// <summary>
 /// 客户端的同步命令行参数
 /// </summary>
-
 [Verb("sync")]
 internal class SyncOptions
 {
+    /// <summary>
+    /// 同步服务的地址，如 http://127.0.0.1:56621
+    /// </summary>
     [Option('a', "Address")]
     public string? Address { set; get; }
 
+    /// <summary>
+    /// 本地同步的文件夹，不填默认为工作路径
+    /// </summary>
     [Option('f', "Folder")]
     public string? SyncFolder { set; get; }
 
@@ -28,6 +33,7 @@ internal class SyncOptions
         var syncFolder = SyncFolder;
         if (string.IsNullOrEmpty(syncFolder))
         {
+            // 没有给明确的文件夹，使用工作文件夹
             syncFolder = Environment.CurrentDirectory;
         }
 
@@ -36,7 +42,7 @@ internal class SyncOptions
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
 
-        // 记录本地的字典值
+        // 记录本地的字典值。首次同步的时候需要用到
         Dictionary<string, SyncFileInfo> syncFileDictionary = InitLocalInfo(syncFolder);
 
         ulong currentVersion = 0;

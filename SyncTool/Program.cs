@@ -1,6 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
-
-using dotnetCampus.Cli;
+﻿using dotnetCampus.Cli;
 using dotnetCampus.Cli.Standard;
 using SyncTool.Client;
 using SyncTool.Server;
@@ -21,5 +19,3 @@ CommandLine.Parse(args)
     .AddHandler<ServeOptions>(o => o.Run())
     .AddHandler<SyncOptions>(o => o.Run())
     .Run();
-
-Console.WriteLine("Hello, World!");
