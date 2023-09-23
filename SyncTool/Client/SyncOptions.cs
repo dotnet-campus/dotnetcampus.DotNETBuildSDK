@@ -1,4 +1,5 @@
 ﻿using dotnetCampus.Cli;
+
 using SyncTool.Context;
 
 namespace SyncTool.Client;
@@ -36,14 +37,7 @@ internal class SyncOptions
         httpClient.BaseAddress = new Uri(Address);
 
         // 记录本地的字典值
-        var syncFileDictionary = new Dictionary<string/*RelativePath*/, SyncFileInfo>();
-        foreach (var file in Directory.EnumerateFiles(syncFolder, "*", SearchOption.AllDirectories))
-        {
-            var fileInfo = new FileInfo(file);
-            var relativePath = Path.GetRelativePath(syncFolder, file);
-            var syncFileInfo = new SyncFileInfo(relativePath, fileInfo.Length, fileInfo.LastWriteTimeUtc);
-            syncFileDictionary[relativePath] = syncFileInfo;
-        }
+        Dictionary<string, SyncFileInfo> syncFileDictionary = InitLocalInfo(syncFolder);
 
         ulong currentVersion = 0;
         while (true)
@@ -57,6 +51,13 @@ internal class SyncOptions
                 }
                 currentVersion = syncFolderInfo.Version;
                 await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
+
+                // 更新本地字典信息
+                syncFileDictionary.Clear();
+                foreach (var syncFileInfo in syncFolderInfo.SyncFileList)
+                {
+                    syncFileDictionary[syncFileInfo.RelativePath] = syncFileInfo;
+                }
             }
             catch (Exception e)
             {
@@ -95,24 +96,7 @@ internal class SyncOptions
                 // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
                 // 那如果下载失败呢？大概需要重新开始同步了
 
-                // 发起请求，使用 Post 的方式，解决 GetURL 的字符不支持
-                var request = new DownloadFileRequest(remoteSyncFileInfo.RelativePath);
-                var response = await httpClient.PostAsJsonAsync("/Download", request);
-                await using var stream = await response.Content.ReadAsStreamAsync();
-
-                var relativePath = remoteSyncFileInfo.RelativePath;
-                // 用来兼容 Linux 系统
-                relativePath = relativePath.Replace('\\', '/');
-
-                var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
-                // 下载之前先确保文件夹存在，防止下载炸了
-                Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
-
-                await using (var fileStream = File.Create(downloadFilePath))
-                {
-                    // 这里必须使用 using 包括起来，因为接下来就需要移动这个下载文件了，必须确保此时已经完成文件写入不占用文件
-                    await stream.CopyToAsync(fileStream);
-                }
+                var downloadFilePath =  await DownloadFile(remoteSyncFileInfo);
 
                 // 完成下载，移动下载的文件作为正式需要的文件
                 while (true)
@@ -124,7 +108,7 @@ internal class SyncOptions
 
                     try
                     {
-                        var localFilePath = Path.Join(syncFolder, relativePath);
+                        var localFilePath = Path.Join(syncFolder, remoteSyncFileInfo.RelativePath);
                         File.Move(downloadFilePath, localFilePath, overwrite: true);
                         break;
                     }
@@ -135,13 +119,14 @@ internal class SyncOptions
                 }
             }
 
-            // 完成之后，更新 local 的信息
-            local.Clear();
-            foreach (var syncFileInfo in remote)
-            {
-                local[syncFileInfo.RelativePath] = syncFileInfo;
-            }
+            RemoveRedundantFile(remote, version);
 
+            Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine("==========");
+        }
+
+        void RemoveRedundantFile(List<SyncFileInfo> remote, ulong version)
+        {
             // 删除多余的文件，也就是本地存在但是远程不存在的文件
             // 记录已经更新的 RelativePath 哈希，用来记录哪些存在
             var updatedList = new HashSet<string>(remote.Count);
@@ -175,9 +160,47 @@ internal class SyncOptions
                 {
                 }
             }
-
-            Console.WriteLine($"[{version}] 同步完成");
-            Console.WriteLine("==========");
         }
+
+        async Task<string> DownloadFile(SyncFileInfo remoteSyncFileInfo)
+        {
+            // 发起请求，使用 Post 的方式，解决 GetURL 的字符不支持
+            var request = new DownloadFileRequest(remoteSyncFileInfo.RelativePath);
+            var response = await httpClient.PostAsJsonAsync("/Download", request);
+            await using var stream = await response.Content.ReadAsStreamAsync();
+
+            var relativePath = remoteSyncFileInfo.RelativePath;
+
+            var downloadFilePath = Path.Join(syncFolder, $"{relativePath}_{Path.GetRandomFileName()}");
+            // 下载之前先确保文件夹存在，防止下载炸了
+            Directory.CreateDirectory(Path.GetDirectoryName(downloadFilePath)!);
+
+            await using (var fileStream = File.Create(downloadFilePath))
+            {
+                // 这里必须使用 using 包括起来，因为接下来就需要移动这个下载文件了，必须确保此时已经完成文件写入不占用文件
+                await stream.CopyToAsync(fileStream);
+            }
+
+            return downloadFilePath;
+        }
+    }
+
+    /// <summary>
+    /// 初始化本地文件的信息
+    /// </summary>
+    /// <param name="syncFolder"></param>
+    /// <returns></returns>
+    private static Dictionary<string /*RelativePath*/, SyncFileInfo> InitLocalInfo(string syncFolder)
+    {
+        var syncFileDictionary =
+            new Dictionary<string /*RelativePath*/, SyncFileInfo>();
+        foreach (var file in Directory.EnumerateFiles(syncFolder, "*", SearchOption.AllDirectories))
+        {
+            var fileInfo = new FileInfo(file);
+            var relativePath = Path.GetRelativePath(syncFolder, file);
+            var syncFileInfo = new SyncFileInfo(relativePath, fileInfo.Length, fileInfo.LastWriteTimeUtc);
+            syncFileDictionary[relativePath] = syncFileInfo;
+        }
+        return syncFileDictionary;
     }
 }
