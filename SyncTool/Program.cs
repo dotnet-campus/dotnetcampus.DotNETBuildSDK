@@ -7,6 +7,7 @@ using dotnetCampus.Cli.Standard;
 
 using System.Net.Sockets;
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Mime;
 using System.Text.Json;
 using Microsoft.AspNetCore.StaticFiles;
@@ -16,6 +17,8 @@ using Microsoft.Extensions.FileProviders.Physical;
 using System.Net.Http.Json;
 using System.Text.Encodings.Web;
 using dotnetCampus.FileDownloader;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
 
 #if DEBUG
 // 调试代码，用来配置客户端同步到本地的路径
@@ -78,6 +81,10 @@ internal class ServeOptions
 
         var webApplication = builder.Build();
         webApplication.MapGet("/", () => syncFolderManager.CurrentFolderInfo);
+        webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request) =>
+        {
+
+        });
         webApplication.UseStaticFiles(new StaticFileOptions()
         {
             FileProvider = new PhysicalFileProvider(syncFolder, ExclusionFilters.System),
@@ -113,6 +120,8 @@ class ContentTypeProvider : IContentTypeProvider
     }
 }
 
+record DownloadFileRequest(string RelativePath);
+
 /// <summary>
 /// 静态文件配置
 /// </summary>
@@ -123,7 +132,16 @@ static class StaticFileConfiguration
 
 record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList)
 {
+    public Dictionary<string /*RelativePath*/, SyncFileInfo> SyncFileDictionary
+    {
+        get
+        {
+            // 这里不怕多线程问题。多线程问题只会多创建一次对象，不会有其他影响
+            return _syncFileDictionary ??= SyncFileList.ToDictionary(t => t.RelativePath);
+        }
+    } 
 
+    private Dictionary<string /*RelativePath*/, SyncFileInfo>? _syncFileDictionary;
 }
 
 record SyncFileInfo(string RelativePath, long FileSize, DateTime LastWriteTimeUtc)
@@ -255,6 +273,16 @@ internal class SyncOptions
         ulong currentVersion = 0;
         while (true)
         {
+            while (currentVersion==0)
+            {
+                await Task.Delay(1000);
+            }
+
+            await httpClient.PostAsJsonAsync("/Download", new DownloadFileRequest("xxxx"));
+
+            var stringContent = new StringContent("Keyxxx",MediaTypeHeaderValue.Parse(MediaTypeNames.Application.Json));
+            await httpClient.PostAsync("/Download", stringContent);
+
             try
             {
                 var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
@@ -274,8 +302,6 @@ internal class SyncOptions
         async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
         {
             Dictionary<string/*RelativePath*/, SyncFileInfo> local = syncFileDictionary;
-            // 记录已经更新的 RelativePath 哈希，用来记录哪些已被删除
-            var updatedList = new HashSet<string>();
 
             foreach (var remoteSyncFileInfo in remote)
             {
@@ -303,7 +329,8 @@ internal class SyncOptions
                 var relativePath = remoteSyncFileInfo.RelativePath;
                 relativePath = relativePath.Replace('\\', '/');
                 var encode = UrlEncoder.Create().Encode(relativePath);
-                var downloadUrl = $"{StaticFileConfiguration.RequestPath}/{encode}";
+                relativePath = encode;
+                var downloadUrl = $"{StaticFileConfiguration.RequestPath}/{relativePath}";
 
                 // 先下载到一个新的文件，然后再重命名替换
                 // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
@@ -311,7 +338,7 @@ internal class SyncOptions
                 var downloadFilePath = Path.Join(syncFolder, $"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
                 await DownloadFile(downloadFilePath, downloadUrl);
 
-                if (File.Exists(downloadFilePath))
+                if (!File.Exists(downloadFilePath))
                 {
                     // 下载失败了？理论上不会进入此分支
                     // 重新等待下一次
@@ -341,6 +368,33 @@ internal class SyncOptions
                 // 更新本地信息
                 local[remoteSyncFileInfo.RelativePath] = remoteSyncFileInfo;
             }
+
+            // 删除多余的文件，也就是本地存在但是远程不存在的文件
+            // 记录已经更新的 RelativePath 哈希，用来记录哪些存在
+            var updatedList = new HashSet<string>();
+            foreach (var syncFileInfo in remote)
+            {
+                updatedList.Add(syncFileInfo.RelativePath);
+            }
+
+            foreach (var file in Directory.GetFiles(syncFolder,"*",SearchOption.AllDirectories))
+            {
+                try
+                {
+                    var relativePath = Path.GetRelativePath(syncFolder,file);
+                    if (!updatedList.Contains(relativePath))
+                    {
+                        // 本地存在，远端不存在，删除
+                        File.Delete(file);
+                    }
+                }
+                catch
+                {
+                }
+            }
+
+            Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine("==========");
         }
 
         async Task DownloadFile(string downloadFilePath, string downloadUrl)
