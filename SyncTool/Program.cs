@@ -19,7 +19,7 @@ using dotnetCampus.FileDownloader;
 
 #if DEBUG
 // 调试代码，用来配置客户端同步到本地的路径
-var syncFolder = Path.Join(Path.GetTempPath(),$"SyncTool_{Path.GetRandomFileName()}");
+var syncFolder = Path.Join(Path.GetTempPath(), $"SyncTool_{Path.GetRandomFileName()}");
 var syncOptions = new SyncOptions()
 {
     Address = "http://127.0.0.1:56621", // 在调试启动参数固定了 56621 当成了端口
@@ -32,7 +32,7 @@ syncOptions.Run();
 CommandLine.Parse(args)
     .AddStandardHandlers()
     .AddHandler<ServeOptions>(o => o.Run())
-    .AddHandler<SyncOptions>(o =>  o.Run())
+    .AddHandler<SyncOptions>(o => o.Run())
     .Run();
 
 Console.WriteLine("Hello, World!");
@@ -230,7 +230,7 @@ internal class SyncOptions
             Console.WriteLine($"找不到同步地址，请确保传入 Address 参数");
             return;
         }
-        
+
         var syncFolder = SyncFolder;
         if (string.IsNullOrEmpty(syncFolder))
         {
@@ -273,7 +273,7 @@ internal class SyncOptions
 
         async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
         {
-            Dictionary<string, SyncFileInfo> local = syncFileDictionary;
+            Dictionary<string/*RelativePath*/, SyncFileInfo> local = syncFileDictionary;
             // 记录已经更新的 RelativePath 哈希，用来记录哪些已被删除
             var updatedList = new HashSet<string>();
 
@@ -285,6 +285,21 @@ internal class SyncOptions
                     return;
                 }
 
+                if (local.TryGetValue(remoteSyncFileInfo.RelativePath, out var localInfo))
+                {
+                    // 如果能拿到本地的记录，判断一下是否需要更新
+                    var localFilePath = Path.Join(syncFolder, localInfo.RelativePath);
+                    var localFile = new FileInfo(localFilePath);
+                    if (localFile.Exists
+                        // 时间不能取本地时间，因为必定存在时间差
+                        && localInfo.LastWriteTimeUtc == remoteSyncFileInfo.LastWriteTimeUtc
+                        && localFile.Length == remoteSyncFileInfo.FileSize)
+                    {
+                        // 如果本地的记录不需要更新，那就跳过
+                        continue;
+                    }
+                }
+
                 var relativePath = remoteSyncFileInfo.RelativePath;
                 relativePath = relativePath.Replace('\\', '/');
                 var encode = UrlEncoder.Create().Encode(relativePath);
@@ -293,7 +308,7 @@ internal class SyncOptions
                 // 先下载到一个新的文件，然后再重命名替换
                 // 如果原本的文件正在被占用，那失败的只有重命名部分，而不会导致重复下载
                 // 那如果下载失败呢？大概需要重新开始同步了
-                var downloadFilePath = Path.Join(syncFolder,$"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
+                var downloadFilePath = Path.Join(syncFolder, $"{remoteSyncFileInfo.RelativePath}_{Path.GetRandomFileName()}");
                 await DownloadFile(downloadFilePath, downloadUrl);
 
                 if (File.Exists(downloadFilePath))
@@ -303,7 +318,8 @@ internal class SyncOptions
                     return;
                 }
 
-                while(true)
+                // 完成下载，移动下载的文件到新的
+                while (true)
                 {
                     if (version != currentVersion)
                     {
@@ -312,14 +328,18 @@ internal class SyncOptions
 
                     try
                     {
-                       
+                        var localFilePath = Path.Join(syncFolder, remoteSyncFileInfo.RelativePath);
+                        File.Move(downloadFilePath, localFilePath);
+                        break;
                     }
-                    catch (Exception e)
+                    catch
                     {
-                        Console.WriteLine(e);
-                        throw;
+                        // 忽略
                     }
                 }
+
+                // 更新本地信息
+                local[remoteSyncFileInfo.RelativePath] = remoteSyncFileInfo;
             }
         }
 
