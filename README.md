@@ -2,6 +2,12 @@
 
 提供dotnet打包方法
 
+[![Github issues](https://img.shields.io/github/issues/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/issues)
+[![Github forks](https://img.shields.io/github/forks/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/network/members)
+[![Github stars](https://img.shields.io/github/stars/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/stargazers)
+[![Top language](https://img.shields.io/github/languages/top/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/)
+[![Github license](https://img.shields.io/github/license/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/)
+
 | Build | NuGet |
 |--|--|
 |![](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/workflows/.NET%20Core/badge.svg) |[![](https://img.shields.io/nuget/v/dotnetCampus.DotNETBuildSDK.svg)](https://www.nuget.org/packages/dotnetCampus.DotNETBuildSDK)|
