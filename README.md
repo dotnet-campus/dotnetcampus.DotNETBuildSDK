@@ -6,7 +6,7 @@
 [![Github forks](https://img.shields.io/github/forks/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/network/members)
 [![Github stars](https://img.shields.io/github/stars/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/stargazers)
 [![Top language](https://img.shields.io/github/languages/top/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/)
-[![Release](https://img.shields.io/github/v/release/dotnet-campus/dotnetcampus.DotNETBuildSDK)]()
+<!-- [![Release](https://img.shields.io/github/v/release/dotnet-campus/dotnetcampus.DotNETBuildSDK)]() -->
 [![Github license](https://img.shields.io/github/license/dotnet-campus/dotnetcampus.DotNETBuildSDK)](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/)
 
 | Build | NuGet |
