@@ -56,6 +56,7 @@ internal class SyncOptions
                     continue;
                 }
                 currentVersion = syncFolderInfo.Version;
+                Console.WriteLine($"[{currentVersion}] 开始同步");
                 await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
 
                 // 更新本地字典信息
@@ -131,13 +132,13 @@ internal class SyncOptions
                 }
             }
 
-            RemoveRedundantFile(remote, version);
+            await RemoveRedundantFile(remote, version);
 
             Console.WriteLine($"[{version}] 同步完成");
             Console.WriteLine("==========");
         }
 
-        void RemoveRedundantFile(List<SyncFileInfo> remote, ulong version)
+        async Task RemoveRedundantFile(List<SyncFileInfo> remote, ulong version)
         {
             // 删除多余的文件，也就是本地存在但是远程不存在的文件
             // 记录已经更新的 RelativePath 哈希，用来记录哪些存在
@@ -154,20 +155,29 @@ internal class SyncOptions
                     return;
                 }
 
-                try
+                for (int i = 0; i < 1000; i++)
                 {
                     var relativePath = Path.GetRelativePath(syncFolder, file);
                     // 用来兼容 Linux 系统
                     relativePath = relativePath.Replace('\\', '/');
-                    if (!updatedList.Contains(relativePath))
+                    try
                     {
-                        Console.WriteLine($"删除 {relativePath}");
-                        // 本地存在，远端不存在，删除
-                        File.Delete(file);
+                        if (!updatedList.Contains(relativePath))
+                        {
+                            // 本地存在，远端不存在，删除
+                            File.Delete(file);
+                            Console.WriteLine($"删除 {relativePath}");
+                        }
                     }
-                }
-                catch
-                {
+                    catch (Exception e)
+                    {
+                        if (i == 100)
+                        {
+                            Console.WriteLine($"第{i}次删除 {relativePath} 失败 {e}");
+                        }
+
+                        await Task.Delay(100);
+                    }
                 }
             }
         }
