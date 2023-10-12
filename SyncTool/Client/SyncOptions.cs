@@ -24,6 +24,19 @@ internal class SyncOptions
 
     public async void Run()
     {
+        try
+        {
+            await RunAsync();
+            Console.WriteLine($"执行完成");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
+    }
+
+    public async Task RunAsync()
+    {
         if (string.IsNullOrEmpty(Address))
         {
             Console.WriteLine($"找不到同步地址，请确保传入 Address 参数");
@@ -41,6 +54,7 @@ internal class SyncOptions
 
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
+        Console.WriteLine($"完成准备HttpClient");
 
         // 记录本地的字典值。首次同步的时候需要用到
         Dictionary<string, SyncFileInfo> syncFileDictionary = InitLocalInfo(syncFolder);
@@ -50,7 +64,9 @@ internal class SyncOptions
         {
             try
             {
+                Console.WriteLine($"开始请求");
                 var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
+                Console.WriteLine($"完成请求");
                 if (syncFolderInfo is null || syncFolderInfo.Version == currentVersion)
                 {
                     continue;
@@ -68,8 +84,10 @@ internal class SyncOptions
             catch (Exception e)
             {
                 // 大不了下次再继续
+                Console.WriteLine(e);
             }
         }
+        Console.WriteLine($"完成同步");
 
         async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
         {
