@@ -54,7 +54,6 @@ internal class SyncOptions
 
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
-        Console.WriteLine($"完成准备HttpClient");
 
         // 记录本地的字典值。首次同步的时候需要用到
         Dictionary<string, SyncFileInfo> syncFileDictionary = InitLocalInfo(syncFolder);
@@ -64,9 +63,7 @@ internal class SyncOptions
         {
             try
             {
-                Console.WriteLine($"开始请求");
                 var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
-                Console.WriteLine($"完成请求");
                 if (syncFolderInfo is null || syncFolderInfo.Version == currentVersion)
                 {
                     continue;

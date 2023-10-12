@@ -21,6 +21,8 @@ try
         .AddHandler<ServeOptions>(o => o.Run())
         .AddHandler<SyncOptions>(o => o.Run())
         .Run();
+
+    Console.Read();
 }
 catch (Exception e)
 {
