@@ -27,7 +27,6 @@ internal class SyncOptions
         try
         {
             await RunAsync();
-            Console.WriteLine($"执行完成");
         }
         catch (Exception e)
         {
@@ -84,7 +83,6 @@ internal class SyncOptions
                 Console.WriteLine(e);
             }
         }
-        Console.WriteLine($"完成同步");
 
         async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
         {
