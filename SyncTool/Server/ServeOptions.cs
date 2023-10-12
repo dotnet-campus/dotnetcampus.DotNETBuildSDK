@@ -27,7 +27,7 @@ internal class ServeOptions
     [Option('f', "Folder")]
     public string? SyncFolder { set; get; }
 
-    public void Run()
+    public async Task Run()
     {
         var syncFolder = SyncFolder;
         if (string.IsNullOrEmpty(syncFolder))
@@ -86,7 +86,7 @@ internal class ServeOptions
             RedirectToAppendTrailingSlash = true,
             DefaultContentType = MediaTypeNames.Application.Octet,
         });
-        webApplication.Run();
+        await webApplication.RunAsync();
     }
 
     public static int GetAvailablePort(IPAddress ip)

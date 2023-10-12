@@ -22,19 +22,7 @@ internal class SyncOptions
     [Option('f', "Folder")]
     public string? SyncFolder { set; get; }
 
-    public async void Run()
-    {
-        try
-        {
-            await RunAsync();
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-        }
-    }
-
-    public async Task RunAsync()
+    public async Task Run()
     {
         if (string.IsNullOrEmpty(Address))
         {

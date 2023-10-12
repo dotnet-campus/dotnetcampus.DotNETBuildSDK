@@ -16,13 +16,11 @@ using SyncTool.Server;
 
 try
 {
-    CommandLine.Parse(args)
+    await CommandLine.Parse(args)
         .AddStandardHandlers()
         .AddHandler<ServeOptions>(o => o.Run())
         .AddHandler<SyncOptions>(o => o.Run())
-        .Run();
-
-    Console.Read();
+        .RunAsync();
 }
 catch (Exception e)
 {
