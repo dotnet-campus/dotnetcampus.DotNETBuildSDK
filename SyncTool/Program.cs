@@ -14,8 +14,15 @@ var syncOptions = new SyncOptions()
 syncOptions.Run();
 #endif
 
-CommandLine.Parse(args)
-    .AddStandardHandlers()
-    .AddHandler<ServeOptions>(o => o.Run())
-    .AddHandler<SyncOptions>(o => o.Run())
-    .Run();
+try
+{
+    CommandLine.Parse(args)
+        .AddStandardHandlers()
+        .AddHandler<ServeOptions>(o => o.Run())
+        .AddHandler<SyncOptions>(o => o.Run())
+        .Run();
+}
+catch (Exception e)
+{
+    Console.WriteLine(e);
+}
