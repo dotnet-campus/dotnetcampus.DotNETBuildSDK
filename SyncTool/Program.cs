@@ -1,10 +1,7 @@
 ﻿using dotnetCampus.Cli;
 using dotnetCampus.Cli.Standard;
 using SyncTool.Client;
-using SyncTool.Context;
 using SyncTool.Server;
-
-using System.Net.Http.Json;
 
 #if DEBUG
 // 调试代码，用来配置客户端同步到本地的路径
@@ -16,15 +13,6 @@ var syncOptions = new SyncOptions()
 };
 syncOptions.Run();
 #endif
-
-var httpClient = new HttpClient();
-var httpResponseMessage = await httpClient.GetAsync("http://www.baidu.com");
-Console.WriteLine($"完成请求");
-Console.WriteLine(httpResponseMessage);
-
-var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("http://www.baidu.com");
-
-Console.WriteLine($"完成请求 SyncFolderInfo");
 
 try
 {
