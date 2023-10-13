@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "SyncTool": {
+      "commandName": "Project"
+    },
+    "Serve": {
+      "commandName": "Project",
+      "commandLineArgs": "serve -p 56621"
+    },
+    "Sync": {
+      "commandName": "Project",
+      "commandLineArgs": "sync -a http://127.0.0.1:56621"
+    }
+  }
+}
