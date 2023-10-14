@@ -328,6 +328,8 @@ RunWithConfigValueTask RegexReplaceTask -v $(GitCount) -r "(\$GitRevisionNumber\
   </ItemGroup>
 ```
 
+此工具仅支持发布 Windows 上的应用
+
 ### GitLabMergeRequestCreator
 
 用于辅助创建 GitLab 上的 MergeRequest 任务
