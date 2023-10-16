@@ -328,6 +328,8 @@ RunWithConfigValueTask RegexReplaceTask -v $(GitCount) -r "(\$GitRevisionNumber\
   </ItemGroup>
 ```
 
+此工具仅支持发布 Windows 上的应用
+
 ### GitLabMergeRequestCreator
 
 用于辅助创建 GitLab 上的 MergeRequest 任务
@@ -392,7 +394,6 @@ AutomateFormatCodeAndCreateGitLabMergeRequest -Token sL5nY_aSNsY2FN9HYjuB
 
 参数完全包含 GitLabMergeRequestCreator 的参数，特有的参数描述如下
 
-
 - `-CodeFormatBranch`: 用于给格式化代码使用的分支，默认是 t/bot/FixCodeFormatting 分支
 - `-GitLabPushUrl`: 用于上传代码的 GitLab 地址，格式如 `git@gitlab.sdlsj.net:lindexi/foo.git` 地址。可选，默认将通过环境变量拼接 `git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git` 地址
 - 其他参数，参阅 GitLabMergeRequestCreator 的参数
@@ -414,6 +415,42 @@ FormatCode:
   only:
     - dev
 ```
+
+### SyncTool
+
+同步文件夹工具，可进行跨平台进行单向同步文件夹的工具。此工具开发的背景是我有一个需要在 Linux 上进行测试的应用，但我习惯在 Windows 进行开发，于是我就需要不断在 Windows 进行构建然后将输出的应用拷贝到 Linux 机器上，为了提升开发效率就开发了此工具
+
+此工具的特点是支持超长次数的文件占用重试以及较低延迟的同步。此工具设计上只是用来拷贝构建输出内容到另一台机器
+
+安装方法如下
+
+```
+dotnet tool install -g dotnetCampus.SyncTool
+```
+
+使用方法如下，使用时需要分为服务端和客户端，从服务端单向将文件同步给到客户端
+
+服务端命令如下
+
+```
+SyncTool serve [参数]
+```
+
+服务端的参数如下
+
+- `-p` 或 `-Port` : 开放监听的端口。可选，不填则工具将会自己随便找一个可用端口
+- `-f` 或 `-Folder` : 同步的文件夹路径。可选，不填将使用当前的工作路径
+
+客户端命令如下
+
+```
+SyncTool sync [参数]
+```
+
+客户端的参数如下
+
+- `-a` 或 `-Address` : 同步服务的地址。必填，格式如 `http://127.0.0.1:56621` 等地址
+- `-f` 或 `-Folder` : 本地同步的文件夹。可选，不填默认为工作路径
 
 ## 相似的项目
 
