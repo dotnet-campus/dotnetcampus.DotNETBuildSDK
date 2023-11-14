@@ -1,0 +1,10 @@
+{
+  "solution": 
+  {
+    "path": "..\\DotNETBuild.sln",
+    "projects": 
+    [
+      "SyncTool\\SyncTool.csproj"
+    ]
+  }
+}
