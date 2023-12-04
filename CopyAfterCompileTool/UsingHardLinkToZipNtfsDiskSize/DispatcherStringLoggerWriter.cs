@@ -11,12 +11,25 @@ class DispatcherStringLoggerWriter : IStringLoggerWriter
 
     private readonly TextBlock _logTextBlock;
 
-    public async ValueTask WriteAsync(string message)
+    private string _lastMessage = string.Empty;
+    private bool _isInvalidate = false;
+
+    public ValueTask WriteAsync(string message)
     {
-        await _logTextBlock.Dispatcher.InvokeAsync(() =>
+        _lastMessage = message;
+
+        if (!_isInvalidate)
         {
-            _logTextBlock.Text = message;
-        });
+            _isInvalidate = true;
+
+            _logTextBlock.Dispatcher.InvokeAsync(() =>
+            {
+                _logTextBlock.Text = _lastMessage;
+                _isInvalidate = false;
+            });
+        }
+
+        return ValueTask.CompletedTask;
     }
 
     public ValueTask DisposeAsync()

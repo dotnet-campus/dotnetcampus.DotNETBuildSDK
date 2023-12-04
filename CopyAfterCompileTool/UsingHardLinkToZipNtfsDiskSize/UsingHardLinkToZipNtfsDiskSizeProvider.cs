@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using Windows.Win32;
 using Windows.Win32.Security;
@@ -20,10 +21,10 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
         var destination = new byte[1024];
         long saveSize = 0;
         foreach (var file in workFolder.EnumerateFiles("*", enumerationOptions: new EnumerationOptions()
-                 {
-                     RecurseSubdirectories = true,
-                     MaxRecursionDepth = 100,
-                 }))
+        {
+            RecurseSubdirectories = true,
+            MaxRecursionDepth = 100,
+        }))
         {
             logger.LogInformation($"Start {file}");
 
@@ -58,7 +59,7 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
                 var fileStorageModel = await fileStorageContext.FileStorageModel.FindAsync(sha1);
                 if (fileStorageModel != null)
                 {
-                    if (CreateHardLink(file.FullName, fileStorageModel.OriginFilePath))
+                    if (CreateHardLink(file.FullName, fileStorageModel.OriginFilePath, logger))
                     {
                         // 省的空间
                         saveSize += fileLength;
@@ -94,17 +95,44 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
         logger.LogInformation($"Total save disk size: {UnitConverter.ConvertSize(saveSize, separators: " ")}");
     }
 
-    private static bool CreateHardLink(string file, string originFilePath)
+    public static bool CreateHardLink(string file, string originFilePath, ILogger logger)
     {
         if (file == originFilePath)
         {
+            logger.LogInformation($"[CreateHardLink] 传入的原始文件相同，返回 false 啥都不做");
             return false;
         }
-        File.Delete(file);
+
+        if (!File.Exists(originFilePath))
+        {
+            logger.LogInformation($"[CreateHardLink] 传入的 originFilePath={originFilePath} 文件不存在");
+            return false;
+        }
+
+        if (File.Exists(file))
+        {
+            logger.LogInformation($"[CreateHardLink] 传入的文件 file={file} 存在，正在删除");
+            File.Delete(file);
+        }
 
         var lpSecurityAttributes = new SECURITY_ATTRIBUTES();
-        PInvoke.CreateHardLink(file, originFilePath, ref lpSecurityAttributes);
+        var result = PInvoke.CreateHardLink(file, originFilePath, ref lpSecurityAttributes);
+        logger.LogInformation($"[CreateHardLink] PInvoke 结果={result == true} file={file} originFilePath={originFilePath}");
 
-        return true;
+        if (!result)
+        {
+            // 以下三个都获取不正确错误号
+            // 如 An attempt was made to create more links on a file than the file system supports.
+            var lastWin32Error = Marshal.GetLastWin32Error();
+            logger.LogInformation($"[CreateHardLink] PInvoke 结果={result == true} LastWin32Error={lastWin32Error} LastPInvokeError={Marshal.GetLastPInvokeError()} LastSystemError={Marshal.GetLastSystemError()}");
+        }
+
+        if (!File.Exists(file))
+        {
+           logger.LogInformation($"[CreateHardLink] 创建符号链接失败，只好复制文件。 Copy {originFilePath} to {file}");
+            File.Copy(originFilePath, file);
+        }
+
+        return result;
     }
 }

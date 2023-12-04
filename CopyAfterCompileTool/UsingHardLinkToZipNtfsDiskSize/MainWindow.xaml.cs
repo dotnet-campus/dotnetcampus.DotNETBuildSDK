@@ -63,6 +63,81 @@ public partial class MainWindow : Window
 
         logger.LogInformation($"Start zip {folder} folder. LogFolder={logFolder}");
 
+        // 损伤修复措施
+        await Task.Run(async () =>
+        {
+            logger.LogInformation($"开始损伤修复 {folder} 文件夹  LogFolder={logFolder}");
+
+            try
+            {
+                await using (var fileStorageContext = new FileStorageContext(sqliteFile))
+                {
+                    logger.LogInformation($"开始打开数据库文件 {sqliteFile}");
+
+                    // 查找所有的记录文件
+                    await foreach (var fileRecordModel in fileStorageContext.FileRecordModel)
+                    {
+                        var filePath = fileRecordModel.FilePath;
+                        logger.LogInformation($"开始 {filePath}");
+                        var fileExists = File.Exists(filePath);
+                        logger.LogInformation($"判断 {filePath} 文件存在：{fileExists}");
+
+                        if (!fileExists)
+                        {
+                            // 文件误删
+                            logger.LogInformation($"文件误删 {filePath} 尝试执行修复逻辑");
+
+                            var success = false;
+
+                            foreach (var recordModel in fileStorageContext.FileRecordModel.Where(t => t.FileSha1Hash == fileRecordModel.FileSha1Hash))
+                            {
+                                var fixFileExists = File.Exists(recordModel.FilePath);
+
+                                logger.LogInformation($"SHA1={fileRecordModel.FileSha1Hash} 找到相近文件 {recordModel.FilePath} 修复的文件存在：{fixFileExists}");
+
+                                if (fixFileExists)
+                                {
+                                    logger.LogInformation($"准备拷贝文件修复 {recordModel.FilePath} 到 {filePath}");
+                                    var result = UsingHardLinkToZipNtfsDiskSizeProvider.CreateHardLink(filePath,
+                                         recordModel.FilePath, logger);
+
+                                    logger.LogInformation($"完成拷贝文件修复 结果={result} {recordModel.FilePath} 到 {filePath}");
+
+                                    success = File.Exists(filePath);
+
+                                    if (!success)
+                                    {
+                                        logger.LogInformation($"修复失败！拷贝之后依然不存在文件");
+                                    }
+
+                                    break;
+                                }
+                            }
+
+                            if (success)
+                            {
+                                logger.LogInformation($"文件误删 {filePath} 修复成功");
+                            }
+                            else
+                            {
+                                logger.LogInformation($"文件误删 {filePath} 修复失败，没有找到相似且存在的文件");
+                            }
+
+                            //Dispatcher.Invoke(() => MessageBox.Show($"修复 {filePath}"));
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                logger.LogInformation($"执行失败 {e}");
+            }
+
+            logger.LogInformation("执行完成");
+        });
+
+        return;
+
         await Task.Run(async () =>
         {
             await using var fileStorageContext = new FileStorageContext(sqliteFile);
