@@ -20,13 +20,15 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
     {
         var destination = new byte[1024];
         long saveSize = 0;
+        long count = 0;
         foreach (var file in workFolder.EnumerateFiles("*", enumerationOptions: new EnumerationOptions()
         {
             RecurseSubdirectories = true,
             MaxRecursionDepth = 100,
         }))
         {
-            logger.LogInformation($"Start {file}");
+            logger.LogInformation($"Start 第 {count} 个文件 {file}");
+            count++;
 
             try
             {
@@ -59,15 +61,33 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
                 var fileStorageModel = await fileStorageContext.FileStorageModel.FindAsync(sha1);
                 if (fileStorageModel != null)
                 {
+                    if (fileStorageModel.FileLength != fileLength)
+                    {
+                        logger.LogInformation($"SHA1={sha1} `fileStorageModel.FileLength != fileLength` fileStorageModel.FileLength={fileStorageModel.FileLength} fileLength={fileLength} fileStorageModel.OriginFilePath={fileStorageModel.OriginFilePath} file={file.FullName} 文件尺寸不匹配，不执行逻辑");
+                        continue;
+                    }
+
                     if (CreateHardLink(file.FullName, fileStorageModel.OriginFilePath, logger))
                     {
                         // 省的空间
                         saveSize += fileLength;
-                        logger.LogInformation(
-                            $"Exists Record SHA1={sha1} {file} SaveSize：{UnitConverter.ConvertSize(saveSize, separators: " ")}");
+                        logger.LogInformation($"Exists Record SHA1={sha1} {file} FileSize={UnitConverter.ConvertSize(fileLength, separators: " ")} SaveSize：{UnitConverter.ConvertSize(saveSize, separators: " ")}");
 
                         fileStorageModel.ReferenceCount++;
                         fileStorageContext.FileStorageModel.Update(fileStorageModel);
+                    }
+                    else
+                    {
+                        // 拷贝失败的情况，可能是超过 Win32 限制数量
+                        // > The maximum number of hard links that can be created with this function is 1023 per file. If more than 1023 links are created for a file, an error results.
+                        // 此时换成新的文件记录即可修复此问题
+                        fileStorageModel.OriginFilePath = file.FullName;
+                        fileStorageContext.FileStorageModel.Update(fileStorageModel);
+                    }
+
+                    if (!File.Exists(file.FullName))
+                    {
+                        logger.LogInformation($"Error Break File {file.FullName} 文件损坏，文件找不到");
                     }
                 }
                 else
@@ -95,6 +115,13 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
         logger.LogInformation($"Total save disk size: {UnitConverter.ConvertSize(saveSize, separators: " ")}");
     }
 
+    /// <summary>
+    /// 创建硬连接
+    /// </summary>
+    /// <param name="file"></param>
+    /// <param name="originFilePath"></param>
+    /// <param name="logger"></param>
+    /// <returns>返回 false 表示创建失败</returns>
     public static bool CreateHardLink(string file, string originFilePath, ILogger logger)
     {
         if (file == originFilePath)
@@ -129,7 +156,7 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
 
         if (!File.Exists(file))
         {
-           logger.LogInformation($"[CreateHardLink] 创建符号链接失败，只好复制文件。 Copy {originFilePath} to {file}");
+            logger.LogInformation($"[CreateHardLink] 创建符号链接失败，只好复制文件。 Copy {originFilePath} to {file}");
             File.Copy(originFilePath, file);
         }
 

@@ -63,7 +63,26 @@ public partial class MainWindow : Window
 
         logger.LogInformation($"Start zip {folder} folder. LogFolder={logFolder}");
 
-        // 损伤修复措施
+        await Task.Run(async () =>
+        {
+            await using var fileStorageContext = new FileStorageContext(sqliteFile);
+
+            var provider = new UsingHardLinkToZipNtfsDiskSizeProvider();
+            await provider.Start(new DirectoryInfo(folder), fileStorageContext, logger);
+        });
+    }
+
+    /// <summary>
+    /// 损伤修复措施
+    /// </summary>
+    /// <param name="folder"></param>
+    /// <param name="logger"></param>
+    /// <param name="logFolder"></param>
+    /// <param name="sqliteFile"></param>
+    /// <returns></returns>
+    /// 暂时不需要调用，因为损伤是代码逻辑写错，后续修复代码逻辑就用不到损伤修复。但是代码放着，也许后面依然有其他诡异的问题，可以继续修复
+    private static async Task FixBreakFile(string folder, ILogger logger, string logFolder, string sqliteFile)
+    {
         await Task.Run(async () =>
         {
             logger.LogInformation($"开始损伤修复 {folder} 文件夹  LogFolder={logFolder}");
@@ -89,17 +108,19 @@ public partial class MainWindow : Window
 
                             var success = false;
 
-                            foreach (var recordModel in fileStorageContext.FileRecordModel.Where(t => t.FileSha1Hash == fileRecordModel.FileSha1Hash))
+                            foreach (var recordModel in fileStorageContext.FileRecordModel.Where(t =>
+                                         t.FileSha1Hash == fileRecordModel.FileSha1Hash))
                             {
                                 var fixFileExists = File.Exists(recordModel.FilePath);
 
-                                logger.LogInformation($"SHA1={fileRecordModel.FileSha1Hash} 找到相近文件 {recordModel.FilePath} 修复的文件存在：{fixFileExists}");
+                                logger.LogInformation(
+                                    $"SHA1={fileRecordModel.FileSha1Hash} 找到相近文件 {recordModel.FilePath} 修复的文件存在：{fixFileExists}");
 
                                 if (fixFileExists)
                                 {
                                     logger.LogInformation($"准备拷贝文件修复 {recordModel.FilePath} 到 {filePath}");
                                     var result = UsingHardLinkToZipNtfsDiskSizeProvider.CreateHardLink(filePath,
-                                         recordModel.FilePath, logger);
+                                        recordModel.FilePath, logger);
 
                                     logger.LogInformation($"完成拷贝文件修复 结果={result} {recordModel.FilePath} 到 {filePath}");
 
@@ -134,16 +155,6 @@ public partial class MainWindow : Window
             }
 
             logger.LogInformation("执行完成");
-        });
-
-        return;
-
-        await Task.Run(async () =>
-        {
-            await using var fileStorageContext = new FileStorageContext(sqliteFile);
-
-            var provider = new UsingHardLinkToZipNtfsDiskSizeProvider();
-            await provider.Start(new DirectoryInfo(folder), fileStorageContext, logger);
         });
     }
 }
