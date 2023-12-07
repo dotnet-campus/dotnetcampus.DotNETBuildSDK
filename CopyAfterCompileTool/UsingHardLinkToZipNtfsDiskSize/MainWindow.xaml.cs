@@ -53,11 +53,7 @@ public partial class MainWindow : Window
             builder.AddProvider(channelLoggerProvider);
         });
 
-        var sqliteFile = Path.Join(hexString, "FileManger.db");
-        await using (var fileStorageContext = new FileStorageContext(sqliteFile))
-        {
-            await fileStorageContext.Database.MigrateAsync();
-        }
+        var sqliteFile = new FileInfo(Path.Join(hexString, "FileManger.db"));
 
         var logger = loggerFactory.CreateLogger("");
 
@@ -65,10 +61,8 @@ public partial class MainWindow : Window
 
         await Task.Run(async () =>
         {
-            await using var fileStorageContext = new FileStorageContext(sqliteFile);
-
             var provider = new UsingHardLinkToZipNtfsDiskSizeProvider();
-            await provider.Start(new DirectoryInfo(folder), fileStorageContext, logger);
+            await provider.Start(new DirectoryInfo(folder), sqliteFile, logger);
         });
     }
 

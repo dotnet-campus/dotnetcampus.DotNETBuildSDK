@@ -4,6 +4,7 @@ using System.Security.Cryptography;
 using Windows.Win32;
 using Windows.Win32.Security;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace UsingHardLinkToZipNtfsDiskSize;
 
@@ -13,11 +14,16 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
     /// 开始将 <paramref name="workFolder"/> 文件夹里面重复的文件使用硬连接压缩磁盘空间
     /// </summary>
     /// <param name="workFolder"></param>
-    /// <param name="fileStorageContext"></param>
+    /// <param name="sqliteFile"></param>
     /// <param name="logger"></param>
     /// <returns></returns>
-    public async Task Start(DirectoryInfo workFolder, FileStorageContext fileStorageContext, ILogger logger)
+    public async Task Start(DirectoryInfo workFolder, FileInfo sqliteFile, ILogger logger)
     {
+        await using (var fileStorageContext = new FileStorageContext(sqliteFile.FullName))
+        {
+            await fileStorageContext.Database.MigrateAsync();
+        }
+
         var destination = new byte[1024];
         long saveSize = 0;
         long count = 0;
@@ -32,6 +38,8 @@ public class UsingHardLinkToZipNtfsDiskSizeProvider
 
             try
             {
+                await using var fileStorageContext = new FileStorageContext(sqliteFile.FullName);
+
                 long fileLength = file.Length;
 
                 var fileRecordModel = await fileStorageContext.FileRecordModel.FindAsync(file.FullName);
