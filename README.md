@@ -461,3 +461,4 @@ SyncTool sync [参数]
 排名无先后
 
 - [nmklotas/GitLabApiClient: GitLab API client](https://github.com/nmklotas/GitLabApiClient )
+- [https://github.com/quamotion/dotnet-packaging](https://github.com/quamotion/dotnet-packaging)
