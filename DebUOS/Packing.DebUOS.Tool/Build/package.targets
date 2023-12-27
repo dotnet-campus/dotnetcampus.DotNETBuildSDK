@@ -16,6 +16,17 @@
       <DebUOSPackingWriteArgLine Include="PublishFolder"/>
       <DebUOSPackingWriteArgLine Include="$([MSBuild]::NormalizePath($(MSBuildProjectDirectory), $(PublishDir)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 用来作为可执行文件的文件名 -->
+      <DebUOSPackingWriteArgLine Include="AssemblyName"/>
+      <DebUOSPackingWriteArgLine Include="$(AssemblyName)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 更进一步的获取入口可执行文件 常常是空值-->
+      <DebUOSPackingWriteArgLine Include="AppHostFile"  Condition="$(AppHostFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(AppHostFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
     </ItemGroup>
     <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
     <Warning Text="Publish $(DebUOSPackingWorkFolder)"/>
