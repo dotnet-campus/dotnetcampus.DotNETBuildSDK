@@ -7,6 +7,10 @@
 
   <Target Name="DebUOSPackingWriteArgs" AfterTargets="Publish">
     <PropertyGroup>
+      <!-- 工作路径 -->
+      <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
+
+      <!-- 参数文件 -->
       <DebUOSPackingArgsFile>$([MSBuild]::NormalizePath($(DebUOSPackingWorkFolder), 'DebUOSPackingArgs.coin'))</DebUOSPackingArgsFile>
     </PropertyGroup>
     <ItemGroup>

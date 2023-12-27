@@ -1,5 +1,3 @@
 <Project>
-  <PropertyGroup>
-    <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
-  </PropertyGroup>
+
 </Project>
