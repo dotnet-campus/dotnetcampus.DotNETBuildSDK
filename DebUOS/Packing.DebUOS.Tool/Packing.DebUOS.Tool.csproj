@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- <BuildOutputTargetFolder>tools</BuildOutputTargetFolder> -->
+    <!-- Suppress warning about lib being empty -->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <!-- <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder> -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <DevelopmentDependency>true</DevelopmentDependency>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="Build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <None Include="Build\package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Packing.DebUOS\Packing.DebUOS.csproj" />
+  </ItemGroup>
+</Project>

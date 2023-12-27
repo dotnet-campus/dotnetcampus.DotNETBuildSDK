@@ -1,3 +1,3 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Packaging.Targets.Tests")]
+[assembly: InternalsVisibleTo("Packing.DebUOS")]

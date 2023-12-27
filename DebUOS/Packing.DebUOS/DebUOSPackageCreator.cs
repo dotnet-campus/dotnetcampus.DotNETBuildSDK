@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace Packing.DebUOS;
 
-internal class Program
+public class DebUOSPackageCreator
 {
-    public static void Main(string[] args)
-    {
-    }
 }
