@@ -1,6 +1,18 @@
 <Project>
-  <Target Name="Fxxxxx" DependsOnTargets="Publish">
-    <Warning Text="Publish xxxx"/>
-    <Warning Text="Dir=$(PublishDir)"/>
+  <Target Name="Fxxxxx" AfterTargets="Publish">
+    <Warning Text="Publish $(DebUOSPackingWorkFolder)"/>
+    <Warning Text="Dir=$([MSBuild]::NormalizePath($(MSBuildProjectDirectory), $(PublishDir)))"/>
+
+  </Target>
+
+  <Target Name="DebUOSPackingWriteArgs" AfterTargets="Publish">
+    <PropertyGroup>
+      <DebUOSPackingArgsFile>$([MSBuild]::NormalizePath($(DebUOSPackingWorkFolder), 'DebUOSPackingArgs.coin'))</DebUOSPackingArgsFile>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- COIN 格式的配置文件 https://github.com/dotnet-campus/dotnetCampus.Configurations -->
+      <DebUOSPackingWriteArgLine Include=">"/>
+    </ItemGroup>
+    <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
   </Target>
 </Project>
