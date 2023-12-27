@@ -5,6 +5,8 @@
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     <!-- 作为引用库使用，不能打包 -->
     <IsPackable>false</IsPackable>
+    <!-- 嵌入源代码到符号文件，方便调试 -->
+    <EmbedAllSources>true</EmbedAllSources>
   </PropertyGroup>
 
   <ItemGroup>

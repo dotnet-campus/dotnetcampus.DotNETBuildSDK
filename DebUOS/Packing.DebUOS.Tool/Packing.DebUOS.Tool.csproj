@@ -7,6 +7,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
     <!-- <BuildOutputTargetFolder>tools</BuildOutputTargetFolder> -->
     <!-- Suppress warning about lib being empty -->
     <NoPackageAnalysis>true</NoPackageAnalysis>
@@ -16,12 +17,17 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <DevelopmentDependency>true</DevelopmentDependency>
+    <!-- 嵌入源代码到符号文件，方便调试 -->
+    <EmbedAllSources>true</EmbedAllSources>
   </PropertyGroup>
   <ItemGroup>
     <None Include="Build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
     <None Include="Build\package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Packing.DebUOS\Packing.DebUOS.csproj" />
+    <ProjectReference Include="..\Packing.DebUOS\Packing.DebUOS.csproj">
+      <!-- 防止 nuget 引用 -->
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
   </ItemGroup>
 </Project>

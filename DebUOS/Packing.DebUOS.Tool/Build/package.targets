@@ -1,2 +1,6 @@
 <Project>
+  <Target Name="Fxxxxx" DependsOnTargets="Publish">
+    <Warning Text="Publish xxxx"/>
+    <Warning Text="Dir=$(PublishDir)"/>
+  </Target>
 </Project>
