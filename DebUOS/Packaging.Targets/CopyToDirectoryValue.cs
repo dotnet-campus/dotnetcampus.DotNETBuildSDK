@@ -11,7 +11,7 @@
         DoNotCopy,
 
         /// <summary>
-        /// The file is alwasy copied.
+        /// The file is always copied.
         /// </summary>
         Always,
 
