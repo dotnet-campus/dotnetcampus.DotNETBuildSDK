@@ -17,15 +17,15 @@ namespace Packaging.Targets
     /// </summary>
     internal class ArchiveBuilder
     {
-        private IFileAnalyzer fileAnayzer;
-        private uint inode = 0;
+        private IFileAnalyzer _fileAnayzer;
+        private uint _inode = 0;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ArchiveBuilder"/> class.
         /// </summary>
         public ArchiveBuilder()
         {
-            this.fileAnayzer = new FileAnalyzer();
+            this._fileAnayzer = new FileAnalyzer();
         }
 
         /// <summary>
@@ -41,7 +41,7 @@ namespace Packaging.Targets
                 throw new ArgumentNullException(nameof(analyzer));
             }
 
-            this.fileAnayzer = analyzer;
+            this._fileAnayzer = analyzer;
         }
 
         ///// <summary>
@@ -218,7 +218,7 @@ namespace Packaging.Targets
                         Owner = "root",
                         TargetPath = $"/usr/local/bin/{appHost}",
                         LinkTo = $"{prefix}/{appHost}",
-                        Inode = this.inode++,
+                        Inode = this._inode++,
                         Sha256 = Array.Empty<byte>(),
                     });
             }
@@ -228,7 +228,7 @@ namespace Packaging.Targets
 
         protected void AddDirectory(string directory, string relativePath, string prefix, List<ArchiveEntry> value/*, ITaskItem[] metadata*/)
         {
-            this.inode++;
+            this._inode++;
 
             // The order in which the files appear in the cpio archive is important; if this is not respected xzdio
             // will report errors like:
@@ -362,7 +362,7 @@ namespace Packaging.Targets
                     //Md5Hash = md5hash,
                     Type = entryType,
                     LinkTo = linkTo,
-                    Inode = this.inode++,
+                    Inode = this._inode++,
                     IsAscii = isAscii,
                     Mode = mode
                 };

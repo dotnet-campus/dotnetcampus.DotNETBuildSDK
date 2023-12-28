@@ -10,6 +10,7 @@ using Packing.DebUOS;
 //var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
 
 var debUosPackageCreator = new DebUOSPackageCreator();
-debUosPackageCreator.Execute();
+debUosPackageCreator.PackageDeb(new DirectoryInfo(@"C:\lindexi\Work\"),
+    new FileInfo(@"C:\lindexi\Work\Downloader.deb"));
 
 Console.Read();

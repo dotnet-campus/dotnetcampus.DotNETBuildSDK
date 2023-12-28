@@ -5,6 +5,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+
 using dotnetCampus.MSBuildUtils;
 
 using Packaging.Targets;
@@ -14,13 +15,17 @@ namespace Packing.DebUOS;
 
 public class DebUOSPackageCreator
 {
-    public void Execute()
+    public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null)
     {
         ArchiveBuilder archiveBuilder = new ArchiveBuilder()
         {
         };
 
-        var optFolder = Path.Combine(WorkFolder, "opt");
+        workingFolder ??= packingFolder;
+        var debTarFilePath = Path.Combine(workingFolder.FullName, "deb.tar");
+        var debTarXzPath = Path.Combine(workingFolder.FullName, "deb.tar.xz");
+
+        var optFolder = Path.Combine(packingFolder.FullName, "opt");
 
         var archiveEntries = archiveBuilder.FromDirectory(
             optFolder,
@@ -33,13 +38,11 @@ public class DebUOSPackageCreator
             .OrderBy(e => e.TargetPathWithFinalSlash, StringComparer.Ordinal)
             .ToList();
 
-        using (var targetStream = File.Open(this.DebPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
-        using (var tarStream = File.Open(this.DebTarPath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+        using (var targetStream = outputDebFile.Open(FileMode.Create, FileAccess.ReadWrite, FileShare.None))
+        using (var tarStream = File.Open(debTarFilePath, FileMode.Create, FileAccess.ReadWrite, FileShare.None))
         {
             TarFileCreator.FromArchiveEntries(archiveEntries, tarStream);
             tarStream.Position = 0;
-
-            var debTarXzPath = Path.Combine(WorkFolder, "deb.tar.xz");
 
             // 由于 XZOutputStream 类质量低劣（连当前位置都不知道，需要 Dispose 才能完成压缩等等）
             // 因此需要先 Dispose 再重新打开
@@ -55,22 +58,22 @@ public class DebUOSPackageCreator
             // 重新打开
             using (var tarXzStream = File.Open(debTarXzPath, FileMode.Open, FileAccess.Read, FileShare.None))
             {
-                var pkgPackageFormatVersion  = new Version(2, 0);
+                var pkgPackageFormatVersion = new Version(2, 0);
 
                 ArFileCreator.WriteMagic(targetStream);
                 ArFileCreator.WriteEntry(targetStream, "debian-binary", ArFileMode, pkgPackageFormatVersion + "\n");
-                WriteControl(targetStream);
+                WriteControl(packingFolder, targetStream);
                 ArFileCreator.WriteEntry(targetStream, "data.tar.xz", ArFileMode, tarXzStream);
             }
         }
     }
 
-    private void WriteControl(Stream targetStream)
+    private void WriteControl(DirectoryInfo packingFolder, Stream targetStream)
     {
         var controlTar = new MemoryStream();
         WriteControlEntry(controlTar, "./");
 
-        var controlFile = Path.Combine(WorkFolder, "DEBIAN", "control");
+        var controlFile = Path.Combine(packingFolder.FullName, "DEBIAN", "control");
         var controlFileText = File.ReadAllText(controlFile);
 
         WriteControlEntry(controlTar, "./control", controlFileText);
@@ -173,10 +176,6 @@ public class DebUOSPackageCreator
 
         entries.AddRange(toAdd);
     }
-
-    public string WorkFolder { set; get; } = @"C:\lindexi\Work\";
-    public string DebPath { get; init; } = "DebPath.deb";
-    public string DebTarPath { get; init; } = "DebTarPath.tar";
 
     private const LinuxFileMode ArFileMode = LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IRGRP |
                                              LinuxFileMode.S_IROTH | LinuxFileMode.S_IFREG;
