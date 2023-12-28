@@ -252,7 +252,7 @@ namespace Packaging.Targets
         {
             var fileName = Path.GetFileName(entry);
 
-            byte[] fileHeader = new byte[32];
+            byte[] fileHeader = null;
             byte[] hash = null;
             byte[] md5hash = null;
             byte[] buffer = new byte[1024];
@@ -279,17 +279,17 @@ namespace Packaging.Targets
                 //using (var hasher = IncrementalHash.CreateHash(HashAlgorithmName.SHA256))
                 //using (var md5hasher = IncrementalHash.CreateHash(HashAlgorithmName.MD5))
                 //{
-                //    int read;
+                    int read;
 
                 //    while (true)
                 //    {
-                //        read = fileStream.Read(buffer, 0, buffer.Length);
+                        read = fileStream.Read(buffer, 0, buffer.Length);
 
-                //        if (fileHeader == null)
-                //        {
-                //            fileHeader = new byte[read];
-                //            Buffer.BlockCopy(buffer, 0, fileHeader, 0, read);
-                //        }
+                if (fileHeader == null)
+                {
+                    fileHeader = new byte[read];
+                    Buffer.BlockCopy(buffer, 0, fileHeader, 0, read);
+                }
 
                 //        hasher.AppendData(buffer, 0, read);
                 //        md5hasher.AppendData(buffer, 0, read);
