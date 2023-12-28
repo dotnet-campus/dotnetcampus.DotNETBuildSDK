@@ -26,6 +26,9 @@ public class DebUOSPackageCreator
             optFolder,
             null,
             "/opt");
+
+        EnsureDirectories(archiveEntries);
+
         archiveEntries = archiveEntries
             .OrderBy(e => e.TargetPathWithFinalSlash, StringComparer.Ordinal)
             .ToList();
@@ -106,6 +109,70 @@ public class DebUOSPackageCreator
         TarFileCreator.WriteEntry(tar, hdr, s);
     }
 
+    internal static void EnsureDirectories(List<ArchiveEntry> entries, bool includeRoot = true)
+    {
+        var dirs = new HashSet<string>(entries.Where(x => x.Mode.HasFlag(LinuxFileMode.S_IFDIR))
+            .Select(d => d.TargetPathWithoutFinalSlash));
+
+        var toAdd = new List<ArchiveEntry>();
+
+        string GetDirPath(string path)
+        {
+            path = path.TrimEnd('/');
+            if (path == string.Empty)
+            {
+                return "/";
+            }
+
+            if (!path.Contains("/"))
+            {
+                return string.Empty;
+            }
+
+            return path.Substring(0, path.LastIndexOf('/'));
+        }
+
+        void EnsureDir(string dirPath)
+        {
+            if (dirPath == string.Empty || dirPath == ".")
+            {
+                return;
+            }
+
+            if (!dirs.Contains(dirPath))
+            {
+                if (dirPath != "/")
+                {
+                    EnsureDir(GetDirPath(dirPath));
+                }
+
+                dirs.Add(dirPath);
+                toAdd.Add(new ArchiveEntry()
+                {
+                    Mode = LinuxFileMode.S_IXOTH | LinuxFileMode.S_IROTH | LinuxFileMode.S_IXGRP |
+                           LinuxFileMode.S_IRGRP | LinuxFileMode.S_IXUSR | LinuxFileMode.S_IWUSR |
+                           LinuxFileMode.S_IRUSR | LinuxFileMode.S_IFDIR,
+                    Modified = DateTime.Now,
+                    Group = "root",
+                    Owner = "root",
+                    TargetPath = dirPath,
+                    LinkTo = string.Empty,
+                });
+            }
+        }
+
+        foreach (var entry in entries)
+        {
+            EnsureDir(GetDirPath(entry.TargetPathWithFinalSlash));
+        }
+
+        if (includeRoot)
+        {
+            EnsureDir("/");
+        }
+
+        entries.AddRange(toAdd);
+    }
 
     public string WorkFolder { set; get; } = @"C:\lindexi\Work\";
     public string DebPath { get; init; } = "DebPath.deb";
