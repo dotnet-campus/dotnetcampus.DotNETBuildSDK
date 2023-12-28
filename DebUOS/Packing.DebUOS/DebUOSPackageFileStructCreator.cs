@@ -2,5 +2,8 @@
 
 public class DebUOSPackageFileStructCreator
 {
+    public void CreateDebUOSPackagingFolder(DebUOSConfiguration configuration)
+    {
 
+    }
 }
