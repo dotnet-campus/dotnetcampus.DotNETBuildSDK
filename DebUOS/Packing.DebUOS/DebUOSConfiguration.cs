@@ -14,6 +14,12 @@ public class DebUOSConfiguration : Configuration
     {
     }
 
+    public string? AssemblyName
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
+
     public string? DebControlFile
     {
         set => SetValue(value);
@@ -182,7 +188,7 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
-    public string PackingFolder
+    public string? PackingFolder
     {
         set => SetValue(value);
         get => GetString();
