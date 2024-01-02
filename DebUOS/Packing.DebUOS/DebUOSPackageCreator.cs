@@ -190,7 +190,7 @@ public class DebUOSPackageCreator
 
             if (!anyIconFileExist)
             {
-                Logger.LogWarning("找不到任何的图标文件。可通过 SvgIconFile 配置矢量图，可通过 Png16x16IconFile 等属性配置不同分辨率的图标");
+                Logger.LogWarning("找不到任何的图标文件，将导致应用无法在开始菜单显示。可通过 SvgIconFile 配置矢量图，可通过 Png16x16IconFile 等属性配置不同分辨率的图标");
             }
         }
 
