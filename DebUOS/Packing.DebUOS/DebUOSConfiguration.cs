@@ -235,8 +235,14 @@ public class DebUOSConfiguration : Configuration
             {
                 if (!string.IsNullOrEmpty(ProjectPublishFolder))
                 {
-                    var name = AssemblyName ?? Path.GetDirectoryName(ProjectPublishFolder);
-                    return Path.Join(ProjectPublishFolder, $"{name}.UOS.deb");
+                    var name = UOSAppId;
+
+                    if (string.IsNullOrEmpty(name))
+                    {
+                        name = Path.GetDirectoryName(ProjectPublishFolder);
+                    }
+                   
+                    return Path.Join(ProjectPublishFolder, $"{name}.deb");
                 }
             }
 
