@@ -1,11 +1,7 @@
 <Project>
 
-  <Target Name="CreateDebUOS" DependsOnTargets="DebUOSPackingWriteArgs">
-  <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
-
-  </Target>
-
-  <Target Name="DebUOSPackingWriteArgs" DependsOnTargets="Publish">
+  <Target Name="CreateDebUOS" DependsOnTargets="Publish">
+    <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
     <PropertyGroup>
       <!-- 工作路径 -->
       <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
@@ -153,7 +149,6 @@
       <DebUOSPackingWriteArgLine Include="$(DesktopIcon)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
-
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopType" Condition="$(DesktopType)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(DesktopType)"/>
@@ -236,6 +231,6 @@
 
     </ItemGroup>
     <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
-    <Warning Text="Publish $(DebUOSPackingWorkFolder)"/>
+    <Warning Text="Publish $(DebUOSPackingArgsFile)"/>
   </Target>
 </Project>
