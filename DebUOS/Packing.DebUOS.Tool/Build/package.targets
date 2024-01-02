@@ -1,5 +1,11 @@
 <Project>
-  <Target Name="DebUOSPackingWriteArgs" AfterTargets="Publish">
+
+  <Target Name="CreateDebUOS" DependsOnTargets="DebUOSPackingWriteArgs">
+  <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
+
+  </Target>
+
+  <Target Name="DebUOSPackingWriteArgs" DependsOnTargets="Publish">
     <PropertyGroup>
       <!-- 工作路径 -->
       <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
