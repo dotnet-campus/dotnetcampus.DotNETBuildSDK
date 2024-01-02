@@ -92,6 +92,7 @@ public class DebUOSPackageCreator
         var entriesFolder = Path.Join(appIdFolder, "entries");
         var applicationsFolder = Path.Join(entriesFolder, "applications");
         var desktopFile = Path.Join(applicationsFolder, $"{appId}.desktop");
+        Directory.CreateDirectory(applicationsFolder);
 
         if (File.Exists(configuration.DebDesktopFile))
         {
@@ -255,6 +256,7 @@ public class DebUOSPackageCreator
 
         // 创建 control 文件
         var controlFile = Path.Join(packingFolder, "DEBIAN", "control");
+        Directory.CreateDirectory(Path.GetDirectoryName(controlFile)!);
         if (File.Exists(configuration.DebControlFile))
         {
             File.Copy(configuration.DebControlFile, controlFile);
