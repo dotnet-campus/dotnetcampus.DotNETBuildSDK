@@ -245,6 +245,6 @@
 
     </ItemGroup>
     <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
-    <Warning Text="Publish $(DebUOSPackingArgsFile)"/>
+    <Exec Command="dotnet &quot;$(MSBuildThisFileDirectory)..\tools\Packing.DebUOS.Tool.dll&quot; -p $(DebUOSPackingArgsFile)" />
   </Target>
 </Project>

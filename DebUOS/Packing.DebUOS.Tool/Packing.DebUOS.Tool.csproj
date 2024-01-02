@@ -23,6 +23,7 @@
   <ItemGroup>
     <None Include="Build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
     <None Include="Build\package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
+    <None Include="bin\$(Configuration)\$(TargetFramework)\**\*" Pack="True" PackagePath="\tools\"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Packing.DebUOS\Packing.DebUOS.csproj">
