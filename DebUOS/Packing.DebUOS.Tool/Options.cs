@@ -25,4 +25,7 @@ public class Options
     /// </summary>
     [Option('p', "Pack", Description = "Package argument file path")]
     public string? PackageArgumentFilePath { set; get; }
+
+    [Option('o', "Output", Description = "Output path")]
+    public string? OutputPath { set; get; }
 }
