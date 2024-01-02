@@ -1,4 +1,5 @@
-﻿using dotnetCampus.Configurations;
+﻿// ReSharper disable InconsistentNaming
+using dotnetCampus.Configurations;
 
 using System;
 using System.Collections.Generic;
