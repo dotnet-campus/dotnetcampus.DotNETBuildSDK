@@ -250,7 +250,10 @@ public class DebUOSPackageCreator
                 data.Permissions = applicationInfoPermissions;
             }
 
-            var json = JsonSerializer.Serialize(data);
+            var json = JsonSerializer.Serialize(data,new JsonSerializerOptions()
+            {
+                WriteIndented = true,
+            }).Replace("\r\n","\n");
             File.WriteAllText(infoJsonFile, json, Encoding.UTF8);
         }
 
