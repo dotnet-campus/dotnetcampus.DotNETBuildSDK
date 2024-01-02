@@ -22,16 +22,21 @@ if (!string.IsNullOrEmpty(options.BuildPath))
 }
 else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
 {
+    var fileConfigurationRepo = ConfigurationFactory.FromFile(options.PackageArgumentFilePath, RepoSyncingBehavior.Static);
+    var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
+    var configuration = appConfigurator.Of<DebUOSConfiguration>();
 
+    var debUosPackageCreator = new DebUOSPackageCreator();
+    debUosPackageCreator.CreatePackageFolder(configuration);
+
+    var outputFilePath = configuration.DebUOSOutputFilePath;
+
+    var packingFolder = new DirectoryInfo(configuration.PackingFolder);
+    var outputDebFile = new FileInfo(outputFilePath);
+
+    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile);
 }
 else
 {
     // Show Help
 }
-
-//var argsFilePath = args[0];
-//var fileConfigurationRepo = ConfigurationFactory.FromFile(argsFilePath,RepoSyncingBehavior.Static);
-//var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
-
-
-Console.Read();

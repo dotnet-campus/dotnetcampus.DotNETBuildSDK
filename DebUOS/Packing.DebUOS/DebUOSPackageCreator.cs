@@ -15,6 +15,11 @@ namespace Packing.DebUOS;
 
 public class DebUOSPackageCreator
 {
+    public void CreatePackageFolder(DebUOSConfiguration configuration)
+    {
+
+    }
+
     public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null)
     {
         ArchiveBuilder archiveBuilder = new ArchiveBuilder()
