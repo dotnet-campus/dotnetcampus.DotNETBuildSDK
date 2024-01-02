@@ -7,14 +7,22 @@ using System.Text;
 using System.Threading.Tasks;
 
 using dotnetCampus.MSBuildUtils;
-
+using Microsoft.Extensions.Logging;
 using Packaging.Targets;
 using Packaging.Targets.IO;
 
 namespace Packing.DebUOS;
 
+// ReSharper disable once InconsistentNaming
 public class DebUOSPackageCreator
 {
+    public DebUOSPackageCreator(ILogger logger)
+    {
+        Logger = logger;
+    }
+
+    public ILogger Logger { get; }
+
     public void CreatePackageFolder(DebUOSConfiguration configuration)
     {
 
@@ -22,6 +30,8 @@ public class DebUOSPackageCreator
 
     public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null)
     {
+        Logger.LogInformation($"Start packing UOS deb from '{packingFolder.FullName}' to '{outputDebFile.FullName}'");
+
         ArchiveBuilder archiveBuilder = new ArchiveBuilder()
         {
         };
