@@ -7,10 +7,6 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-
-using dotnetCampus.MSBuildUtils;
-
 using Microsoft.Extensions.Logging;
 
 using Packaging.Targets;
@@ -288,7 +284,7 @@ public class DebUOSPackageCreator
             }
             else
             {
-                Logger.LogWarning($"没有找到 DebControlMaintainer 属性配置。请配置 deb 包的维护者，如 <DebControlMaintainer>lindexi</DebControlMaintainer> 格式");
+                Logger.LogWarning($"没有找到 DebControlMaintainer 属性配置。安装完成可能在开始菜单找不到应用。请配置 deb 包的维护者，如 <DebControlMaintainer>lindexi</DebControlMaintainer> 格式");
             }
 
             if (!string.IsNullOrEmpty(configuration.DebControlDescription))
@@ -297,7 +293,7 @@ public class DebUOSPackageCreator
             }
             else
             {
-                Logger.LogWarning($"没有找到 DebControlDescription 属性配置。请配置 deb 包的描述，描述可使用中文");
+                Logger.LogWarning($"没有找到 DebControlDescription 属性配置。安装完成可能在开始菜单找不到应用。请配置 deb 包的描述，描述可使用中文");
             }
 
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
