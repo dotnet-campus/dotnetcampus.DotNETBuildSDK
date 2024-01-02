@@ -51,16 +51,16 @@ public class DebUOSConfiguration : Configuration
         get => GetString() ?? AppId;
     }
 
-    public string? Version
+    public string Version
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? "1.0.0";
     }
 
-    public string? DebControlSection
+    public string DebControlSection
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? "utils";
     }
 
     public string DebControlPriority
@@ -99,10 +99,10 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
-    public string? DebControlHomepage
+    public string DebControlHomepage
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? "https://www.uniontech.com";
     }
 
     public string? DebControlDescription
@@ -114,7 +114,7 @@ public class DebUOSConfiguration : Configuration
     public string? AppName
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? AssemblyName;
     }
 
     public string? InfoPermissions
@@ -129,16 +129,16 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
-    public string? DesktopCategories
+    public string DesktopCategories
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? "Other";
     }
 
-    public string? DesktopKeywords
+    public string DesktopKeywords
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString()?? "deepin";
     }
 
     public string? DesktopKeywordsZhCN
@@ -147,10 +147,10 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
-    public string? DesktopComment
+    public string DesktopComment
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString() ?? UOSAppId;
     }
 
     public string? DesktopCommentZhCN
