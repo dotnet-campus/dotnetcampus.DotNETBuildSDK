@@ -50,6 +50,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="UOSAppId"  Condition="$(UOSAppId)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSAppId)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="Version"  Condition="$(Version)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(Version)"/>
       <DebUOSPackingWriteArgLine Include=">"/>

@@ -42,7 +42,13 @@ public class DebUOSConfiguration : Configuration
     public string? AppId
     {
         set => SetValue(value);
-        get => GetString();
+        get => GetString()??AssemblyName;
+    }
+
+    public string? UOSAppId
+    {
+        set => SetValue(value);
+        get => GetString() ?? AppId;
     }
 
     public string? Version
@@ -230,7 +236,7 @@ public class DebUOSConfiguration : Configuration
                 if (!string.IsNullOrEmpty(ProjectPublishFolder))
                 {
                     var name = AssemblyName ?? Path.GetDirectoryName(ProjectPublishFolder);
-                    return Path.Join(ProjectPublishFolder, $"{name}.deb");
+                    return Path.Join(ProjectPublishFolder, $"{name}.UOS.deb");
                 }
             }
 
