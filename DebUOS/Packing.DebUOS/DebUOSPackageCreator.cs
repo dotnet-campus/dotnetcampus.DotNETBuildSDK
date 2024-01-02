@@ -52,7 +52,11 @@ public class DebUOSPackageCreator
             packingFolder = Path.Join(workingFolder, "Packing");
         }
         // 删除旧的文件夹，防止打包使用到旧文件
-        Directory.Delete(packingFolder, true);
+        if(Directory.Exists(packingFolder))
+        {
+            Directory.Delete(packingFolder, true);
+        }
+
         Directory.CreateDirectory(packingFolder);
 
         var appId = configuration.UOSAppId;
