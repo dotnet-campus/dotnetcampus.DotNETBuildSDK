@@ -27,7 +27,11 @@
       <DebUOSPackingWriteArgLine Include="$(AssemblyName)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
-
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 打包输出文件路径-->
+      <DebUOSPackingWriteArgLine Include="DebUOSOutputFilePath"  Condition="$(DebUOSOutputFilePath)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebUOSOutputFilePath)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlFile"  Condition="$(DebControlFile)!=''"/>

@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -188,22 +189,53 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
+    /// <summary>
+    /// 进行打包的文件夹，用来组织打包的文件
+    /// </summary>
     public string? PackingFolder
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <summary>
+    /// 工作文件夹，用来存放打包过程中的临时文件
+    /// </summary>
     public string? WorkingFolder
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <summary>
+    /// 项目的发布输出文件夹
+    /// </summary>
     public string? ProjectPublishFolder
     {
         set => SetValue(value);
         get => GetString();
+    }
+
+    /// <summary>
+    /// 打包输出文件路径
+    /// </summary>
+    public string? DebUOSOutputFilePath
+    {
+        set => SetValue(value);
+        get
+        {
+            var outputFilePath = GetString();
+            if (outputFilePath is null)
+            {
+                if (!string.IsNullOrEmpty(ProjectPublishFolder))
+                {
+                    var name = AssemblyName ?? Path.GetDirectoryName(ProjectPublishFolder);
+                    return Path.Join(ProjectPublishFolder, $"{name}.deb");
+                }
+            }
+
+            return outputFilePath;
+        }
     }
 
     public string? IconFolder
