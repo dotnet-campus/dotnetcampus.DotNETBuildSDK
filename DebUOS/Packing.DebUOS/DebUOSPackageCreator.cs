@@ -277,10 +277,8 @@ public class DebUOSPackageCreator
                 .Append($"Build-Depends: {configuration.DebControlBuildDepends}\n")
                 .Append($"Standards-Version: {configuration.DebControlStandardsVersion}\n")
                 .Append($"Maintainer: {configuration.DebControlMaintainer}\n")
-                .Append($"Homepage: {configuration.DebControlHomepage}")
+                .Append($"Homepage: {configuration.DebControlHomepage}\n")
                 .Append($"Description: {configuration.DebControlDescription}\n")
-                // 必须添加最后一行，否则 missing final newline 失败
-                .Append("\n")
                 ;
             File.WriteAllText(controlFile, stringBuilder.ToString(), Encoding.UTF8);
         }
