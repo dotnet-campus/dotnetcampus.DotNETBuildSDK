@@ -45,6 +45,7 @@ public class DebUOSPackageCreator
         }
 
         Directory.CreateDirectory(workingFolder);
+        configuration.WorkingFolder = workingFolder;
 
         var packingFolder = configuration.PackingFolder;
         if (string.IsNullOrEmpty(packingFolder))
@@ -58,6 +59,7 @@ public class DebUOSPackageCreator
         }
 
         Directory.CreateDirectory(packingFolder);
+        configuration.PackingFolder = packingFolder;
 
         var appId = configuration.UOSAppId;
         if (string.IsNullOrEmpty(appId))
@@ -93,6 +95,8 @@ public class DebUOSPackageCreator
         var applicationsFolder = Path.Join(entriesFolder, "applications");
         var desktopFile = Path.Join(applicationsFolder, $"{appId}.desktop");
         Directory.CreateDirectory(applicationsFolder);
+
+        var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
         if (File.Exists(configuration.DebDesktopFile))
         {
@@ -154,7 +158,7 @@ public class DebUOSPackageCreator
                 stringBuilder.Append($"MimeType={configuration.DesktopMimeType}\n");
             }
 
-            File.WriteAllText(desktopFile, stringBuilder.ToString(), Encoding.UTF8);
+            File.WriteAllText(desktopFile, stringBuilder.ToString(), encoding);
         }
 
         // opt\apps\AppId\entries\icons
@@ -254,7 +258,7 @@ public class DebUOSPackageCreator
             {
                 WriteIndented = true,
             }).Replace("\r\n","\n");
-            File.WriteAllText(infoJsonFile, json, Encoding.UTF8);
+            File.WriteAllText(infoJsonFile, json, encoding);
         }
 
         // 创建 control 文件
@@ -276,11 +280,27 @@ public class DebUOSPackageCreator
                 .Append($"Multi-Arch: {configuration.DebControlMultiArch}\n")
                 .Append($"Build-Depends: {configuration.DebControlBuildDepends}\n")
                 .Append($"Standards-Version: {configuration.DebControlStandardsVersion}\n")
-                .Append($"Maintainer: {configuration.DebControlMaintainer}\n")
                 .Append($"Homepage: {configuration.DebControlHomepage}\n")
-                .Append($"Description: {configuration.DebControlDescription}\n")
                 ;
-            File.WriteAllText(controlFile, stringBuilder.ToString(), Encoding.UTF8);
+            if (!string.IsNullOrEmpty(configuration.DebControlMaintainer))
+            {
+                stringBuilder.Append($"Maintainer: {configuration.DebControlMaintainer}\n");
+            }
+            else
+            {
+                Logger.LogWarning($"没有找到 DebControlMaintainer 属性配置。请配置 deb 包的维护者，如 <DebControlMaintainer>lindexi</DebControlMaintainer> 格式");
+            }
+
+            if (!string.IsNullOrEmpty(configuration.DebControlDescription))
+            {
+                stringBuilder.Append($"Description: {configuration.DebControlDescription}\n");
+            }
+            else
+            {
+                Logger.LogWarning($"没有找到 DebControlDescription 属性配置。请配置 deb 包的描述，描述可使用中文");
+            }
+
+            File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
         }
     }
 
