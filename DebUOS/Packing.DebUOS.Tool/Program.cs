@@ -41,12 +41,11 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
     var debUosPackageCreator = new DebUOSPackageCreator(logger);
     debUosPackageCreator.CreatePackageFolder(configuration);
 
-    var outputFilePath = configuration.DebUOSOutputFilePath;
+    var packingFolder = new DirectoryInfo(configuration.PackingFolder!);
+    var outputDebFile = new FileInfo(configuration.DebUOSOutputFilePath!);
+    var workingFolder = new DirectoryInfo(configuration.WorkingFolder!);
 
-    var packingFolder = new DirectoryInfo(configuration.PackingFolder);
-    var outputDebFile = new FileInfo(outputFilePath);
-
-    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile);
+    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile,workingFolder);
 }
 else
 {
