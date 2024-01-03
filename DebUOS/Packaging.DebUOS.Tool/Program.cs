@@ -8,7 +8,6 @@ using Microsoft.Extensions.Logging.Console;
 using Packaging.DebUOS;
 using Packaging.DebUOS.Contexts.Configurations;
 using Packaging.DebUOS.Tool;
-using Packing.DebUOS;
 
 var options = CommandLine.Parse(args).As<Options>();
 
