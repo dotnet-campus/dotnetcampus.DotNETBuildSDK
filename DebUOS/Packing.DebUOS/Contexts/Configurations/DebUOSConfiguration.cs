@@ -1,14 +1,9 @@
 ﻿// ReSharper disable InconsistentNaming
+
+using System.IO;
 using dotnetCampus.Configurations;
 
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Packing.DebUOS;
+namespace Packing.DebUOS.Contexts.Configurations;
 
 public class DebUOSConfiguration : Configuration
 {

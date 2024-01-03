@@ -6,6 +6,7 @@ using dotnetCampus.Configurations.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Packing.DebUOS;
+using Packing.DebUOS.Contexts.Configurations;
 using Packing.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
