@@ -5,12 +5,12 @@ using System.IO.Compression;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 
 using Packaging.Targets;
 using Packaging.Targets.IO;
+using Packing.DebUOS.Contexts;
 
 namespace Packing.DebUOS;
 
@@ -92,6 +92,7 @@ public class DebUOSPackageCreator
         var desktopFile = Path.Join(applicationsFolder, $"{appId}.desktop");
         Directory.CreateDirectory(applicationsFolder);
 
+        // 不能使用 Encoding.UTF8 编码，因为默认会写入 BOM 导致 deb 打包失败
         var encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
         if (File.Exists(configuration.DebDesktopFile))
@@ -467,46 +468,3 @@ public class DebUOSPackageCreator
     private const LinuxFileMode ArFileMode = LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IRGRP |
                                              LinuxFileMode.S_IROTH | LinuxFileMode.S_IFREG;
 }
-
-class ApplicationInfoFileData
-{
-    [JsonPropertyName("appid")]
-    public string? AppId { init; get; }
-
-    [JsonPropertyName("name")]
-    public string? ApplicationName { init; get; }
-
-    [JsonPropertyName("version")]
-    public string? Version { init; get; }
-
-    [JsonPropertyName("arch")]
-    public IList<string>? Architecture { init; get; }
-
-    [JsonPropertyName("permissions")]
-    public ApplicationInfoPermissions? Permissions { set; get; }
-}
-
-class ApplicationInfoPermissions
-{
-    [JsonPropertyName("autostart")]
-    public bool Autostart { get; set; }
-    [JsonPropertyName("notification")]
-    public bool Notification { get; set; }
-    [JsonPropertyName("trayicon")]
-    public bool TrayIcon { get; set; }
-    [JsonPropertyName("clipboard")]
-    public bool Clipboard { get; set; }
-    [JsonPropertyName("account")]
-    public bool Account { get; set; }
-    [JsonPropertyName("bluetooth")]
-    public bool Bluetooth { get; set; }
-    [JsonPropertyName("camera")]
-    public bool Camera { get; set; }
-    [JsonPropertyName("audio_record")]
-    public bool AudioRecord { get; set; }
-    [JsonPropertyName("installed_apps")]
-    public bool InstalledApps { get; set; }
-}
-
-
-
