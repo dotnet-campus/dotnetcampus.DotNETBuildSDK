@@ -26,7 +26,7 @@
     <None Include="bin\$(Configuration)\$(TargetFramework)\**\*" Pack="True" PackagePath="\tools\"/>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Packing.DebUOS\Packing.DebUOS.csproj">
+    <ProjectReference Include="..\Packaging.DebUOS\Packaging.DebUOS.csproj">
       <!-- 防止 nuget 引用 -->
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>

@@ -204,6 +204,8 @@ public class DebUOSPackageFileStructCreator
         }
         else
         {
+            var infoPermissions = configuration.InfoPermissions;
+
             var data = new ApplicationInfoFileData()
             {
                 AppId = appId,
@@ -212,7 +214,7 @@ public class DebUOSPackageFileStructCreator
                 Architecture = configuration.Architecture.Split(';')
             };
 
-            var permissions = configuration.InfoPermissions?.Split(';');
+            var permissions = infoPermissions?.Split(';');
             if (permissions != null && permissions.Length > 0)
             {
                 var applicationInfoPermissions = new ApplicationInfoPermissions();
