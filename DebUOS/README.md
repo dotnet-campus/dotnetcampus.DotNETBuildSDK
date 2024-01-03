@@ -1,0 +1,56 @@
+# 制作符合 UOS 规范的 deb 安装包的工具
+
+## 使用方法
+
+有以下两个使用方式，任选其一即可
+
+### 命令行工具方式
+
+使用以下命令进行更新或安装工具：
+
+```
+dotnet tool update -g Packaging.DebUOS.Tool
+```
+
+将已经准备好的符合 UOS 安装包文件组织规范的文件夹打包为 deb 安装包：
+
+```
+dotnet dpkg-debuos -b C:\lindexi\DebPacking -o C:\lindexi\UOS\Foo.deb
+```
+
+以上的 `C:\lindexi\DebPacking` 为已准备好的符合 UOS 安装包文件组织规范的文件夹，以上的 `C:\lindexi\UOS\Foo.deb` 为打包输出的文件。其中 `-o` 指定打包输出文件参数可以忽略，如忽略此参数，则将会在打包文件夹输出 deb 安装包
+
+使用命令行工具比较适合创建构建更为复杂的 deb 安装包，可以有更强的定制化，适合对 UOS 安装包规范较熟悉的开发者使用。或者是作为 `dpkg-deb` 工具在 Windows 上的替代品
+
+### 配合 csproj 的 NuGet 包方式
+
+请通过 NuGet 管理器或采用如下代码编辑 csproj 文件安装 `Packaging.DebUOS` 库
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Packaging.DebUOS" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+```
+
+接着添加一些必要的配置参数，比如用来配置 UOS 的 AppId 的 `UOSAppId` 属性，如以下代码示例。更多的属性配置请参阅下文
+
+```xml
+  <PropertyGroup>
+    <UOSAppId>com.xx.xxx</UOSAppId>
+  </PropertyGroup>
+```
+
+通过如下命令行发布时，即可打出符合 UOS 规范的 deb 包
+
+```
+dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
+```
+
+以上命令行与传统的发布命令最大的不同在于添加了 `-t:CreateDebUOS` 参数，通过此参数即可触发名为 `CreateDebUOS` 的 Target 进行创建 deb 包
+
+通过 NuGet 包配置的方法，可以很方便进行接入，且不需要有许多额外的知识。可以完全复用原有的构建工具链，可以配合其他工具实现一次打包创建多个平台的安装包，可以将各项配置写入到 csproj 里面方便客制化定制以及接入更多自动化参数和加入代码管理
+
+更多可配置属性请参阅 DebUOSConfiguration.cs 文件
