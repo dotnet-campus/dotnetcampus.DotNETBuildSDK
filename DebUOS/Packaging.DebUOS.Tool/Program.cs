@@ -12,8 +12,6 @@ using Packaging.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
 
-Console.OutputEncoding = Encoding.UTF8;
-
 var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder.AddSimpleConsole(simpleConsoleFormatterOptions =>
