@@ -452,6 +452,54 @@ SyncTool sync [参数]
 - `-a` 或 `-Address` : 同步服务的地址。必填，格式如 `http://127.0.0.1:56621` 等地址
 - `-f` 或 `-Folder` : 本地同步的文件夹。可选，不填默认为工作路径
 
+### 制作符合 UOS 规范的 deb 安装包的工具
+
+可以打包出符合 UOS 规范的 deb 安装包的工具
+
+提供两个不同的使用方式，分别是命令行方式和配合 csproj 的 NuGet 包方式
+
+命令行方式通过 dotnet tool 方式使用，先使用以下命令安装工具
+
+```
+dotnet tool update -g Packaging.DebUOS.Tool
+```
+
+将已经准备好的符合 UOS 安装包文件组织规范的文件夹打包为 deb 安装包：
+
+```
+dotnet dpkg-debuos -b C:\lindexi\DebPacking -o C:\lindexi\UOS\Foo.deb
+```
+
+配合 csproj 的 NuGet 包方式：
+
+请通过 NuGet 管理器或采用如下代码编辑 csproj 文件安装 `Packaging.DebUOS` 库
+
+```xml
+  <ItemGroup>
+    <PackageReference Include="Packaging.DebUOS" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+```
+
+接着添加一些必要的配置参数，比如用来配置 UOS 的 AppId 的 `UOSAppId` 属性，如以下代码示例。更多的属性配置请参阅下文
+
+```xml
+  <PropertyGroup>
+    <UOSAppId>com.xx.xxx</UOSAppId>
+  </PropertyGroup>
+```
+
+通过如下命令行发布时，即可打出符合 UOS 规范的 deb 包
+
+```
+dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
+```
+
+更多请参阅 [Packaging.DebUOS 工具](./DebUOS)
+
+
 ## 相似的项目
 
 [dotnetcore/FlubuCore: A cross platform build and deployment automation system for building projects and executing deployment scripts using C# code.](https://github.com/dotnetcore/FlubuCore )
