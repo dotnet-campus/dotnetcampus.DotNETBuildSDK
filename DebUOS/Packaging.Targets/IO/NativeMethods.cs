@@ -50,7 +50,7 @@ namespace Packaging.Targets.IO
             var lzmaWindowsPath = Path.GetFullPath(Path.Combine(libraryPath, "../../runtimes/win7-x64/native/lzma.dll"));
 
             IntPtr library = FunctionLoader.LoadNativeLibrary(
-                new string[] { lzmaWindowsPath, "lzma.dll" }, // lzma.dll is used when running unit tests.
+                new string[] { lzmaWindowsPath, Path.GetFullPath(Path.Combine(libraryPath, "lzma.dll")) }, // lzma.dll is used when running unit tests.
                 new string[] { "liblzma.so.5", "liblzma.so" },
                 new string[] { "liblzma.dylib" });
 
