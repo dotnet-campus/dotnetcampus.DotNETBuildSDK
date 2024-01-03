@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Reflection;
 using System.Text;
 using dotnetCampus.Cli;
 using dotnetCampus.Configurations;
@@ -60,4 +61,16 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
 else
 {
     // Show Help
+    var stringBuilder = new StringBuilder()
+        .AppendLine($"用法：[options] [arguments]");
+    foreach (var propertyInfo in typeof(Options).GetProperties())
+    {
+        var optionAttribute = propertyInfo.GetCustomAttribute<OptionAttribute>();
+        if (optionAttribute != null)
+        {
+            stringBuilder.AppendLine($"-{optionAttribute.ShortName}  {(optionAttribute.LongName ?? string.Empty).PadRight(10)} {optionAttribute.Description} {optionAttribute.LocalizableDescription}");
+        }
+    }
+
+    Console.WriteLine(stringBuilder.ToString());
 }
