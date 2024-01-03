@@ -69,6 +69,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="UOSDebVersion" Condition="$(UOSDebVersion)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSDebVersion)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlSection" Condition="$(DebControlSection)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(DebControlSection)"/>
       <DebUOSPackingWriteArgLine Include=">"/>

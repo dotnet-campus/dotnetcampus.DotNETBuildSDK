@@ -209,7 +209,7 @@ public class DebUOSPackageFileStructCreator
             {
                 AppId = appId,
                 ApplicationName = configuration.AppName,
-                Version = configuration.Version,
+                Version = configuration.UOSDebVersion,
                 Architecture = configuration.Architecture.Split(';')
             };
 
@@ -273,7 +273,7 @@ public class DebUOSPackageFileStructCreator
             var stringBuilder = new StringBuilder();
             stringBuilder
                 .Append($"Package: {appId}\n")
-                .Append($"Version: {configuration.Version}\n")
+                .Append($"Version: {configuration.UOSDebVersion}\n")
                 .Append($"Section: {configuration.DebControlSection}\n")
                 .Append($"Priority: {configuration.DebControlPriority}\n")
                 .Append($"Architecture: {configuration.Architecture}\n")

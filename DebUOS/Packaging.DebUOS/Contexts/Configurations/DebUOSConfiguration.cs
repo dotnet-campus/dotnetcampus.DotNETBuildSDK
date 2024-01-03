@@ -53,6 +53,12 @@ public class DebUOSConfiguration : Configuration
         get => GetString() ?? "1.0.0";
     }
 
+    public string UOSDebVersion
+    {
+        set => SetValue(value);
+        get => GetString() ?? Version;
+    }
+
     public string DebControlSection
     {
         set => SetValue(value);
