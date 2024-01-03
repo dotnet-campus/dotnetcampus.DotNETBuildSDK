@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Packing.DebUOS.Tool": {
-      "commandName": "Project",
-      "commandLineArgs": "-p C:\\lindexi\\Work\\DebUOSPackingArgs.coin"
+      "commandName": "Project"
     }
   }
 }
