@@ -14,6 +14,10 @@ using Packing.DebUOS.Contexts;
 
 namespace Packing.DebUOS;
 
+/// <summary>
+/// 打出 UOS 的 deb 包
+/// </summary>
+/// 打包细节请参阅 [一步步教你在 Windows 上构建 dotnet 系应用的 UOS 软件安装包](https://blog.lindexi.com/post/%E4%B8%80%E6%AD%A5%E6%AD%A5%E6%95%99%E4%BD%A0%E5%9C%A8-Windows-%E4%B8%8A%E6%9E%84%E5%BB%BA-dotnet-%E7%B3%BB%E5%BA%94%E7%94%A8%E7%9A%84-UOS-%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8C%85.html )
 // ReSharper disable once InconsistentNaming
 public class DebUOSPackageCreator
 {

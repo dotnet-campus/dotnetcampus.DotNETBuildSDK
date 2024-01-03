@@ -3,6 +3,10 @@ using System.Text.Json.Serialization;
 
 namespace Packing.DebUOS.Contexts;
 
+/// <summary>
+/// 用于写入到 opt\apps\${AppId}\info 文件的数据内容
+/// </summary>
+/// 将使用 json 格式写入
 class ApplicationInfoFileData
 {
     [JsonPropertyName("appid")]
