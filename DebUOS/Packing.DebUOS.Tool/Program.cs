@@ -38,13 +38,14 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
     var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
     var configuration = appConfigurator.Of<DebUOSConfiguration>();
 
-    var debUosPackageCreator = new DebUOSPackageCreator(logger);
-    debUosPackageCreator.CreatePackageFolder(configuration);
+    var fileStructCreator = new DebUOSPackageFileStructCreator(logger);
+    fileStructCreator.CreatePackagingFolder(configuration);
 
     var packingFolder = new DirectoryInfo(configuration.PackingFolder!);
     var outputDebFile = new FileInfo(configuration.DebUOSOutputFilePath!);
     var workingFolder = new DirectoryInfo(configuration.WorkingFolder!);
 
+    var debUosPackageCreator = new DebUOSPackageCreator(logger);
     debUosPackageCreator.PackageDeb(packingFolder, outputDebFile,workingFolder);
 }
 else
