@@ -26,7 +26,7 @@ public class DebUOSPackageCreator
 
     public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null)
     {
-        Logger.LogInformation($"Start packing UOS deb from '{packingFolder.FullName}' to '{outputDebFile.FullName}'");
+        Logger.LogInformation($"开始打包。Start packaging UOS deb from '{packingFolder.FullName}' to '{outputDebFile.FullName}'");
 
         ArchiveBuilder archiveBuilder = new ArchiveBuilder()
         {
@@ -77,6 +77,8 @@ public class DebUOSPackageCreator
                 ArFileCreator.WriteEntry(targetStream, "data.tar.xz", ArFileMode, tarXzStream);
             }
         }
+
+        Logger.LogInformation($"打包完成 '{outputDebFile.FullName}'");
     }
 
     private void WriteControl(DirectoryInfo packingFolder, Stream targetStream)
