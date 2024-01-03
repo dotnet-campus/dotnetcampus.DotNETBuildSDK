@@ -5,9 +5,10 @@ using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Packaging.DebUOS;
+using Packaging.DebUOS.Contexts.Configurations;
+using Packaging.DebUOS.Tool;
 using Packing.DebUOS;
-using Packing.DebUOS.Contexts.Configurations;
-using Packing.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
 

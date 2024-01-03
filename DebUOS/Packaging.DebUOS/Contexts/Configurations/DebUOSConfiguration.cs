@@ -3,7 +3,7 @@
 using System.IO;
 using dotnetCampus.Configurations;
 
-namespace Packing.DebUOS.Contexts.Configurations;
+namespace Packaging.DebUOS.Contexts.Configurations;
 
 public class DebUOSConfiguration : Configuration
 {

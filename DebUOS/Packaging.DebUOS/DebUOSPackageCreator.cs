@@ -4,15 +4,11 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
-using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-
 using Packaging.Targets;
 using Packaging.Targets.IO;
-using Packing.DebUOS.Contexts;
 
-namespace Packing.DebUOS;
+namespace Packaging.DebUOS;
 
 /// <summary>
 /// 打出 UOS 的 deb 包

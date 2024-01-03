@@ -1,13 +1,12 @@
-﻿using Microsoft.Extensions.Logging;
-
-using Packing.DebUOS.Contexts;
-using System.IO;
+﻿using System.IO;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using System.Text;
-using Packing.DebUOS.Contexts.Configurations;
+using Microsoft.Extensions.Logging;
+using Packaging.DebUOS.Contexts;
+using Packaging.DebUOS.Contexts.Configurations;
 
-namespace Packing.DebUOS;
+namespace Packaging.DebUOS;
 
 /// <summary>
 /// 创建符合 UOS 安装包制作规范的打包文件夹

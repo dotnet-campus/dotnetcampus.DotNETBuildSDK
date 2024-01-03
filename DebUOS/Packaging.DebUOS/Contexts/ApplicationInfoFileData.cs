@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Packing.DebUOS.Contexts;
+namespace Packaging.DebUOS.Contexts;
 
 /// <summary>
 /// 用于写入到 opt\apps\${AppId}\info 文件的数据内容

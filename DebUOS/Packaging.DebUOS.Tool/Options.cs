@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using dotnetCampus.Cli;
 
-using dotnetCampus.Cli;
-
-namespace Packing.DebUOS.Tool;
+namespace Packaging.DebUOS.Tool;
 
 /// <summary>
 /// 命令行参数
