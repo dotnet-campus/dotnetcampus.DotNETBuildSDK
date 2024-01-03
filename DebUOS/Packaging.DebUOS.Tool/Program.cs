@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using System.Text;
 using dotnetCampus.Cli;
 using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
@@ -10,6 +11,8 @@ using Packaging.DebUOS.Contexts.Configurations;
 using Packaging.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
+
+Console.OutputEncoding = Encoding.UTF8;
 
 var loggerFactory = LoggerFactory.Create(builder =>
 {
@@ -35,6 +38,13 @@ if (!string.IsNullOrEmpty(options.BuildPath))
 }
 else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
 {
+    logger.LogInformation($"开始根据配置创建 UOS 的 deb 包。配置文件：{options.PackageArgumentFilePath}");
+    if (!File.Exists(options.PackageArgumentFilePath))
+    {
+        logger.LogError($"配置文件 '{options.PackageArgumentFilePath}' 不创建");
+        return;
+    }
+
     var fileConfigurationRepo = ConfigurationFactory.FromFile(options.PackageArgumentFilePath, RepoSyncingBehavior.Static);
     var appConfigurator = fileConfigurationRepo.CreateAppConfigurator();
     var configuration = appConfigurator.Of<DebUOSConfiguration>();
