@@ -51,6 +51,14 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
 
 以上命令行与传统的发布命令最大的不同在于添加了 `-t:CreateDebUOS` 参数，通过此参数即可触发名为 `CreateDebUOS` 的 Target 进行创建 deb 包
 
+如期望自动在发布之后输出符合 UOS 规范的 deb 包，期望不添加 `-t:CreateDebUOS` 参数，则可以通过配置 `<AutoCreateDebUOSAfterPublish>true</AutoCreateDebUOSAfterPublish>` 属性到 csproj 从而实现在发布之后，自动执行打包，如以下代码
+
+```xml
+  <PropertyGroup>
+    <AutoCreateDebUOSAfterPublish>true</AutoCreateDebUOSAfterPublish>
+  </PropertyGroup>
+```
+
 通过 NuGet 包配置的方法，可以很方便进行接入，自带大量的默认配置，从零开始接入的成本低，且不需要有许多额外的知识。可以完全复用原有的构建工具链，可以配合其他工具实现一次打包创建多个平台的安装包，可以将各项配置写入到 csproj 里面方便客制化定制以及接入更多自动化参数和加入代码管理
 
 更多可配置属性请参阅 DebUOSConfiguration.cs 文件

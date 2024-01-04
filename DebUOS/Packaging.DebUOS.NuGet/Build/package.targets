@@ -1,5 +1,9 @@
 <Project>
 
+  <Target Name="AutoCreateDebUOS" AfterTargets="Publish" Condition="'$(AutoCreateDebUOSAfterPublish)' == 'true'" DependsOnTargets="CreateDebUOS">
+    <!-- 用来配置属性自动输出打包 -->
+  </Target>
+
   <Target Name="CreateDebUOS" DependsOnTargets="Publish">
     <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
     <PropertyGroup>
