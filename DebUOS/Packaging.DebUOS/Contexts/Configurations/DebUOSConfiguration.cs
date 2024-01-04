@@ -351,48 +351,62 @@ public class DebUOSConfiguration : Configuration
     //    get => GetString();
     //}
 
+    /// <summary>
+    /// 应用图标文件，表示矢量图标文件。将被放入到 opt/apps/${AppId}/entries/icons/hicolor/scalable/apps/${appid}.svg 里面。矢量图标文件与 png 非矢量格式二选一，如果同时存在，优先使用矢量图标文件。
+    /// 当 <see cref="IconFolder"/> 属性存在值时，本属性设置无效
+    /// </summary>
     public string? SvgIconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <summary>
+    /// 应用图标文件，表示 png 非矢量格式文件。将被放入到 opt/apps/${AppId}/entries/icons/hicolor/${分辨率}/apps/${appid}.png 里面。请确保实际图片分辨率正确，且是 png 格式。矢量图标文件与 png 非矢量格式二选一，如果同时存在，优先使用矢量图标文件。
+    /// 当 <see cref="IconFolder"/> 属性存在值时，本属性设置无效
+    /// </summary>
     public string? Png16x16IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png24x24IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png32x32IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png48x48IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png128x128IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png256x256IconFile
     {
         set => SetValue(value);
         get => GetString();
     }
 
+    /// <inheritdoc cref="Png16x16IconFile"/>
     public string? Png512x512IconFile
     {
         set => SetValue(value);
