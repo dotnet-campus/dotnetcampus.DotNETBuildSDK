@@ -190,7 +190,6 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
 
-
     /// <summary>
     /// 配置放入到 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件的 Categories 属性，可选值有：AudioVideo, Audio, Video, Development, Education, Game, Graphics, Network, Office, Science, Settings, System, Utility, Other 等。默认为 Other 的值
     /// </summary>
