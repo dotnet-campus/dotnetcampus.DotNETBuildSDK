@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Packaging.Targets;
@@ -28,9 +30,20 @@ public class DebUOSPackageCreator
     {
         Logger.LogInformation($"开始打包。Start packaging UOS deb from '{packingFolder.FullName}' to '{outputDebFile.FullName}'");
 
-        ArchiveBuilder archiveBuilder = new ArchiveBuilder()
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
         {
-        };
+            // 在 Linux 上直接使用 dpkg-deb 打包
+            var process = Process.Start("dpkg-deb", new[]
+            {
+                "-b",
+                packingFolder.FullName,
+                outputDebFile.FullName,
+            });
+            process.WaitForExit();
+            return;
+        }
+
+        ArchiveBuilder archiveBuilder = new ArchiveBuilder();
 
         workingFolder ??= packingFolder;
         var debTarFilePath = Path.Combine(workingFolder.FullName, "deb.tar");
