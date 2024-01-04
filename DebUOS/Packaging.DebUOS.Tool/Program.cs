@@ -3,7 +3,6 @@
 using System.Reflection;
 using System.Text;
 using dotnetCampus.Cli;
-using dotnetCampus.Configurations;
 using dotnetCampus.Configurations.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
