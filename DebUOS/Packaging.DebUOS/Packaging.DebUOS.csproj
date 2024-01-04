@@ -21,6 +21,8 @@
     </PackageReference>
 
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+
+    <PackageReference Include="Walterlv.IO.PackageManagement" Version="7.6.0" />
   </ItemGroup>
 
   <ItemGroup>

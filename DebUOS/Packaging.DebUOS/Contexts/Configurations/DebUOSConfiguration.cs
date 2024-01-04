@@ -345,15 +345,21 @@ public class DebUOSConfiguration : Configuration
         }
     }
 
-    //public string? IconFolder
-    //{
-    //    set => SetValue(value);
-    //    get => GetString();
-    //}
+    /// <summary>
+    /// 表示图标文件夹路径，文件夹里面按照 UOS 的 deb 规范组织图标文件，文件夹里面存放的内容将会被原原本本拷贝到 opt/apps/${AppId}/entries/icons/ 文件夹里面。此属性属于高级配置，一般不需要使用，可以用来满足更多的定制化需求。默认不填，且推荐在充分理解 UOS 的 deb 规范的情况下再进行使用。此属性存在值时，将会忽略 <see cref="SvgIconFile"/> 和 <see cref="Png16x16IconFile"/> 等属性的设置
+    /// </summary>
+    /// <remarks>
+    /// 如果此属性配置不正确或图标文件夹的组织不正确，将会导致安装完成之后，无法从开始菜单中找到应用的图标
+    /// </remarks>
+    public string? UOSDebIconFolder
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
 
     /// <summary>
     /// 应用图标文件，表示矢量图标文件。将被放入到 opt/apps/${AppId}/entries/icons/hicolor/scalable/apps/${appid}.svg 里面。矢量图标文件与 png 非矢量格式二选一，如果同时存在，优先使用矢量图标文件。
-    /// 当 <see cref="IconFolder"/> 属性存在值时，本属性设置无效
+    /// 当 <see cref="UOSDebIconFolder"/> 属性存在值时，本属性设置无效
     /// </summary>
     public string? SvgIconFile
     {
@@ -363,7 +369,7 @@ public class DebUOSConfiguration : Configuration
 
     /// <summary>
     /// 应用图标文件，表示 png 非矢量格式文件。将被放入到 opt/apps/${AppId}/entries/icons/hicolor/${分辨率}/apps/${appid}.png 里面。请确保实际图片分辨率正确，且是 png 格式。矢量图标文件与 png 非矢量格式二选一，如果同时存在，优先使用矢量图标文件。
-    /// 当 <see cref="IconFolder"/> 属性存在值时，本属性设置无效
+    /// 当 <see cref="UOSDebIconFolder"/> 属性存在值时，本属性设置无效
     /// </summary>
     public string? Png16x16IconFile
     {

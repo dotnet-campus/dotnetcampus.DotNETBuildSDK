@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Packaging.DebUOS.Contexts;
 using Packaging.DebUOS.Contexts.Configurations;
+using Walterlv.IO.PackageManagement;
 
 namespace Packaging.DebUOS;
 
@@ -159,9 +160,22 @@ public class DebUOSPackageFileStructCreator
         }
 
         // opt\apps\AppId\entries\icons
-        if (File.Exists(configuration.SvgIconFile))
+        var iconsFolder = Path.Join(entriesFolder, "icons");
+        if (!string.IsNullOrEmpty(configuration.UOSDebIconFolder))
         {
-            var svgFile = Path.Join(entriesFolder, "icons", "hicolor", "scalable", "apps", $"{appId}.svg");
+            // 如果开发者配置了自定义的图标文件夹，则使用开发者的文件夹
+            if (!Directory.Exists(configuration.UOSDebIconFolder))
+            {
+                Logger.LogError($"配置了 Icon 文件夹的 UOSDebIconFolder 属性，但文件夹不存在 UOSDebIconFolder={configuration.UOSDebIconFolder} FullPath={Path.GetFullPath(configuration.UOSDebIconFolder)}");
+                return;
+            }
+
+            PackageDirectory.Copy(configuration.UOSDebIconFolder, iconsFolder);
+        }
+        else if (File.Exists(configuration.SvgIconFile))
+        {
+            // 如果开发者配置了自定义的矢量图标文件，则优先使用矢量图标
+            var svgFile = Path.Join(iconsFolder, "hicolor", "scalable", "apps", $"{appId}.svg");
             Directory.CreateDirectory(Path.GetDirectoryName(svgFile)!);
             File.Copy(configuration.SvgIconFile, svgFile);
         }
@@ -181,7 +195,7 @@ public class DebUOSPackageFileStructCreator
             {
                 if (File.Exists(iconFile))
                 {
-                    var pngFile = Path.Join(entriesFolder, "icons", "hicolor", resolution, "apps", $"{appId}.png");
+                    var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
                     Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
                     File.Copy(iconFile, pngFile);
 
