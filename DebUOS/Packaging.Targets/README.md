@@ -1,0 +1,1 @@
+Copy From https://github.com/quamotion/dotnet-packaging

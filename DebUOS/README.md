@@ -108,3 +108,22 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
 
 </Project>
 ```
+
+## 开发
+
+### 各项目作用
+
+- Packaging.Targets ： 来源于 [https://github.com/quamotion/dotnet-packaging](https://github.com/quamotion/dotnet-packaging) 项目，用来提供基础的打包功能
+- Packaging.DebUOS ： 打出符合 UOS 规范的 deb 包的核心项目，包括组织文件夹以及使用 Packaging.Targets 创建 deb 包两个功能
+- Packaging.DebUOS.Tool ： 对 Packaging.DebUOS 封装 dotnet tool 命令行工具
+- Packaging.DebUOS.NuGet ： 对 Packaging.DebUOS.Tool 工具进行封装为配合 csproj 的 NuGet 包，且添加大量的和 csproj 属性对接的中间属性
+
+## 参考文档
+
+- [一步步教你在 Windows 上构建 dotnet 系应用的 UOS 软件安装包](https://blog.lindexi.com/post/%E4%B8%80%E6%AD%A5%E6%AD%A5%E6%95%99%E4%BD%A0%E5%9C%A8-Windows-%E4%B8%8A%E6%9E%84%E5%BB%BA-dotnet-%E7%B3%BB%E5%BA%94%E7%94%A8%E7%9A%84-UOS-%E8%BD%AF%E4%BB%B6%E5%AE%89%E8%A3%85%E5%8C%85.html )
+
+- [应用打包规范 文档中心-统信UOS生态社区](https://doc.chinauos.com/content/M7kCi3QB_uwzIp6HyF5J )
+
+## 感谢
+
+- [https://github.com/quamotion/dotnet-packaging](https://github.com/quamotion/dotnet-packaging)
