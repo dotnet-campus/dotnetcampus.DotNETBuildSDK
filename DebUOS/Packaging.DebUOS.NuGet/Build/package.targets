@@ -204,8 +204,8 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
-      <DebUOSPackingWriteArgLine Include="IconFolder" Condition="$(IconFolder)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(IconFolder)"/>
+      <DebUOSPackingWriteArgLine Include="UOSDebIconFolder" Condition="$(UOSDebIconFolder)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSDebIconFolder)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
