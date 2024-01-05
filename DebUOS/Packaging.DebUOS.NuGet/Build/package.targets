@@ -243,12 +243,12 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
-      <DebUOSPackingWriteArgLine Include="Png256x256IconFile" Condition="$(Png128x128IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="Png256x256IconFile" Condition="$(Png256x256IconFile)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(Png256x256IconFile)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
-      <DebUOSPackingWriteArgLine Include="Png512x512IconFile" Condition="$(Png128x128IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="Png512x512IconFile" Condition="$(Png512x512IconFile)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(Png512x512IconFile)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
