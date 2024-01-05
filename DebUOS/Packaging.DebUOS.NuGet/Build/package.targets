@@ -6,6 +6,7 @@
 
   <Target Name="CreateDebUOS" DependsOnTargets="Publish">
     <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
+    <!-- 如果期望默认发布时自动打出 UOS 的 deb 包，可以通过设置 AutoCreateDebUOSAfterPublish 属性为 true 的值，依靠 AutoCreateDebUOS 触发打包 -->
     <PropertyGroup>
       <!-- 工作路径 -->
       <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
