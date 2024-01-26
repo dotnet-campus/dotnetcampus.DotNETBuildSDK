@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <!-- 作为引用库使用，不能打包 -->
+    <IsPackable>false</IsPackable>
+    <!-- 嵌入源代码到符号文件，方便调试 -->
+    <EmbedAllSources>true</EmbedAllSources>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- BoncyCastle and SharpZipLib are included in the lib\ folder in the Packaging.Targets package (see below), so we don't need an
+         explicit dependency on them, either -->
+    <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.1" />
+    <PackageReference Include="dotnetCampus.Configurations" Version="1.6.11" />
+
+    <PackageReference Include="dotnetCampus.MSBuildUtils.Source" Version="1.1.1-alpha01">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+
+    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="8.0.0" />
+
+    <PackageReference Include="Walterlv.IO.PackageManagement" Version="7.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Packaging.Targets\Packaging.Targets.csproj" />
+  </ItemGroup>
+</Project>

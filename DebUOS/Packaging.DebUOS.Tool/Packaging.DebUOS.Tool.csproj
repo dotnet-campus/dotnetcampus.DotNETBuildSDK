@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup>
+    <!-- <BuildOutputTargetFolder>tools</BuildOutputTargetFolder> -->
+    <!-- Suppress warning about lib being empty -->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <!-- <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder> -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <!-- 嵌入源代码到符号文件，方便调试 -->
+    <EmbedAllSources>true</EmbedAllSources>
+    <PackAsTool>True</PackAsTool>
+    <ToolCommandName>dotnet-dpkg-debuos</ToolCommandName>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Packaging.DebUOS\Packaging.DebUOS.csproj">
+      <!-- 防止 nuget 引用 -->
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <!-- <BuildOutputTargetFolder>tools</BuildOutputTargetFolder> -->
+    <!-- Suppress warning about lib being empty -->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- <IncludeSymbols>true</IncludeSymbols> -->
+    <!-- <SymbolPackageFormat>snupkg</SymbolPackageFormat> -->
+    <!-- <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder> -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <PackageId>Packaging.DebUOS</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Packaging.DebUOS.Tool\Packaging.DebUOS.Tool.csproj" ReferenceOutputAssembly="false">
+      <!-- 防止 nuget 引用 -->
+      <PrivateAssets>all</PrivateAssets>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Build\package.targets" Pack="True" PackagePath="\build\$(PackageId).targets" />
+    <None Include="Build\package.props" Pack="True" PackagePath="\build\$(PackageId).props" />
+
+    <!-- 不能引用自身，因为自身是 DLL 而不是 EXE 输出，将不会带上依赖 -->
+    <None Include="..\Packaging.DebUOS.Tool\bin\$(Configuration)\$(TargetFramework)\**\*" Pack="True" Exclude="..\Packaging.DebUOS.Tool\bin\$(Configuration)\$(TargetFramework)\publish\**\*" PackagePath="\tools\" />
+  </ItemGroup>
+
+</Project>

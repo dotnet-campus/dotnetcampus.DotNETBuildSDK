@@ -1,0 +1,260 @@
+<Project>
+
+  <Target Name="AutoCreateDebUOS" AfterTargets="Publish" Condition="'$(AutoCreateDebUOSAfterPublish)' == 'true'" DependsOnTargets="CreateDebUOS">
+    <!-- 用来配置属性自动输出打包 -->
+  </Target>
+
+  <Target Name="CreateDebUOS" DependsOnTargets="Publish">
+    <!-- 这里用 DependsOnTargets 原因是不要默认打包，只需要打包命令写 -t:CreateDebUOS 参数 -->
+    <!-- 如果期望默认发布时自动打出 UOS 的 deb 包，可以通过设置 AutoCreateDebUOSAfterPublish 属性为 true 的值，依靠 AutoCreateDebUOS 触发打包 -->
+    <PropertyGroup>
+      <!-- 工作路径 -->
+      <DebUOSPackingWorkFolder>$([MSBuild]::NormalizePath($(IntermediateOutputPath), 'DebUOSPacking'))</DebUOSPackingWorkFolder>
+
+      <!-- 参数文件 -->
+      <DebUOSPackingArgsFile>$([MSBuild]::NormalizePath($(DebUOSPackingWorkFolder), 'DebUOSPackingArgs.coin'))</DebUOSPackingArgsFile>
+
+      <!-- 默认参数 -->
+      <AppName Condition="'$(AppName)' == ''">$(Product)</AppName>
+      <DebControlDescription Condition="'$(DebControlDescription)' == ''">$(Description)</DebControlDescription>
+      <DebControlMaintainer Condition="'$(DebControlMaintainer)' == ''">$(Authors)</DebControlMaintainer>
+      <DebControlMaintainer Condition="'$(DebControlMaintainer)' == ''">$(Author)</DebControlMaintainer>
+      <DebControlMaintainer Condition="'$(DebControlMaintainer)' == ''">$(Company)</DebControlMaintainer>
+      <DebControlMaintainer Condition="'$(DebControlMaintainer)' == ''">$(Publisher)</DebControlMaintainer>
+      <DebControlHomepage Condition="'$(DebControlHomepage)' == ''">$(PackageProjectUrl)</DebControlHomepage>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- COIN 格式的配置文件 https://github.com/dotnet-campus/dotnetCampus.Configurations -->
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="WorkingFolder"/>
+      <DebUOSPackingWriteArgLine Include="$(DebUOSPackingWorkFolder)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="ProjectPublishFolder"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::NormalizePath($(MSBuildProjectDirectory), $(PublishDir)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 用来作为可执行文件的文件名 -->
+      <DebUOSPackingWriteArgLine Include="AssemblyName"/>
+      <DebUOSPackingWriteArgLine Include="$(AssemblyName)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 打包输出文件路径-->
+      <DebUOSPackingWriteArgLine Include="DebUOSOutputFilePath" Condition="$(DebUOSOutputFilePath)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebUOSOutputFilePath)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlFile" Condition="$(DebControlFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebInfoFile" Condition="$(DebInfoFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebInfoFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebDesktopFile" Condition="$(DebDesktopFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebDesktopFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="AppId" Condition="$(AppId)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(AppId)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="UOSAppId" Condition="$(UOSAppId)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSAppId)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Version" Condition="$(Version)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Version)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="UOSDebVersion" Condition="$(UOSDebVersion)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSDebVersion)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlSection" Condition="$(DebControlSection)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlSection)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlPriority" Condition="$(DebControlPriority)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlPriority)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Architecture" Condition="$(Architecture)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Architecture)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlMultiArch" Condition="$(DebControlMultiArch)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlMultiArch)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlBuildDepends" Condition="$(DebControlBuildDepends)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlBuildDepends)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlStandardsVersion" Condition="$(DebControlStandardsVersion)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlStandardsVersion)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlMaintainer" Condition="$(DebControlMaintainer)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlMaintainer)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlHomepage" Condition="$(DebControlHomepage)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlHomepage)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlDescription" Condition="$(DebControlDescription)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebControlDescription)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="AppName" Condition="$(AppName)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(AppName)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="InfoPermissions" Condition="$(InfoPermissions)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(InfoPermissions)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="AppNameZhCN" Condition="$(AppNameZhCN)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(AppNameZhCN)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopCategories" Condition="$(DesktopCategories)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopCategories)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopKeywords" Condition="$(DesktopKeywords)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopKeywords)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopKeywordsZhCN" Condition="$(DesktopKeywordsZhCN)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopKeywordsZhCN)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopComment" Condition="$(DesktopComment)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopComment)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopCommentZhCN" Condition="$(DesktopCommentZhCN)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopCommentZhCN)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopExec" Condition="$(DesktopExec)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopExec)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopIcon" Condition="$(DesktopIcon)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopIcon)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopType" Condition="$(DesktopType)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopType)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopTerminal" Condition="$(DesktopTerminal)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopTerminal)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopStartupNotify" Condition="$(DesktopStartupNotify)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopStartupNotify)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopMimeType" Condition="$(DesktopMimeType)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DesktopMimeType)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="PackingFolder" Condition="$(PackingFolder)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(PackingFolder)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="WorkingFolder" Condition="$(WorkingFolder)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(WorkingFolder)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="ProjectPublishFolder" Condition="$(ProjectPublishFolder)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(ProjectPublishFolder)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="UOSDebIconFolder" Condition="$(UOSDebIconFolder)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(UOSDebIconFolder)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="SvgIconFile" Condition="$(SvgIconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(SvgIconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png16x16IconFile" Condition="$(Png16x16IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png16x16IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png24x24IconFile" Condition="$(Png24x24IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png24x24IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png32x32IconFile" Condition="$(Png32x32IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png32x32IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png48x48IconFile" Condition="$(Png48x48IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png48x48IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png128x128IconFile" Condition="$(Png128x128IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png128x128IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png256x256IconFile" Condition="$(Png256x256IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png256x256IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="Png512x512IconFile" Condition="$(Png512x512IconFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(Png512x512IconFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+    </ItemGroup>
+    <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
+    <Exec Command="dotnet &quot;$(MSBuildThisFileDirectory)..\tools\Packaging.DebUOS.Tool.dll&quot; -p $(DebUOSPackingArgsFile)" />
+  </Target>
+</Project>
