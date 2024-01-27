@@ -50,7 +50,7 @@ public class DebUOSConfiguration : Configuration
     public string? AppId
     {
         set => SetValue(value);
-        get => GetString() ?? AssemblyName;
+        get => GetString() ?? AssemblyName?.ToLowerInvariant();
     }
 
     /// <summary>
