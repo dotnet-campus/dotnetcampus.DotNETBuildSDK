@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Packaging.DebUOS.Contexts;
 using Packaging.DebUOS.Contexts.Configurations;
+using Packaging.DebUOS.Exceptions;
 using Walterlv.IO.PackageManagement;
 
 namespace Packaging.DebUOS;
@@ -28,8 +29,7 @@ public class DebUOSPackageFileStructCreator
         var projectPublishFolder = configuration.ProjectPublishFolder;
         if (!Directory.Exists(projectPublishFolder))
         {
-            Logger.LogError($"Project publish folder '{projectPublishFolder}' not exist");
-            return;
+            throw new PackagingException($"Project publish folder '{projectPublishFolder}' not exist");
         }
 
         var workingFolder = configuration.WorkingFolder;
@@ -60,16 +60,13 @@ public class DebUOSPackageFileStructCreator
         var appId = configuration.UOSAppId;
         if (string.IsNullOrEmpty(appId))
         {
-            Logger.LogError($"找不到 UOS 的 AppId 内容，请确保已经配置 UOSAppId 属性");
-            return;
+            throw new PackagingException($"找不到 UOS 的 AppId 内容，请确保已经配置 UOSAppId 属性");
         }
 
         var match = Regex.Match(appId, @"[a-z\.]+");
         if (!match.Success || match.Value != appId)
         {
-            Logger.LogError(
-                $"UOS 的 AppId 内容不符合规范，请确保配置的 UOSAppId 属性符合规范。请务必使用厂商的倒置域名+产品名作为应用包名，如 `com.example.demo` 格式，且只允许使用小写字母");
-            return;
+            throw new PackagingException($"UOS 的 AppId 内容不符合规范，请确保配置的 UOSAppId 属性符合规范。请务必使用厂商的倒置域名+产品名作为应用包名，如 `com.example.demo` 格式，且只允许使用小写字母。UOSAppId={appId}");
         }
 
         // opt\apps\AppId\
@@ -82,8 +79,7 @@ public class DebUOSPackageFileStructCreator
         var symbol = Directory.CreateSymbolicLink(applicationBin, projectPublishFolder);
         if (!symbol.Exists)
         {
-            Logger.LogError($"创建符号链接失败，从 '{projectPublishFolder}' 到 '{applicationBin}'");
-            return;
+            throw new PackagingException($"创建符号链接失败，从 '{projectPublishFolder}' 到 '{applicationBin}'");
         }
 
         // opt\apps\AppId\entries
@@ -166,8 +162,7 @@ public class DebUOSPackageFileStructCreator
             // 如果开发者配置了自定义的图标文件夹，则使用开发者的文件夹
             if (!Directory.Exists(configuration.UOSDebIconFolder))
             {
-                Logger.LogError($"配置了 Icon 文件夹的 UOSDebIconFolder 属性，但文件夹不存在 UOSDebIconFolder={configuration.UOSDebIconFolder} FullPath={Path.GetFullPath(configuration.UOSDebIconFolder)}");
-                return;
+                throw new PackagingException($"配置了 Icon 文件夹的 UOSDebIconFolder 属性，但文件夹不存在 UOSDebIconFolder={configuration.UOSDebIconFolder} FullPath={Path.GetFullPath(configuration.UOSDebIconFolder)}");
             }
 
             PackageDirectory.Copy(configuration.UOSDebIconFolder, iconsFolder);
