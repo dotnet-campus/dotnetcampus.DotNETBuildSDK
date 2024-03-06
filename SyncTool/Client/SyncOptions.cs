@@ -26,7 +26,14 @@ internal class SyncOptions
     {
         if (string.IsNullOrEmpty(Address))
         {
-            Console.WriteLine($"找不到同步地址，请确保传入 Address 参数");
+            Console.WriteLine($@"找不到同步地址，请确保传入正确参数。
+参数列表：
+
+- `-a` 或 `--Address` : 【必填】同步服务的地址，如 http://127.0.0.1:56621
+- `-f` 或 `--Folder` : 【选填】本地同步的文件夹，不填默认为工作路径
+
+参数例子： 
+SyncTool -a http://127.0.0.1:56621 -f lindexi");
             return;
         }
 
