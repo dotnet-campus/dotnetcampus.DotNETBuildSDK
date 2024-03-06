@@ -44,7 +44,10 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             syncFolder = Environment.CurrentDirectory;
         }
 
+        syncFolder = Path.GetFullPath(syncFolder);
         Directory.CreateDirectory(syncFolder);
+
+        Console.WriteLine($"开始执行文件夹同步。同步地址：{Address} 同步文件夹{syncFolder}");
 
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
@@ -142,6 +145,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             await RemoveRedundantFile(remote, version);
 
             Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
             Console.WriteLine("==========");
         }
 
