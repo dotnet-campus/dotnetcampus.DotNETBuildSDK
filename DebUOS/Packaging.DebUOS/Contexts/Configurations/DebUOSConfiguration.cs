@@ -27,6 +27,42 @@ public class DebUOSConfiguration : Configuration
     }
 
     /// <summary>
+    /// 自定义的 DEBIAN\postinst 文件路径，将直接使用该文件作为 postinst 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// </summary>
+    public string? DebPostinstFile
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
+
+    /// <summary>
+    /// 自定义的 DEBIAN\prerm 文件路径，将直接使用该文件作为 prerm 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// </summary>
+    public string? DebPrermFile
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
+
+    /// <summary>
+    /// 自定义的 DEBIAN\postrm 文件路径，将直接使用该文件作为 postrm 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// </summary>
+    public string? DebPostrmFile
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
+
+    /// <summary>
+    /// 自定义的 DEBIAN\preinst 文件路径，将直接使用该文件作为 preinst 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// </summary>
+    public string? DebPreinstFile
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
+
+    /// <summary>
     /// 自定义的 opt\apps\${AppId}\info 文件路径，将直接使用该文件作为 info 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
     /// </summary>
     public string? DebInfoFile
