@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mime;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using dotnetCampus.Cli;
 using Microsoft.AspNetCore.Mvc;
@@ -35,15 +36,32 @@ internal class ServeOptions
             syncFolder = Environment.CurrentDirectory;
         }
 
+        syncFolder = Path.GetFullPath(syncFolder);
+
         var syncFolderManager = new SyncFolderManager();
         syncFolderManager.Run(syncFolder);
 
         var port = Port ?? GetAvailablePort(IPAddress.Any);
 
-        Console.WriteLine($"Listening on: http://0.0.0.0:{port} SyncFolder: {syncFolder}");
+        Console.WriteLine($"Listening on: http://0.0.0.0:{port}");
+        try
+        {
+            foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
+            {
+                foreach (var unicastIpAddressInformation in networkInterface.GetIPProperties().UnicastAddresses)
+                {
+                    Console.WriteLine($"Listening on: http://{unicastIpAddressInformation.Address.ToString()}:{port}");
+                }
+            }
+        }
+        catch
+        {
+            // 忽略异常，只是为了方便开发者了解当前的网络信息，不用每次都去看自己内网地址
+        }
+        Console.WriteLine($"SyncFolder: {syncFolder}");
 
         var builder = WebApplication.CreateBuilder();
-        builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+        builder.WebHost.UseUrls($"http://*:{port}");
 
         builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore"] = "Debug";
         builder.Configuration["Logging:LogLevel:Microsoft.AspNetCore.Routing.EndpointMiddleware"] = "Warning";

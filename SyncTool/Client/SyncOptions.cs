@@ -26,7 +26,14 @@ internal class SyncOptions
     {
         if (string.IsNullOrEmpty(Address))
         {
-            Console.WriteLine($"找不到同步地址，请确保传入 Address 参数");
+            Console.WriteLine($@"找不到同步地址，请确保传入正确参数。
+参数列表：
+
+- `-a` 或 `--Address` : 【必填】同步服务的地址，如 http://127.0.0.1:56621
+- `-f` 或 `--Folder` : 【选填】本地同步的文件夹，不填默认为工作路径
+
+参数例子： 
+SyncTool -a http://127.0.0.1:56621 -f lindexi");
             return;
         }
 
@@ -37,7 +44,10 @@ internal class SyncOptions
             syncFolder = Environment.CurrentDirectory;
         }
 
+        syncFolder = Path.GetFullPath(syncFolder);
         Directory.CreateDirectory(syncFolder);
+
+        Console.WriteLine($"开始执行文件夹同步。同步地址：{Address} 同步文件夹{syncFolder}");
 
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
@@ -135,6 +145,7 @@ internal class SyncOptions
             await RemoveRedundantFile(remote, version);
 
             Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
             Console.WriteLine("==========");
         }
 
