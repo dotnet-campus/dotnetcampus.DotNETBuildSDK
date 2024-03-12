@@ -28,6 +28,10 @@ public class DebUOSConfiguration : Configuration
 
     /// <summary>
     /// 自定义的 DEBIAN\postinst 文件路径，将直接使用该文件作为 postinst 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// <para></para>
+    /// postinst：软件安装时执行的脚本
+    /// <para></para>
+    /// 按照 UOS 的规范，除对本程序根目录文件进行必要的操作修改外，禁止使用deb的postinst等钩子对系统文件进行修改，包含这些脚本的软件包都无法上架
     /// </summary>
     public string? DebPostinstFile
     {
@@ -37,6 +41,10 @@ public class DebUOSConfiguration : Configuration
 
     /// <summary>
     /// 自定义的 DEBIAN\prerm 文件路径，将直接使用该文件作为 prerm 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// <para></para>
+    /// prerm：软件卸载前执行的脚本
+    /// <para></para>
+    /// 按照 UOS 的规范，除对本程序根目录文件进行必要的操作修改外，禁止使用deb的postinst等钩子对系统文件进行修改，包含这些脚本的软件包都无法上架
     /// </summary>
     public string? DebPrermFile
     {
@@ -46,6 +54,10 @@ public class DebUOSConfiguration : Configuration
 
     /// <summary>
     /// 自定义的 DEBIAN\postrm 文件路径，将直接使用该文件作为 postrm 文件，忽略其他配置。这是比较高级的配置，一般不需要使用，可以用来满足更多的定制化需求
+    /// <para></para>
+    /// postrm：软件卸载后执行的脚本
+    /// <para></para>
+    /// 按照 UOS 的规范，除对本程序根目录文件进行必要的操作修改外，禁止使用deb的postinst等钩子对系统文件进行修改，包含这些脚本的软件包都无法上架
     /// </summary>
     public string? DebPostrmFile
     {
