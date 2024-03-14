@@ -85,11 +85,19 @@ public class DebUOSPackageCreator
     {
         var controlTar = new MemoryStream();
         WriteControlEntry(controlTar, "./");
+        foreach (var file in new[] { "control", "preinst", "postinst", "prerm", "postrm" })
+        {
+            var filePath = Path.Combine(packingFolder.FullName, "DEBIAN", file);
+            if (File.Exists(filePath))
+            {
+                var fileText = File.ReadAllText(filePath);
+                var mode = file == "control"
+                    ? LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IRGRP | LinuxFileMode.S_IROTH
+                    : LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IXUSR;
+                WriteControlEntry(controlTar, $"./{file}", fileText, mode);
+            }
+        }
 
-        var controlFile = Path.Combine(packingFolder.FullName, "DEBIAN", "control");
-        var controlFileText = File.ReadAllText(controlFile);
-
-        WriteControlEntry(controlTar, "./control", controlFileText);
         TarFileCreator.WriteTrailer(controlTar);
         controlTar.Seek(0, SeekOrigin.Begin);
 

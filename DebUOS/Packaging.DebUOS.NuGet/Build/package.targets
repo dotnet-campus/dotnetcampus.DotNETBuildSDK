@@ -49,6 +49,26 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebPostinstFile" Condition="$(DebPostinstFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebPostinstFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebPrermFile" Condition="$(DebPrermFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebPrermFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebPostrmFile" Condition="$(DebPostrmFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebPostrmFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebPreinstFile" Condition="$(DebPreinstFile)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(DebPreinstFile)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebInfoFile" Condition="$(DebInfoFile)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(DebInfoFile)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
