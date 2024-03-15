@@ -55,7 +55,7 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
     var workingFolder = new DirectoryInfo(configuration.WorkingFolder!);
 
     var debUosPackageCreator = new DebUOSPackageCreator(logger);
-    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile,workingFolder);
+    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile, workingFolder);
 }
 else
 {
