@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -103,9 +104,9 @@ public class DebUOSPackageFileStructCreator
             // 这里不能使用 AppendLine 方法，保持换行使用 \n 字符
             stringBuilder
                 .Append("[Desktop Entry]\n")
-                .Append($"Categories={configuration.DesktopCategories}\n")
+                .Append($"Categories={string.Join(";", configuration.DesktopCategories.Split('\n'))};\n")
                 .Append($"Name={configuration.AppName}\n")
-                .Append($"Keywords={configuration.DesktopKeywords}\n")
+                .Append($"Keywords={string.Join(";", configuration.DesktopKeywords.Split('\n'))};\n")
                 .Append($"Comment={configuration.DesktopComment}\n")
                 .Append($"Type={configuration.DesktopType}\n")
                 .Append($"Terminal={configuration.DesktopTerminal.ToString().ToLowerInvariant()}\n")
@@ -118,7 +119,7 @@ public class DebUOSPackageFileStructCreator
 
             if (!string.IsNullOrEmpty(configuration.DesktopKeywordsZhCN))
             {
-                stringBuilder.Append($"Keywords[zh_CN]={configuration.DesktopKeywordsZhCN}\n");
+                stringBuilder.Append($"Keywords[zh_CN]={string.Join(";", configuration.DesktopKeywordsZhCN.Split('\n'))};\n");
             }
 
             if (!string.IsNullOrEmpty(configuration.DesktopCommentZhCN))
@@ -149,7 +150,7 @@ public class DebUOSPackageFileStructCreator
 
             if (!string.IsNullOrEmpty(configuration.DesktopMimeType))
             {
-                stringBuilder.Append($"MimeType={configuration.DesktopMimeType}\n");
+                stringBuilder.Append($"MimeType={string.Join(";", configuration.DesktopMimeType.Split('\n'))};\n");
             }
 
             File.WriteAllText(desktopFile, stringBuilder.ToString(), encoding);
@@ -222,7 +223,7 @@ public class DebUOSPackageFileStructCreator
                 Architecture = configuration.Architecture.Split(';')
             };
 
-            var permissions = infoPermissions?.Split(';');
+            var permissions = infoPermissions?.Split('\n');
             if (permissions != null && permissions.Length > 0)
             {
                 var applicationInfoPermissions = new ApplicationInfoPermissions();
