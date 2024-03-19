@@ -103,9 +103,9 @@ public class DebUOSPackageFileStructCreator
             // 这里不能使用 AppendLine 方法，保持换行使用 \n 字符
             stringBuilder
                 .Append("[Desktop Entry]\n")
-                .Append($"Categories={configuration.DesktopCategories}\n")
+                .Append($"Categories={configuration.DesktopCategories.TrimEnd(',')};\n")
                 .Append($"Name={configuration.AppName}\n")
-                .Append($"Keywords={configuration.DesktopKeywords}\n")
+                .Append($"Keywords={configuration.DesktopKeywords.TrimEnd(',')};\n")
                 .Append($"Comment={configuration.DesktopComment}\n")
                 .Append($"Type={configuration.DesktopType}\n")
                 .Append($"Terminal={configuration.DesktopTerminal.ToString().ToLowerInvariant()}\n")
@@ -118,7 +118,7 @@ public class DebUOSPackageFileStructCreator
 
             if (!string.IsNullOrEmpty(configuration.DesktopKeywordsZhCN))
             {
-                stringBuilder.Append($"Keywords[zh_CN]={configuration.DesktopKeywordsZhCN}\n");
+                stringBuilder.Append($"Keywords[zh_CN]={configuration.DesktopKeywordsZhCN.TrimEnd(';')};\n");
             }
 
             if (!string.IsNullOrEmpty(configuration.DesktopCommentZhCN))
@@ -149,7 +149,7 @@ public class DebUOSPackageFileStructCreator
 
             if (!string.IsNullOrEmpty(configuration.DesktopMimeType))
             {
-                stringBuilder.Append($"MimeType={configuration.DesktopMimeType}\n");
+                stringBuilder.Append($"MimeType={configuration.DesktopMimeType.TrimEnd(';')};\n");
             }
 
             File.WriteAllText(desktopFile, stringBuilder.ToString(), encoding);
