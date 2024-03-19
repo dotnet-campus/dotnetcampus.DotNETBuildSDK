@@ -1,0 +1,13 @@
+{
+  "solution": 
+  {
+    "path": "..\\DotNETBuild.sln",
+    "projects": 
+    [
+      "DebUOS\\Packaging.DebUOS.NuGet\\Packaging.DebUOS.NuGet.csproj",
+      "DebUOS\\Packaging.DebUOS.Tool\\Packaging.DebUOS.Tool.csproj",
+      "DebUOS\\Packaging.DebUOS\\Packaging.DebUOS.csproj",
+      "DebUOS\\Packaging.Targets\\Packaging.Targets.csproj"
+    ]
+  }
+}
