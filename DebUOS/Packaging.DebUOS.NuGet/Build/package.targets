@@ -100,7 +100,7 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlSection" Condition="$(DebControlSection)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlSection)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlSection)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -110,17 +110,17 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="Architecture" Condition="$(Architecture)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(Architecture)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(Architecture)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlMultiArch" Condition="$(DebControlMultiArch)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlMultiArch)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlMultiArch)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlBuildDepends" Condition="$(DebControlBuildDepends)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlBuildDepends)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlBuildDepends)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -130,17 +130,17 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlMaintainer" Condition="$(DebControlMaintainer)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlMaintainer)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlMaintainer)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlHomepage" Condition="$(DebControlHomepage)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlHomepage)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlHomepage)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DebControlDescription" Condition="$(DebControlDescription)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DebControlDescription)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlDescription)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -150,7 +150,7 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="InfoPermissions" Condition="$(InfoPermissions)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(InfoPermissions)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(InfoPermissions)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -160,27 +160,27 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopCategories" Condition="$(DesktopCategories)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopCategories)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopCategories)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopKeywords" Condition="$(DesktopKeywords)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopKeywords)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopKeywords)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopKeywordsZhCN" Condition="$(DesktopKeywordsZhCN)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopKeywordsZhCN)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopKeywordsZhCN)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopComment" Condition="$(DesktopComment)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopComment)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopComment)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopCommentZhCN" Condition="$(DesktopCommentZhCN)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopCommentZhCN)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopCommentZhCN)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -195,7 +195,7 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopType" Condition="$(DesktopType)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopType)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopType)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -210,7 +210,7 @@
 
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopMimeType" Condition="$(DesktopMimeType)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$(DesktopMimeType)"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopMimeType)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
