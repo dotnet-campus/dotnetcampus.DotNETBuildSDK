@@ -24,3 +24,5 @@ jobs:
 
       - name: Run dotnet format
         run: dotnet format
+      - name: Output Diff
+        run: git diff  
