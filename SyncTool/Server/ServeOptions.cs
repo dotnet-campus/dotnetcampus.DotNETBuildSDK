@@ -112,7 +112,7 @@ internal class ServeOptions
         using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         socket.Bind(new IPEndPoint(ip, 0));
         socket.Listen(1);
-        var ipEndPoint = (IPEndPoint) socket.LocalEndPoint!;
+        var ipEndPoint = (IPEndPoint)socket.LocalEndPoint!;
         var port = ipEndPoint.Port;
         return port;
     }

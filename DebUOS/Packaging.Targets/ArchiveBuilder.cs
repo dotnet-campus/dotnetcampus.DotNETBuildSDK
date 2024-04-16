@@ -279,11 +279,11 @@ namespace Packaging.Targets
                 //using (var hasher = IncrementalHash.CreateHash(HashAlgorithmName.SHA256))
                 //using (var md5hasher = IncrementalHash.CreateHash(HashAlgorithmName.MD5))
                 //{
-                    int read;
+                int read;
 
                 //    while (true)
                 //    {
-                        read = fileStream.Read(buffer, 0, buffer.Length);
+                read = fileStream.Read(buffer, 0, buffer.Length);
 
                 if (fileHeader == null)
                 {
