@@ -284,6 +284,15 @@ public class DebUOSConfiguration : Configuration
     }
 
     /// <summary>
+    /// 配置放入到 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件的 NoDisplay 属性，如果设置为 true 则表示当前的应用不放在开始菜单里面，即在开始菜单隐藏应用。一般用于一些不想让用户直接碰到的，直接运行的应用
+    /// </summary>
+    public bool? DesktopNoDisplay
+    {
+        set => SetValue(value);
+        get => GetBoolean();
+    }
+
+    /// <summary>
     /// 配置放入到 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件的 Exec 属性，作为程序的启动命令，可不填，且推荐不填，除非有特殊需求。默认为 /opt/apps/${AppId}/files/bin/${AssemblyName} 的值
     /// </summary>
     public string? DesktopExec
