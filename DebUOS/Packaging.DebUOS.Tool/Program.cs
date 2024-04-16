@@ -26,7 +26,7 @@ var logger = loggerFactory.CreateLogger("");
 if (!string.IsNullOrEmpty(options.BuildPath))
 {
     var packingFolder = new DirectoryInfo(options.BuildPath);
-    var outputPath = options.OutputPath ?? Path.Join(packingFolder.FullName,$"{packingFolder.Name}.deb");
+    var outputPath = options.OutputPath ?? Path.Join(packingFolder.FullName, $"{packingFolder.Name}.deb");
     var outputDebFile = new FileInfo(outputPath);
 
     var debUosPackageCreator = new DebUOSPackageCreator(logger);

@@ -123,7 +123,7 @@ public class DebUOSPackageCreator
         {
             FileMode = mode,
             FileName = name,
-            FileSize = (uint) s.Length,
+            FileSize = (uint)s.Length,
             GroupName = "root",
             UserName = "root",
             LastModified = DateTimeOffset.UtcNow,
