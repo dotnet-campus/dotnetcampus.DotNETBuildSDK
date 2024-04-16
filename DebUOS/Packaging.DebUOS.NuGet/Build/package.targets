@@ -184,6 +184,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DesktopNoDisplay" Condition="$(DesktopNoDisplay)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DesktopNoDisplay)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="DesktopExec" Condition="$(DesktopExec)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(DesktopExec)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
