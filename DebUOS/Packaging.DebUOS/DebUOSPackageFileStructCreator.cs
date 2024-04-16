@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
@@ -108,7 +109,7 @@ public class DebUOSPackageFileStructCreator
                 .Append($"Keywords={configuration.DesktopKeywords.TrimEnd(',')};\n")
                 .Append($"Comment={configuration.DesktopComment}\n")
                 .Append($"Type={configuration.DesktopType}\n")
-                .Append($"Terminal={configuration.DesktopTerminal.ToString().ToLowerInvariant()}\n")
+                .Append($"Terminal={configuration.DesktopTerminal.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}\n")
                 .Append($"StartupNotify={configuration.DesktopStartupNotify.ToString().ToLowerInvariant()}\n");
 
             if (!string.IsNullOrEmpty(configuration.AppNameZhCN))
@@ -124,6 +125,11 @@ public class DebUOSPackageFileStructCreator
             if (!string.IsNullOrEmpty(configuration.DesktopCommentZhCN))
             {
                 stringBuilder.Append($"Comment[zh_CN]={configuration.DesktopCommentZhCN}\n");
+            }
+
+            if (configuration.DesktopNoDisplay is not null)
+            {
+                stringBuilder.Append($"NoDisplay={configuration.DesktopNoDisplay.Value.ToString(CultureInfo.InvariantCulture).ToLowerInvariant()}\n");
             }
 
             if (!string.IsNullOrEmpty(configuration.DesktopExec))
