@@ -194,13 +194,20 @@ public class DebUOSPackageFileStructCreator
                          (configuration.Png512x512IconFile, "512x512"),
                      })
             {
-                if (File.Exists(iconFile))
+                if (!string.IsNullOrEmpty(iconFile))
                 {
-                    var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
-                    Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
-                    File.Copy(iconFile, pngFile);
+                    if (File.Exists(iconFile))
+                    {
+                        var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
+                        Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
+                        File.Copy(iconFile, pngFile);
 
-                    anyIconFileExist = true;
+                        anyIconFileExist = true;
+                    }
+                    else
+                    {
+                        Logger.LogWarning($"配置了 {resolution} 的图标文件路径，但是找不到图标文件 图标文件={iconFile}");
+                    }
                 }
             }
 
