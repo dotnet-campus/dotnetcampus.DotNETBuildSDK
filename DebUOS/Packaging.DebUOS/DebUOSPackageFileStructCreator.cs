@@ -1,12 +1,16 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+
 using Microsoft.Extensions.Logging;
+
 using Packaging.DebUOS.Contexts;
 using Packaging.DebUOS.Contexts.Configurations;
 using Packaging.DebUOS.Exceptions;
+
 using Walterlv.IO.PackageManagement;
 
 namespace Packaging.DebUOS;
@@ -52,7 +56,14 @@ public class DebUOSPackageFileStructCreator
         // 删除旧的文件夹，防止打包使用到旧文件
         if (Directory.Exists(packingFolder))
         {
-            Directory.Delete(packingFolder, true);
+            if (OperatingSystem.IsWindows())
+            {
+                PackageDirectory.Delete(packingFolder);
+            }
+            else
+            {
+                Directory.Delete(packingFolder, true);
+            }
         }
 
         Directory.CreateDirectory(packingFolder);
@@ -76,11 +87,9 @@ public class DebUOSPackageFileStructCreator
         var filesFolder = Path.Join(appIdFolder, "files");
         Directory.CreateDirectory(filesFolder);
         var applicationBin = Path.Join(filesFolder, "bin");
-        // 符号比拷贝速度快
-        var symbol = Directory.CreateSymbolicLink(applicationBin, projectPublishFolder);
-        if (!symbol.Exists)
+        if (!FolderUtils.CreateSymbolLinkOrCopyFolder(projectPublishFolder, applicationBin))
         {
-            throw new PackagingException($"创建符号链接失败，从 '{projectPublishFolder}' 到 '{applicationBin}'");
+            throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationBin}' 失败");
         }
 
         // opt\apps\AppId\entries
@@ -194,13 +203,20 @@ public class DebUOSPackageFileStructCreator
                          (configuration.Png512x512IconFile, "512x512"),
                      })
             {
-                if (File.Exists(iconFile))
+                if (!string.IsNullOrEmpty(iconFile))
                 {
-                    var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
-                    Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
-                    File.Copy(iconFile, pngFile);
+                    if (File.Exists(iconFile))
+                    {
+                        var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
+                        Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
+                        File.Copy(iconFile, pngFile);
 
-                    anyIconFileExist = true;
+                        anyIconFileExist = true;
+                    }
+                    else
+                    {
+                        Logger.LogWarning($"配置了 {resolution} 的图标文件路径，但是找不到图标文件 图标文件={iconFile} 图标文件绝对路径={Path.GetFullPath(iconFile)}");
+                    }
                 }
             }
 
@@ -338,6 +354,56 @@ public class DebUOSPackageFileStructCreator
         {
             var preinstFile = Path.Join(packingFolder, "DEBIAN", "preinst");
             File.Copy(configuration.DebPreinstFile, preinstFile);
+        }
+    }
+
+    static class FolderUtils
+    {
+        public static bool CreateSymbolLinkOrCopyFolder(string sourceFolder, string destinationFolder)
+        {
+            try
+            {
+                try
+                {
+                    if (OperatingSystem.IsWindows())
+                    {
+                        // 在 Win 下可以创建 JunctionPoint 联接试试
+                        // 这是不需要权限的，比 Directory.CreateSymbolicLink 更好
+                        var ioResult = PackageDirectory.Link(sourceFolder, destinationFolder);
+
+                        if (ioResult)
+                        {
+                            // 创建成功
+                            return true;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // 失败了，继续尝试
+                }
+
+                try
+                {
+                    // 符号比拷贝速度快
+                    var symbol = Directory.CreateSymbolicLink(destinationFolder, sourceFolder);
+                    if (symbol.Exists)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    // 创建符号失败了，失败了就尝试拷贝一下吧
+                }
+
+                var result = PackageDirectory.Copy(sourceFolder, destinationFolder, true);
+                return result;
+            }
+            catch (Exception e)
+            {
+                throw new PackagingException($"从 '{sourceFolder}' 复制到 '{destinationFolder}' 失败", e);
+            }
         }
     }
 }
