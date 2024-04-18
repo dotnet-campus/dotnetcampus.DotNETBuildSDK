@@ -206,7 +206,7 @@ public class DebUOSPackageFileStructCreator
                     }
                     else
                     {
-                        Logger.LogWarning($"配置了 {resolution} 的图标文件路径，但是找不到图标文件 图标文件={iconFile}");
+                        Logger.LogWarning($"配置了 {resolution} 的图标文件路径，但是找不到图标文件 图标文件={iconFile} 图标文件绝对路径={Path.GetFullPath(iconFile)}");
                     }
                 }
             }
