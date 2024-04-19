@@ -56,14 +56,8 @@ public class DebUOSPackageFileStructCreator
         // 删除旧的文件夹，防止打包使用到旧文件
         if (Directory.Exists(packingFolder))
         {
-            if (OperatingSystem.IsWindows())
-            {
-                PackageDirectory.Delete(packingFolder);
-            }
-            else
-            {
-                Directory.Delete(packingFolder, true);
-            }
+            // 这里不能使用 PackageDirectory.Delete 进行删除文件，因为可能里面建立了符号链接。这将导致错误删除了原本 bin 文件夹下的发布输出的文件
+            Directory.Delete(packingFolder, true);
         }
 
         Directory.CreateDirectory(packingFolder);
@@ -369,7 +363,7 @@ public class DebUOSPackageFileStructCreator
                     {
                         // 在 Win 下可以创建 JunctionPoint 联接试试
                         // 这是不需要权限的，比 Directory.CreateSymbolicLink 更好
-                        var ioResult = PackageDirectory.Link(sourceFolder, destinationFolder);
+                        var ioResult = PackageDirectory.Link(destinationFolder, sourceFolder);
 
                         if (ioResult)
                         {
