@@ -25,21 +25,36 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// </summary>
         public void Sniff()
         {
-            FindNugetFile();
+            if (FileSniffConfiguration.ShouldFindNuGet)
+            {
+                FindNugetFile();
 
-            Logger.LogInformation("寻找 nuget 文件完成");
+                Logger.LogInformation("寻找 nuget 文件完成");
+            }
 
-            var msBuild = new MsBuild(AppConfigurator);
-            msBuild.FindMsBuildFile();
+            if (FileSniffConfiguration.ShouldFindMSBuild)
+            {
+                var msBuild = new MSBuild(AppConfigurator);
+                msBuild.FindMSBuildFile();
 
-            Logger.LogInformation("寻找 msbuild 文件完成");
+                Logger.LogInformation("寻找 msbuild 文件完成");
+            }
 
-            FindCodeDirectory();
+            if (FileSniffConfiguration.ShouldFindCodeDirectory)
+            {
+                FindCodeDirectory();
+            }
 
-            FindSlnFile();
+            if (FileSniffConfiguration.ShouldFindSlnFile)
+            {
+                FindSlnFile();
+            }
 
-            var testHelper = new TestHelper(AppConfigurator);
-            testHelper.GetVsTest();
+            if (FileSniffConfiguration.ShouldFindVsTest)
+            {
+                var testHelper = new TestHelper(AppConfigurator);
+                testHelper.GetVsTest();
+            }
         }
 
         private void FindCodeDirectory()
@@ -216,5 +231,43 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// 构建的配置
         /// </summary>
         public CompileConfiguration CompileConfiguration => AppConfigurator.Of<CompileConfiguration>();
+
+        private FileSniffConfiguration FileSniffConfiguration => AppConfigurator.Of<FileSniffConfiguration>();
+    }
+
+    public class FileSniffConfiguration : Configuration
+    {
+        /// <summary>
+        /// 是否应该寻在 NuGet.exe 所在的文件，将可能导致下载 nuget.exe 可执行文件
+        /// </summary>
+        public bool ShouldFindNuGet
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? true;
+        }
+
+        public bool ShouldFindMSBuild
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? true;
+        }
+
+        public bool ShouldFindCodeDirectory
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? true;
+        }
+
+        public bool ShouldFindSlnFile
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? true;
+        }
+
+        public bool ShouldFindVsTest
+        {
+            set => SetValue(value);
+            get => GetBoolean() ?? true;
+        }
     }
 }
