@@ -29,7 +29,7 @@ namespace dotnetCampus.DotNETBuild.Utils
             string? displaySenderName = null,
             IEnumerable<FileInfo>? attachmentFileList = null)
         {
-            EmailHelper.SendEmail(AppConfigurator.Of<EmailConfiguration>(),toList, subject, body, displaySenderName, attachmentFileList);
+            EmailHelper.SendEmail(AppConfigurator.Of<EmailConfiguration>(), toList, subject, body, displaySenderName, attachmentFileList);
         }
     }
 }
