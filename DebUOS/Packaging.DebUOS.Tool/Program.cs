@@ -53,9 +53,11 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
     var packingFolder = new DirectoryInfo(configuration.PackingFolder!);
     var outputDebFile = new FileInfo(configuration.DebUOSOutputFilePath!);
     var workingFolder = new DirectoryInfo(configuration.WorkingFolder!);
+    var excludePackingDebFileExtensionsPredicate = configuration.ToExcludePackingDebFileExtensionsPredicate();
 
     var debUosPackageCreator = new DebUOSPackageCreator(logger);
-    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile, workingFolder);
+    debUosPackageCreator.PackageDeb(packingFolder, outputDebFile, workingFolder,
+        optFileCanIncludePredicate: entry => /*取反，因为配置是不包括*/  !excludePackingDebFileExtensionsPredicate(entry));
 }
 else
 {

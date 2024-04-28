@@ -278,6 +278,11 @@
       <DebUOSPackingWriteArgLine Include="$(Png512x512IconFile)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="ExcludePackingDebFileExtensions" Condition="$(ExcludePackingDebFileExtensions)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(ExcludePackingDebFileExtensions)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
     </ItemGroup>
     <WriteLinesToFile File="$(DebUOSPackingArgsFile)" Lines="@(DebUOSPackingWriteArgLine)" Overwrite="True" />
     <Exec Command="dotnet &quot;$(MSBuildThisFileDirectory)..\tools\Packaging.DebUOS.Tool.dll&quot; -p $(DebUOSPackingArgsFile)" />
