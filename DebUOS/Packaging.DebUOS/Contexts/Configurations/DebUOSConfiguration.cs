@@ -522,4 +522,19 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+
+    #region 打包控制相关
+
+    /// <summary>
+    /// 打包时应该有哪些后缀被排除，默认包括 .pdb .dbg .md 文件
+    /// 如果有其他特殊规则，请自行编写 Target 在 CreateDebUOS 之前删除掉
+    /// </summary>
+    /// <example>.pdb;.dbg;.md</example>
+    public string? ExcludePackingDebFileExtensions
+    {
+        set => SetValue(value);
+        get => GetString() ?? ".pdb;.dbg;.md";
+    }
+
+    #endregion
 }

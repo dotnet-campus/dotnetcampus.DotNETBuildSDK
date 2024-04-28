@@ -29,6 +29,11 @@ public class DebUOSPackageFileStructCreator
 
     public ILogger Logger { get; }
 
+    /// <summary>
+    /// 创建符合 UOS 安装包制作规范的打包文件夹，后续此文件夹完全支持 dpkg 工具直接打包
+    /// </summary>
+    /// <param name="configuration"></param>
+    /// <exception cref="PackagingException"></exception>
     public void CreatePackagingFolder(DebUOSConfiguration configuration)
     {
         var projectPublishFolder = configuration.ProjectPublishFolder;
@@ -56,12 +61,17 @@ public class DebUOSPackageFileStructCreator
         // 删除旧的文件夹，防止打包使用到旧文件
         if (Directory.Exists(packingFolder))
         {
-            // 这里不能使用 PackageDirectory.Delete 进行删除文件，因为可能里面建立了符号链接。这将导致错误删除了原本 bin 文件夹下的发布输出的文件
-            Directory.Delete(packingFolder, true);
+            PackageDirectory.Delete(packingFolder);
         }
 
         Directory.CreateDirectory(packingFolder);
         configuration.PackingFolder = packingFolder;
+
+        if (File.Exists(configuration.DebUOSOutputFilePath))
+        {
+            // 如果存在输出文件，则先删除，防止后续又将其加入压缩文件
+            File.Delete(configuration.DebUOSOutputFilePath);
+        }
 
         var appId = configuration.UOSAppId;
         if (string.IsNullOrEmpty(appId))

@@ -198,13 +198,15 @@ namespace Packaging.Targets
         /// <param name="metadata">
         /// Additional metadata to use.
         /// </param>
+        /// <param name="fileCanIncludePredicate">文件是否能够被包含，为空则全部包含</param>
         /// <returns>
         /// A list of <see cref="ArchiveEntry"/> objects representing the data in the directory.
         /// </returns>
-        public List<ArchiveEntry> FromDirectory(string directory, string? appHost, string prefix/*, ITaskItem[] metadata*/)
+#nullable enable
+        public List<ArchiveEntry> FromDirectory(string directory, string? appHost, string prefix/*, ITaskItem[] metadata*/, Predicate<string>? fileCanIncludePredicate)
         {
             List<ArchiveEntry> value = new List<ArchiveEntry>();
-            this.AddDirectory(directory, string.Empty, prefix, value/*, metadata*/);
+            this.AddDirectory(directory, string.Empty, prefix, value/*, metadata*/, fileCanIncludePredicate);
 
             // Add a symlink to appHost, if available
             if (appHost != null)
@@ -226,7 +228,7 @@ namespace Packaging.Targets
             return value;
         }
 
-        protected void AddDirectory(string directory, string relativePath, string prefix, List<ArchiveEntry> value/*, ITaskItem[] metadata*/)
+        protected void AddDirectory(string directory, string relativePath, string prefix, List<ArchiveEntry> value/*, ITaskItem[] metadata*/, Predicate<string>? fileCanIncludePredicate)
         {
             this._inode++;
 
@@ -239,11 +241,17 @@ namespace Packaging.Targets
             {
                 if (File.Exists(entry))
                 {
+                    if (fileCanIncludePredicate is not null && !fileCanIncludePredicate(entry))
+                    {
+                        // 如果不能被包含的，则忽略
+                        continue;
+                    }
+
                     this.AddFile(entry, relativePath + Path.GetFileName(entry), prefix, value/*, metadata*/);
                 }
                 else
                 {
-                    this.AddDirectory(entry, relativePath + Path.GetFileName(entry) + "/", prefix + "/" + Path.GetFileName(entry), value/*, metadata*/);
+                    this.AddDirectory(entry, relativePath + Path.GetFileName(entry) + "/", prefix + "/" + Path.GetFileName(entry), value/*, metadata*/, fileCanIncludePredicate);
                 }
             }
         }

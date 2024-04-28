@@ -26,7 +26,8 @@ public class DebUOSPackageCreator
 
     public ILogger Logger { get; }
 
-    public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null)
+    public void PackageDeb(DirectoryInfo packingFolder, FileInfo outputDebFile, DirectoryInfo? workingFolder = null,
+        Predicate<string>? optFileCanIncludePredicate = null)
     {
         Logger.LogInformation($"开始打包。Start packaging UOS deb from '{packingFolder.FullName}' to '{outputDebFile.FullName}'");
 
@@ -38,10 +39,11 @@ public class DebUOSPackageCreator
 
         var optFolder = Path.Combine(packingFolder.FullName, "opt");
 
+        // 压缩文件夹里面的文件
         var archiveEntries = archiveBuilder.FromDirectory(
             optFolder,
             null,
-            "/opt");
+            "/opt", optFileCanIncludePredicate);
 
         EnsureDirectories(archiveEntries);
 
