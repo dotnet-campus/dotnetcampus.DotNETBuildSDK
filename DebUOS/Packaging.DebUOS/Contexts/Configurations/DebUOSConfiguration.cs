@@ -162,13 +162,28 @@ public class DebUOSConfiguration : Configuration
     }
 
     /// <summary>
-    /// 配置放入到 DEBIAN\control 文件的 Architecture 属性，以及 opt\apps\${AppId}\info 文件的 arch 属性。可以选用 amd64, i386, arm64, armel, armhf, mips, mips64el, mipsel, ppc64el, s390x, 或者 all 等等，代表着该软件包在 Debian 仓库中的架构，amd64 代表着 64 位的 x86 架构，i386 代表着 32 位的 x86 架构，arm64 代表着 64 位的 ARM 架构，armel 代表着 32 位的 ARM 架构，armhf 代表着 32 位的 ARM 架构，mips 代表着 32 位的 MIPS 架构，mips64el 代表着 64 位的 MIPS 架构，mipsel 代表着 32 位的 MIPS 架构，ppc64el 代表着 64 位的 PowerPC 架构，s390x 代表着 64 位的 IBM S/390 架构，all 代表着所有架构。目前商店支持以下的 amd64, mips64el, arm64, sw_64, loongarch64 几种架构。默认是 amd64 类型
+    /// 配置放入到 DEBIAN\control 文件的 Architecture 属性，以及 opt\apps\${AppId}\info 文件的 arch 属性。可以选用 amd64, i386, arm64, armel, armhf, mips, mips64el, mipsel, ppc64el, s390x, 或者 all 等等，代表着该软件包在 Debian 仓库中的架构，amd64 代表着 64 位的 x86 架构，i386 代表着 32 位的 x86 架构，arm64 代表着 64 位的 ARM 架构，armel 代表着 32 位的 ARM 架构，armhf 代表着 32 位的 ARM 架构，mips 代表着 32 位的 MIPS 架构，mips64el 代表着 64 位的 MIPS 架构，mipsel 代表着 32 位的 MIPS 架构，ppc64el 代表着 64 位的 PowerPC 架构，s390x 代表着 64 位的 IBM S/390 架构，all 代表着所有架构。目前商店支持以下的 amd64, mips64el, arm64, sw_64, loongarch64 几种架构。默认将根据 <see cref="RuntimeIdentifier"/> 属性决定是 amd64 、arm64类型
     /// </summary>
     /// <example>amd64</example>
     public string Architecture
     {
         set => SetValue(value);
-        get => GetString() ?? "amd64";
+        get
+        {
+            var architecture = GetString();
+            if (architecture == null)
+            {
+                if (RuntimeIdentifier == "linux-x64")
+                {
+                    architecture = "amd64";
+                }
+                else if (RuntimeIdentifier == "linux-arm64")
+                {
+                    architecture = "arm64";
+                }
+            }
+            return architecture ?? "amd64";
+        }
     }
 
     /// <summary>
@@ -438,6 +453,15 @@ public class DebUOSConfiguration : Configuration
 
             return outputFilePath;
         }
+    }
+
+    /// <summary>
+    /// 表示当前的构建平台信息，一般从 dotnet publish 命令的 -r 参数里读取。无需手动配置
+    /// </summary>
+    public string? RuntimeIdentifier
+    {
+        set => SetValue(value);
+        get => GetString();
     }
 
     /// <summary>
