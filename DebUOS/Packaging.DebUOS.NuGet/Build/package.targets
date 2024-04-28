@@ -13,7 +13,7 @@
 
       <!-- 参数文件 -->
       <DebUOSPackingArgsFile>$([MSBuild]::NormalizePath($(DebUOSPackingWorkFolder), 'DebUOSPackingArgs.coin'))</DebUOSPackingArgsFile>
-
+      
       <!-- 默认参数 -->
       <AppName Condition="'$(AppName)' == ''">$(Product)</AppName>
       <DebControlDescription Condition="'$(DebControlDescription)' == ''">$(Description)</DebControlDescription>
@@ -41,6 +41,12 @@
       <!-- 打包输出文件路径-->
       <DebUOSPackingWriteArgLine Include="DebUOSOutputFilePath" Condition="$(DebUOSOutputFilePath)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(DebUOSOutputFilePath)"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <!-- 获取平台，如 linux-x64 平台 -->
+      <DebUOSPackingWriteArgLine Include="RuntimeIdentifier" Condition="$(RuntimeIdentifier)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$(RuntimeIdentifier)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
