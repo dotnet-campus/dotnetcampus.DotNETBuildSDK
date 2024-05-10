@@ -2,7 +2,9 @@
 using System.Configuration.Assemblies;
 using System.Net;
 using System.Reflection;
+
 using dotnetCampus.Cli;
+
 using SyncTool.Configurations;
 using SyncTool.Context;
 using SyncTool.Server;
@@ -42,7 +44,7 @@ internal class SyncOptions
 SyncTool -a http://127.0.0.1:56621 -f lindexi");
             return;
         }
-        
+
         var syncFolder = SyncFolder;
         if (string.IsNullOrEmpty(syncFolder))
         {
@@ -55,7 +57,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
 
         Console.WriteLine($"开始执行文件夹同步。同步地址：{Address} 同步文件夹{syncFolder}");
 
-        using var httpClient = new HttpClient();
+        var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
         // 客户端允许等着服务端慢慢返回，不要不断发送请求
         httpClient.Timeout = ServerConfiguration.MaxFreeTime;
@@ -71,7 +73,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             try
             {
                 var queryFileStatusRequest = new QueryFileStatusRequest(clientName, currentVersion, isFirstQuery);
-                var httpResponseMessage = await httpClient.PostAsJsonAsync("/", queryFileStatusRequest);
+                using var httpResponseMessage = await httpClient.PostAsJsonAsync("/", queryFileStatusRequest);
                 if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     // 服务端是不是还没开启 是不是开启错版本了
@@ -113,6 +115,8 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                 {
                     syncFileDictionary[syncFileInfo.RelativePath] = syncFileInfo;
                 }
+
+                _ = ReportCompleted(currentVersion);
             }
             catch (HttpRequestException e)
             {
@@ -251,6 +255,19 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             await stream.CopyToAsync(fileStream);
 
             return downloadFilePath;
+        }
+
+        async Task ReportCompleted(ulong version)
+        {
+            try
+            {
+                var syncCompletedRequest = new SyncCompletedRequest(clientName, version);
+                await httpClient.PostAsJsonAsync("/SyncCompleted", syncCompletedRequest);
+            }
+            catch
+            {
+                // 只是报告而已，失败就失败
+            }
         }
     }
 
