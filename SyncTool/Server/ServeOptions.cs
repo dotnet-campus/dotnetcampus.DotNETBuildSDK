@@ -195,7 +195,7 @@ internal class ServeOptions
                     clientInfoList.Remove(clientInfo.ClientName);
                 }
 
-                stringBuilder.AppendLine($"{DateTimeHelper.ToLogMessage(clientInfo.UpdateTime)} {clientInfo.ClientName}: {clientInfo.Version}");
+                stringBuilder.AppendLine($"{DateTimeHelper.ToLogMessage(clientInfo.UpdateTime)} ClientName={clientInfo.ClientName} Version={clientInfo.Version}");
             }
 
             webApplication.Logger.LogInformation(stringBuilder.ToString());
