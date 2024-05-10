@@ -3,12 +3,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-      <PackAsTool>true</PackAsTool>
-      <ToolCommandName>MSBuildTask</ToolCommandName>
-      <AssemblyName>dotnetCampus.MSBuildTask</AssemblyName>
-      <RootNamespace>dotnetCampus.MSBuildTask</RootNamespace>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>MSBuildTask</ToolCommandName>
+    <AssemblyName>dotnetCampus.MSBuildTask</AssemblyName>
+    <RootNamespace>dotnetCampus.MSBuildTask</RootNamespace>
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
-    <ItemGroup>
-        <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DotNETBuild\DotNETBuildSDK.csproj" />
+  </ItemGroup>
 </Project>

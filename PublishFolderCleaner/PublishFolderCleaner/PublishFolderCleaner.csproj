@@ -3,7 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>
+    <!-- 由专门的项目负责打包 -->
     <IsPackable>false</IsPackable>
+
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
 
   <ItemGroup>

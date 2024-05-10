@@ -2,12 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>CreateGitLabMergeRequest</ToolCommandName>
     <AssemblyName>dotnetCampus.GitLabMergeRequestCreator</AssemblyName>
     <RootNamespace>dotnetCampus.GitLabMergeRequestCreator</RootNamespace>
+
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />

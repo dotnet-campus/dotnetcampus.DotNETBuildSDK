@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -8,6 +8,8 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>VerifyMd5Task</ToolCommandName>
     <RootNamespace>dotnetCampus.VerifyMd5Task</RootNamespace>
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\DotNETBuild\Assembly.cs" Link="Assembly.cs" />
