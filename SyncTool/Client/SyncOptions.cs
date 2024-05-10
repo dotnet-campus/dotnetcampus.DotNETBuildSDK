@@ -225,6 +225,10 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                             // 本地存在，远端不存在，删除
                             File.Delete(file);
                             Console.WriteLine($"删除 {relativePath}");
+                            if (!File.Exists(file))
+                            {
+                                break;
+                            }
                         }
                     }
                     catch (Exception e)
