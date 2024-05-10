@@ -1,11 +1,15 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Mime;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+
 using dotnetCampus.Cli;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+
 using SyncTool.Context;
 
 namespace SyncTool.Server;
@@ -77,6 +81,50 @@ internal class ServeOptions
 
         var webApplication = builder.Build();
         webApplication.MapGet("/", () => syncFolderManager.CurrentFolderInfo);
+        webApplication.MapPost("/", async ([FromBody] QueryFileStatusRequest request, [FromServices] ILogger<ServeOptions> logger) =>
+        {
+            var taskCompletionSource = new TaskCompletionSource();
+            syncFolderManager.CurrentFolderInfoChanged += OnCurrentFolderInfoChanged;
+
+            try
+            {
+                // 如果没有更新，则进入等待，不立刻返回客户端
+                if (syncFolderManager.CurrentFolderInfo == null ||
+                    (syncFolderManager.CurrentFolderInfo.Version == request.CurrentVersion && !request.IsFirstQuery))
+                {
+                    // 防止客户端超过时间，设置为一半时间
+                    var mainDelayTask = Task.Delay(ServerConfiguration.MaxFreeTime / 2);
+
+                    while (!mainDelayTask.IsCompleted && !taskCompletionSource.Task.IsCompleted)
+                    {
+                        await Task.WhenAny(mainDelayTask, taskCompletionSource.Task, Task.Delay(TimeSpan.FromSeconds(1)));
+
+                        if (syncFolderManager.CurrentFolderInfo?.Version != request.CurrentVersion)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if (syncFolderManager.CurrentFolderInfo is not null)
+                {
+                    return new QueryFileStatusResponse(syncFolderManager.CurrentFolderInfo);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            finally
+            {
+                syncFolderManager.CurrentFolderInfoChanged -= OnCurrentFolderInfoChanged;
+            }
+
+            void OnCurrentFolderInfoChanged(object? sender, SyncFolderInfo e)
+            {
+                taskCompletionSource.TrySetResult();
+            }
+        });
         webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request, [FromServices] ILogger<ServeOptions> logger) =>
         {
             var currentFolderInfo = syncFolderManager.CurrentFolderInfo;
@@ -112,7 +160,7 @@ internal class ServeOptions
         using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         socket.Bind(new IPEndPoint(ip, 0));
         socket.Listen(1);
-        var ipEndPoint = (IPEndPoint)socket.LocalEndPoint!;
+        var ipEndPoint = (IPEndPoint) socket.LocalEndPoint!;
         var port = ipEndPoint.Port;
         return port;
     }

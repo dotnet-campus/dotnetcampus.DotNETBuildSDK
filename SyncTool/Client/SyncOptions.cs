@@ -1,6 +1,10 @@
-﻿using dotnetCampus.Cli;
+﻿using System;
+using System.Net;
+
+using dotnetCampus.Cli;
 
 using SyncTool.Context;
+using SyncTool.Server;
 
 namespace SyncTool.Client;
 
@@ -51,23 +55,47 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
 
         using var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri(Address);
+        // 客户端允许等着服务端慢慢返回，不要不断发送请求
+        httpClient.Timeout = ServerConfiguration.MaxFreeTime;
 
         // 记录本地的字典值。首次同步的时候需要用到
         Dictionary<string, SyncFileInfo> syncFileDictionary = InitLocalInfo(syncFolder);
 
         ulong currentVersion = 0;
+        bool isFirstQuery = true;
+        var clientName = Environment.MachineName;
         while (true)
         {
             try
             {
-                var syncFolderInfo = await httpClient.GetFromJsonAsync<SyncFolderInfo>("/");
+                var queryFileStatusRequest = new QueryFileStatusRequest(clientName, currentVersion, isFirstQuery);
+                var httpResponseMessage = await httpClient.PostAsJsonAsync("/", queryFileStatusRequest);
+                if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // 服务端是不是还没开启 是不是开启错版本了
+                }
+
+                httpResponseMessage.EnsureSuccessStatusCode();
+
+                var queryFileStatusResponse = await httpResponseMessage.Content.ReadFromJsonAsync<QueryFileStatusResponse>();
+                var syncFolderInfo = queryFileStatusResponse?.SyncFolderInfo;
+
                 if (syncFolderInfo is null || syncFolderInfo.Version == currentVersion)
                 {
+                    // 这里不需要等待，继续不断发起请求就可以
+                    // 为什么不怕发送太多，影响性能？服务端不会立刻返回
+                    //await Task.Delay(TimeSpan.FromSeconds(1));
                     continue;
                 }
+
+                isFirstQuery = false;
                 currentVersion = syncFolderInfo.Version;
-                Console.WriteLine($"[{currentVersion}] 开始同步");
+                Console.WriteLine($"[{currentVersion}] 开始同步 - {DateTimeHelper.DateTimeNowToLogMessage()}");
                 await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
+
+                Console.WriteLine($"[{currentVersion}] 同步完成 - {DateTimeHelper.DateTimeNowToLogMessage()}");
+                Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
+                Console.WriteLine("==========");
 
                 // 更新本地字典信息
                 syncFileDictionary.Clear();
@@ -143,10 +171,6 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             }
 
             await RemoveRedundantFile(remote, version);
-
-            Console.WriteLine($"[{version}] 同步完成 - {DateTimeHelper.DateTimeNowToLogMessage()}");
-            Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
-            Console.WriteLine("==========");
         }
 
         async Task RemoveRedundantFile(List<SyncFileInfo> remote, ulong version)

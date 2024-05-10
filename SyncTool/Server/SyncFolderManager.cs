@@ -1,12 +1,25 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using SyncTool.Client;
 using SyncTool.Context;
 
 namespace SyncTool.Server;
 
 class SyncFolderManager
 {
-    public SyncFolderInfo? CurrentFolderInfo { get; private set; }
+    [DisallowNull]
+    public SyncFolderInfo? CurrentFolderInfo
+    {
+        get => _currentFolderInfo;
+        private set
+        {
+            _currentFolderInfo = value;
+            CurrentFolderInfoChanged?.Invoke(this, value);
+        }
+    }
+
     private FileSystemWatcher? _watcher;
+    public event EventHandler<SyncFolderInfo>? CurrentFolderInfoChanged;
 
     public void Run(string watchFolder)
     {
@@ -43,6 +56,7 @@ class SyncFolderManager
     }
 
     private ulong _currentVersion;
+    private SyncFolderInfo? _currentFolderInfo;
 
     private void UpdateChange(string watchFolder)
     {
@@ -85,7 +99,7 @@ class SyncFolderManager
                 Debug.WriteLine(e);
             }
 
-            Console.WriteLine($"检测到更新");
+            Console.WriteLine($"检测到更新 - {DateTimeHelper.DateTimeNowToLogMessage()}");
         });
 
         bool Enable() => Interlocked.Read(ref _currentVersion) == currentVersion;
