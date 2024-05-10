@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Configuration.Assemblies;
 using System.Net;
-
+using System.Reflection;
 using dotnetCampus.Cli;
 
 using SyncTool.Context;
@@ -40,7 +41,7 @@ internal class SyncOptions
 SyncTool -a http://127.0.0.1:56621 -f lindexi");
             return;
         }
-
+        
         var syncFolder = SyncFolder;
         if (string.IsNullOrEmpty(syncFolder))
         {
@@ -73,11 +74,19 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                 if (httpResponseMessage.StatusCode == HttpStatusCode.NotFound)
                 {
                     // 服务端是不是还没开启 是不是开启错版本了
+                    var assemblyVersion =
+                        GetType().Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()!
+                            .InformationalVersion;
+                    Console.WriteLine($"服务器返回 404 可能访问错误的服务，或 SyncTool 服务器版本过低。当前 SyncTool 客户端版本：{assemblyVersion}");
+
+                    // 同步结束
+                    return;
                 }
 
                 httpResponseMessage.EnsureSuccessStatusCode();
 
-                var queryFileStatusResponse = await httpResponseMessage.Content.ReadFromJsonAsync<QueryFileStatusResponse>();
+                var queryFileStatusResponse =
+                    await httpResponseMessage.Content.ReadFromJsonAsync<QueryFileStatusResponse>();
                 var syncFolderInfo = queryFileStatusResponse?.SyncFolderInfo;
 
                 if (syncFolderInfo is null || syncFolderInfo.Version == currentVersion)
@@ -104,10 +113,19 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     syncFileDictionary[syncFileInfo.RelativePath] = syncFileInfo;
                 }
             }
+            catch (HttpRequestException e)
+            {
+                if (e.HttpRequestError == HttpRequestError.ConnectionError)
+                {
+                    // 可能是服务器还没开启
+                    Console.WriteLine($"【同步失败】连接服务器失败，同步地址：{Address} 同步文件夹{syncFolder}");
+                    await Task.Delay(TimeSpan.FromSeconds(1));
+                }
+            }
             catch (Exception e)
             {
                 // 大不了下次再继续
-                Console.WriteLine(e);
+                Console.WriteLine($"【同步失败】同步地址：{Address} 同步文件夹{syncFolder}\r\n{e}");
             }
         }
 
