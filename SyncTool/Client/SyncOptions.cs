@@ -144,7 +144,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
 
             await RemoveRedundantFile(remote, version);
 
-            Console.WriteLine($"[{version}] 同步完成");
+            Console.WriteLine($"[{version}] 同步完成 - {DateTimeHelper.DateTimeNowToLogMessage()}");
             Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
             Console.WriteLine("==========");
         }
@@ -229,4 +229,19 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
         }
         return syncFileDictionary;
     }
+}
+
+static class DateTimeHelper
+{
+    public static string DateTimeNowToLogMessage()
+    {
+        return ToLogMessage(DateTime.Now);
+    }
+
+    public static string ToLogMessage(DateTime time)
+    {
+        return time.ToString(DefaultLogTimeFormat);
+    }
+
+    public const string DefaultLogTimeFormat = "yyyy-MM-dd HH:mm:ss,fff";
 }
