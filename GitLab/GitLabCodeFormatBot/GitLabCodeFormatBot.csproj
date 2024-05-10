@@ -1,13 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
 
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>AutomateFormatCodeAndCreateGitLabMergeRequest</ToolCommandName>
     <AssemblyName>dotnetCampus.GitLabCodeFormatBot</AssemblyName>
     <RootNamespace>dotnetCampus.GitLabCodeFormatBot</RootNamespace>
+
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
 
   <ItemGroup>

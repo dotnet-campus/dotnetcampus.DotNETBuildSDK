@@ -8,6 +8,9 @@
         <ToolCommandName>dotnet-buildkit</ToolCommandName>
         <AssemblyName>dotnetCampus.BuildKitTool</AssemblyName>
         <RootNamespace>dotnetCampus.BuildKitTool</RootNamespace>
+
+        <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+        <RollForward>Major</RollForward>
     </PropertyGroup>
 
     <ItemGroup>

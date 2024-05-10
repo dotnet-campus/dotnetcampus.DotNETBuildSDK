@@ -8,14 +8,16 @@
 		<PackAsTool>true</PackAsTool>
 		<ToolCommandName>SendEmail</ToolCommandName>
 		<RootNamespace>dotnetCampus.SendEmailTask</RootNamespace>
+        <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+        <RollForward>Major</RollForward>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="dotnetCampus.CommandLine" Version="3.3.0" />
+		<PackageReference Include="dotnetCampus.CommandLine" Version="3.3.1" />
 		<PackageReference Include="Walterlv.Collections.Source" Version="5.11.2">
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="3.7.0-alpha02"></PackageReference>
+		<PackageReference Include="dotnetCampus.DotNETBuildSDK" Version="3.15.3"></PackageReference>
 	</ItemGroup>
 </Project>

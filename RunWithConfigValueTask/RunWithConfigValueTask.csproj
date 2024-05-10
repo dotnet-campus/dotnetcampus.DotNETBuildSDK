@@ -1,12 +1,14 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>RunWithConfigValueTask</ToolCommandName>
     <AssemblyName>dotnetCampus.RunWithConfigValueTask</AssemblyName>
     <RootNamespace>dotnetCampus.RunWithConfigValueTask</RootNamespace>
+    <!--设置自动回滚，如果开发者有安装更新版本的，就自动使用新版本 -->
+    <RollForward>Major</RollForward>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="dotnetCampus.Configurations" Version="1.6.8" />
