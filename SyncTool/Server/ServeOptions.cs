@@ -176,22 +176,6 @@ internal class ServeOptions
             }
         });
 
-        _ = Task.Run(async () =>
-        {
-            while (true)
-            {
-                var delay = TimeSpan.FromSeconds(10) - outputStatusStopwatch.Elapsed;
-                if (delay.TotalSeconds < 0)
-                {
-                    OutputStatus();
-                }
-                else
-                {
-                    await Task.Delay(delay);
-                }
-            }
-        });
-
         await webApplication.RunAsync();
 
         void OutputStatus()
