@@ -7,3 +7,9 @@
 /// <param name="FileSize"></param>
 /// <param name="LastWriteTimeUtc"></param>
 record SyncFileInfo(string RelativePath, long FileSize, DateTime LastWriteTimeUtc);
+
+/// <summary>
+/// 文件夹信息，防止空文件夹没有被同步过去
+/// </summary>
+/// <param name="RelativePath"></param>
+record SyncFolderPathInfo(string RelativePath);

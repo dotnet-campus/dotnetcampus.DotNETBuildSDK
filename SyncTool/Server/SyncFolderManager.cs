@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+
 using SyncTool.Client;
 using SyncTool.Context;
 using SyncTool.Utils;
@@ -92,7 +93,22 @@ class SyncFolderManager
                     syncFileList.Add(syncFileInfo);
                 }
 
-                CurrentFolderInfo = new SyncFolderInfo(currentVersion, syncFileList);
+                var syncFolderPathInfoList = new List<SyncFolderPathInfo>();
+                foreach (var folder in Directory.EnumerateDirectories(watchFolder, "*", SearchOption.AllDirectories))
+                {
+                    if (!Enable())
+                    {
+                        return;
+                    }
+
+                    var relativePath = Path.GetRelativePath(watchFolder, folder);
+                    // 用来兼容 Linux 系统
+                    relativePath = relativePath.Replace('\\', '/');
+
+                    syncFolderPathInfoList.Add(new SyncFolderPathInfo(relativePath));
+                }
+
+                CurrentFolderInfo = new SyncFolderInfo(currentVersion, syncFileList, syncFolderPathInfoList);
             }
             catch (IOException e)
             {

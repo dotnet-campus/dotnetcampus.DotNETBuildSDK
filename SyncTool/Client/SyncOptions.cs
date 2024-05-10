@@ -103,7 +103,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                 isFirstQuery = false;
                 currentVersion = syncFolderInfo.Version;
                 Console.WriteLine($"[{currentVersion}] 开始同步 - {DateTimeHelper.DateTimeNowToLogMessage()}");
-                await SyncFolderAsync(syncFolderInfo.SyncFileList, currentVersion);
+                await SyncFolderAsync(syncFolderInfo.SyncFileList, syncFolderInfo.SyncFolderPathInfoList, currentVersion);
 
                 Console.WriteLine($"[{currentVersion}] 同步完成 - {DateTimeHelper.DateTimeNowToLogMessage()}");
                 Console.WriteLine($"同步地址：{Address} 同步文件夹{syncFolder}");
@@ -134,7 +134,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
             }
         }
 
-        async Task SyncFolderAsync(List<SyncFileInfo> remote, ulong version)
+        async Task SyncFolderAsync(List<SyncFileInfo> remote, List<SyncFolderPathInfo> syncFolderPathInfoList, ulong version)
         {
             Dictionary<string/*RelativePath*/, SyncFileInfo> local = syncFileDictionary;
 
@@ -189,11 +189,26 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                         Console.WriteLine($"同步 {remoteSyncFileInfo.RelativePath} 失败，正在重试");
                     }
 
-                    await Task.Delay(200);
+                    // 快速下载完成
+                    //await Task.Delay(200);
                 }
             }
 
+            foreach (var folderPathInfo in syncFolderPathInfoList)
+            {
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
+                // 如果文件夹不存在，则创建文件夹
+                var localFilePath = Path.Join(syncFolder, folderPathInfo.RelativePath);
+                Directory.CreateDirectory(localFilePath);
+            }
+
+            // 先删除多余的文件，再删除空文件夹，除非空文件夹是在记录里面的
             await RemoveRedundantFile(remote, version);
+            await RemoveRedundantFolder(syncFolderPathInfoList, version);
         }
 
         async Task RemoveRedundantFile(List<SyncFileInfo> remote, ulong version)
@@ -213,14 +228,19 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     return;
                 }
 
+                var relativePath = Path.GetRelativePath(syncFolder, file);
+                // 用来兼容 Linux 系统
+                relativePath = relativePath.Replace('\\', '/');
+
                 for (int i = 0; i < 1000; i++)
                 {
-                    var relativePath = Path.GetRelativePath(syncFolder, file);
-                    // 用来兼容 Linux 系统
-                    relativePath = relativePath.Replace('\\', '/');
                     try
                     {
-                        if (!updatedList.Contains(relativePath))
+                        if (updatedList.Contains(relativePath))
+                        {
+                            break;
+                        }
+                        else
                         {
                             // 本地存在，远端不存在，删除
                             File.Delete(file);
@@ -234,6 +254,62 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     catch (Exception e)
                     {
                         if (i == 100)
+                        {
+                            Console.WriteLine($"第{i}次删除 {relativePath} 失败 {e}");
+                        }
+
+                        await Task.Delay(100);
+                    }
+                }
+            }
+        }
+
+        async Task RemoveRedundantFolder(List<SyncFolderPathInfo> syncFolderPathInfoList, ulong version)
+        {
+            var updatedList = new HashSet<string>(syncFolderPathInfoList.Count);
+            foreach (var syncFileInfo in syncFolderPathInfoList)
+            {
+                updatedList.Add(syncFileInfo.RelativePath);
+            }
+
+            foreach (var folder in Directory.GetDirectories(syncFolder, "*", SearchOption.AllDirectories))
+            {
+                if (version != currentVersion)
+                {
+                    return;
+                }
+
+                if (Directory.EnumerateFiles(folder,"*",SearchOption.AllDirectories).Any())
+                {
+                    // 如果存在文件，则不是空文件夹，不能删除
+                    continue;
+                }
+
+                // 没有任何文件的空文件夹，如果不在列表里面，则需要删除文件夹
+                var relativePath = Path.GetRelativePath(syncFolder, folder);
+                // 用来兼容 Linux 系统
+                relativePath = relativePath.Replace('\\', '/');
+
+                for (int i = 0; i < 100; i++)
+                {
+                    try
+                    {
+                        if (updatedList.Contains(relativePath))
+                        {
+                            break;
+                        }
+                        else
+                        {
+                            Directory.Delete(folder);
+                            if (!Directory.Exists(folder))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        if (i == 100 - 1)
                         {
                             Console.WriteLine($"第{i}次删除 {relativePath} 失败 {e}");
                         }
