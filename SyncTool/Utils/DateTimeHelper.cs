@@ -1,4 +1,4 @@
-﻿namespace SyncTool.Client;
+﻿namespace SyncTool.Utils;
 
 static class DateTimeHelper
 {
