@@ -279,7 +279,7 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     return;
                 }
 
-                if (Directory.EnumerateFiles(folder,"*",SearchOption.AllDirectories).Any())
+                if (Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Any())
                 {
                     // 如果存在文件，则不是空文件夹，不能删除
                     continue;
