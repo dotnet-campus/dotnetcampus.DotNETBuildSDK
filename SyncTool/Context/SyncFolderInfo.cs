@@ -5,7 +5,7 @@
 /// </summary>
 /// <param name="Version">同步版本</param>
 /// <param name="SyncFileList">同步的文件列表</param>
-record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList)
+record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList, List<SyncFolderPathInfo> SyncFolderPathInfoList)
 {
     /// <summary>
     /// 同步的文件字典，用来给服务端快速获取文件对应

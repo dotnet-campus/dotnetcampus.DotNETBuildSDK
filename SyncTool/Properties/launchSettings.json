@@ -5,11 +5,13 @@
     },
     "Serve": {
       "commandName": "Project",
-      "commandLineArgs": "serve -p 56621"
+      "commandLineArgs": "serve -p 5625",
+      "workingDirectory": "C:\\lindexi\\SyncFile_Serve\\"
     },
     "Sync": {
       "commandName": "Project",
-      "commandLineArgs": "sync -a http://127.0.0.1:56621"
+      "commandLineArgs": "sync -a http://127.0.0.1:56622",
+      "workingDirectory": "C:\\lindexi\\SyncFile_Client\\"
     }
   }
 }

@@ -1,12 +1,19 @@
-﻿using System.Net;
+﻿using System.Diagnostics;
+using System.Net;
 using System.Net.Mime;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Text;
+
 using dotnetCampus.Cli;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Physical;
+
+using SyncTool.Configurations;
 using SyncTool.Context;
+using SyncTool.Utils;
 
 namespace SyncTool.Server;
 
@@ -43,14 +50,14 @@ internal class ServeOptions
 
         var port = Port ?? GetAvailablePort(IPAddress.Any);
 
-        Console.WriteLine($"Listening on: http://0.0.0.0:{port}");
+        string listenInfo = $"Listening on: http://0.0.0.0:{port}\r\n";
         try
         {
             foreach (var networkInterface in NetworkInterface.GetAllNetworkInterfaces())
             {
                 foreach (var unicastIpAddressInformation in networkInterface.GetIPProperties().UnicastAddresses)
                 {
-                    Console.WriteLine($"Listening on: http://{unicastIpAddressInformation.Address.ToString()}:{port}");
+                    listenInfo += $"Listening on: http://{unicastIpAddressInformation.Address.ToString()}:{port}\r\n";
                 }
             }
         }
@@ -58,7 +65,7 @@ internal class ServeOptions
         {
             // 忽略异常，只是为了方便开发者了解当前的网络信息，不用每次都去看自己内网地址
         }
-        Console.WriteLine($"SyncFolder: {syncFolder}");
+        Console.WriteLine($"{listenInfo}SyncFolder: {syncFolder}");
 
         var builder = WebApplication.CreateBuilder();
         builder.WebHost.UseUrls($"http://*:{port}");
@@ -75,8 +82,57 @@ internal class ServeOptions
             options.SerializerOptions.PropertyNameCaseInsensitive = false;
         });
 
+        var clientInfoList = new Dictionary<string/*ClientName*/, ClientInfo>();
+        var outputStatusStopwatch = Stopwatch.StartNew();
+
         var webApplication = builder.Build();
         webApplication.MapGet("/", () => syncFolderManager.CurrentFolderInfo);
+        webApplication.MapPost("/", async ([FromBody] QueryFileStatusRequest request, [FromServices] ILogger<ServeOptions> logger) =>
+        {
+            logger.LogInformation($"[{request.CurrentVersion}] 收到 {request.ClientName} 的同步请求");
+            clientInfoList[request.ClientName] = new ClientInfo(request.ClientName, request.CurrentVersion);
+            var taskCompletionSource = new TaskCompletionSource();
+            syncFolderManager.CurrentFolderInfoChanged += OnCurrentFolderInfoChanged;
+
+            try
+            {
+                // 如果没有更新，则进入等待，不立刻返回客户端
+                if (syncFolderManager.CurrentFolderInfo == null ||
+                    (syncFolderManager.CurrentFolderInfo.Version == request.CurrentVersion && !request.IsFirstQuery))
+                {
+                    // 防止客户端超过时间，设置为一半时间
+                    var mainDelayTask = Task.Delay(ServerConfiguration.MaxFreeTime / 2);
+
+                    while (!mainDelayTask.IsCompleted && !taskCompletionSource.Task.IsCompleted)
+                    {
+                        await Task.WhenAny(mainDelayTask, taskCompletionSource.Task, Task.Delay(TimeSpan.FromSeconds(1)));
+
+                        if (syncFolderManager.CurrentFolderInfo?.Version != request.CurrentVersion)
+                        {
+                            break;
+                        }
+                    }
+                }
+
+                if (syncFolderManager.CurrentFolderInfo is not null)
+                {
+                    return new QueryFileStatusResponse(syncFolderManager.CurrentFolderInfo);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            finally
+            {
+                syncFolderManager.CurrentFolderInfoChanged -= OnCurrentFolderInfoChanged;
+            }
+
+            void OnCurrentFolderInfoChanged(object? sender, SyncFolderInfo e)
+            {
+                taskCompletionSource.TrySetResult();
+            }
+        });
         webApplication.MapPost("/Download", ([FromBody] DownloadFileRequest request, [FromServices] ILogger<ServeOptions> logger) =>
         {
             var currentFolderInfo = syncFolderManager.CurrentFolderInfo;
@@ -95,6 +151,12 @@ internal class ServeOptions
             logger.LogInformation($"Download NotFound {request.RelativePath}");
             return Results.NotFound();
         });
+        webApplication.MapPost("/SyncCompleted", (SyncCompletedRequest request) =>
+        {
+            clientInfoList[request.ClientName] = new ClientInfo(request.ClientName, request.CurrentVersion);
+            OutputStatus();
+            return new SyncCompletedResponse();
+        });
         webApplication.UseStaticFiles(new StaticFileOptions()
         {
             FileProvider = new PhysicalFileProvider(syncFolder, ExclusionFilters.System),
@@ -104,7 +166,42 @@ internal class ServeOptions
             RedirectToAppendTrailingSlash = true,
             DefaultContentType = MediaTypeNames.Application.Octet,
         });
+
+        _ = Task.Run(() =>
+        {
+            while (true)
+            {
+                Console.ReadLine();
+                OutputStatus();
+            }
+        });
+
         await webApplication.RunAsync();
+
+        void OutputStatus()
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder
+                .AppendLine()
+                .Append(listenInfo)
+                .AppendLine($"SyncFolder: {syncFolder}")
+                .AppendLine($"Version: {syncFolderManager.CurrentFolderInfo?.Version} {DateTimeHelper.DateTimeNowToLogMessage()}")
+                .AppendLine()
+                .AppendLine("连接的客户端同步状态：");
+            foreach (var clientInfo in clientInfoList.Values.ToList())
+            {
+                if (DateTime.Now - clientInfo.UpdateTime > TimeSpan.FromMinutes(10))
+                {
+                    clientInfoList.Remove(clientInfo.ClientName);
+                }
+
+                stringBuilder.AppendLine($"{DateTimeHelper.ToLogMessage(clientInfo.UpdateTime)} ClientName={clientInfo.ClientName} Version={clientInfo.Version}");
+            }
+
+            webApplication.Logger.LogInformation(stringBuilder.ToString());
+
+            outputStatusStopwatch.Restart();
+        }
     }
 
     public static int GetAvailablePort(IPAddress ip)
@@ -112,8 +209,13 @@ internal class ServeOptions
         using var socket = new Socket(SocketType.Stream, ProtocolType.Tcp);
         socket.Bind(new IPEndPoint(ip, 0));
         socket.Listen(1);
-        var ipEndPoint = (IPEndPoint)socket.LocalEndPoint!;
+        var ipEndPoint = (IPEndPoint) socket.LocalEndPoint!;
         var port = ipEndPoint.Port;
         return port;
+    }
+
+    record ClientInfo(string ClientName, ulong Version)
+    {
+        public DateTime UpdateTime { get; } = DateTime.Now;
     }
 }

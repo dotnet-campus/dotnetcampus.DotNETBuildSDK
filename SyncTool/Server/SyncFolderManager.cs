@@ -1,12 +1,27 @@
 ﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+
+using SyncTool.Client;
 using SyncTool.Context;
+using SyncTool.Utils;
 
 namespace SyncTool.Server;
 
 class SyncFolderManager
 {
-    public SyncFolderInfo? CurrentFolderInfo { get; private set; }
+    [DisallowNull]
+    public SyncFolderInfo? CurrentFolderInfo
+    {
+        get => _currentFolderInfo;
+        private set
+        {
+            _currentFolderInfo = value;
+            CurrentFolderInfoChanged?.Invoke(this, value);
+        }
+    }
+
     private FileSystemWatcher? _watcher;
+    public event EventHandler<SyncFolderInfo>? CurrentFolderInfoChanged;
 
     public void Run(string watchFolder)
     {
@@ -43,6 +58,7 @@ class SyncFolderManager
     }
 
     private ulong _currentVersion;
+    private SyncFolderInfo? _currentFolderInfo;
 
     private void UpdateChange(string watchFolder)
     {
@@ -77,7 +93,22 @@ class SyncFolderManager
                     syncFileList.Add(syncFileInfo);
                 }
 
-                CurrentFolderInfo = new SyncFolderInfo(currentVersion, syncFileList);
+                var syncFolderPathInfoList = new List<SyncFolderPathInfo>();
+                foreach (var folder in Directory.EnumerateDirectories(watchFolder, "*", SearchOption.AllDirectories))
+                {
+                    if (!Enable())
+                    {
+                        return;
+                    }
+
+                    var relativePath = Path.GetRelativePath(watchFolder, folder);
+                    // 用来兼容 Linux 系统
+                    relativePath = relativePath.Replace('\\', '/');
+
+                    syncFolderPathInfoList.Add(new SyncFolderPathInfo(relativePath));
+                }
+
+                CurrentFolderInfo = new SyncFolderInfo(currentVersion, syncFileList, syncFolderPathInfoList);
             }
             catch (IOException e)
             {
@@ -85,7 +116,7 @@ class SyncFolderManager
                 Debug.WriteLine(e);
             }
 
-            Console.WriteLine($"检测到更新");
+            Console.WriteLine($"检测到更新 - {DateTimeHelper.DateTimeNowToLogMessage()}");
         });
 
         bool Enable() => Interlocked.Read(ref _currentVersion) == currentVersion;
