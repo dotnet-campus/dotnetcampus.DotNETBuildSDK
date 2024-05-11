@@ -428,6 +428,8 @@ FormatCode:
 dotnet tool install -g dotnetCampus.SyncTool
 ```
 
+或从 [Release](https://github.com/dotnet-campus/dotnetcampus.DotNETBuildSDK/releases) 中下载已提前构建的二进制文件，规避同步机器不带 dotnet SDK 问题
+
 使用方法如下，使用时需要分为服务端和客户端，从服务端单向将文件同步给到客户端
 
 服务端命令如下
@@ -451,6 +453,8 @@ SyncTool sync [参数]
 
 - `-a` 或 `-Address` : 同步服务的地址。必填，格式如 `http://127.0.0.1:56621` 等地址
 - `-f` 或 `-Folder` : 本地同步的文件夹。可选，不填默认为工作路径
+
+
 
 ### 制作符合 UOS 规范的 deb 安装包的工具
 

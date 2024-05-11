@@ -300,7 +300,9 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                         }
                         else
                         {
-                            Directory.Delete(folder);
+                            // 删除空文件夹的时候，可能遇到空文件夹里面还包含其他空文件夹，导致删除失败
+                            // System.IO.IOException: Directory not empty
+                            Directory.Delete(folder, true);
                             if (!Directory.Exists(folder))
                             {
                                 break;
