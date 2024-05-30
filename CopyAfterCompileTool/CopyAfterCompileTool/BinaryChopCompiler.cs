@@ -75,7 +75,7 @@ namespace dotnetCampus.CopyAfterCompileTool
 
             var git = new Git(codeDirectory)
             {
-                DefaultCommandTimeout = TimeSpan.FromMinutes(3)
+                //DefaultCommandTimeout = TimeSpan.FromMinutes(3)
             };
 
             _git = git;

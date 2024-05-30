@@ -417,6 +417,20 @@ namespace Packaging.Targets
         /// </returns>
         private LinuxFileMode GetFileMode(string name, /*ITaskItem metadata, */LinuxFileMode defaultMode)
         {
+            // 后续可以尝试判断一下系统，在 Linux 下直接读取文件权限
+            //if (Environment.OSVersion.Platform == PlatformID.Unix)
+            //{
+            //}
+            //else
+            //{
+            // 在 Windows 下，直接给所有 sh 文件加权限
+            //}
+
+            if (Path.GetExtension(name) == ".sh")
+            {
+                return defaultMode | LinuxFileMode.S_IXOTH | LinuxFileMode.S_IXGRP | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IXUSR;
+            }
+
             return defaultMode;
 
             //LinuxFileMode mode = defaultMode;
