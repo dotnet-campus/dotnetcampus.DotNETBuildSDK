@@ -336,6 +336,11 @@ public class DebUOSPackageFileStructCreator
                 Logger.LogWarning($"没有找到 DebControlDescription 属性配置。安装完成可能在开始菜单找不到应用。请配置 deb 包的描述，描述可使用中文");
             }
 
+            if (!string.IsNullOrEmpty(configuration.DebControlDepends))
+            {
+                stringBuilder.Append($"Depends: {configuration.DebControlDepends}\n");
+            }
+
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
         }
 
