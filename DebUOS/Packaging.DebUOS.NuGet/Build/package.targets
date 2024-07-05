@@ -150,6 +150,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlDepends" Condition="$(DebControlDepends)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlDepends)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="AppName" Condition="$(AppName)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(AppName)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
