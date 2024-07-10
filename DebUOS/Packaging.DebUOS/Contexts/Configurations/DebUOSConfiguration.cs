@@ -245,6 +245,15 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+    /// <summary>
+    /// 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。
+    /// </summary>
+    /// <example>vlc</example>
+    public string? DebControlDepends
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
 
     /// <summary>
     /// 应用名，英文名。将作为 opt\apps\${AppId}\entries\applications\${AppId}.desktop 和 opt\apps\${AppId}\info 的 Name 属性的值，不写默认和 AssemblyName 属性相同
@@ -546,6 +555,7 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+
 
     #region 打包控制相关
 
