@@ -289,3 +289,50 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
  如果有其他特殊规则，请自行编写 Target 在 CreateDebUOS 之前删除掉 -->
 <ExcludePackingDebFileExtensions>.pdb;.dbg;.md</ExcludePackingDebFileExtensions>
 ```
+
+## FAQ
+
+### 如何在 deb 包里面添加符号 pdb 文件
+
+添加 ExcludePackingDebFileExtensions 属性配置，重新指定打包时应该有哪些后缀被排除。因为默认的 ExcludePackingDebFileExtensions 属性包含了 .pdb .dbg .md 文件，因此符号 pdb 文件将被排除
+
+```xml
+    <PropertyGroup>
+      <ExcludePackingDebFileExtensions>.dbg;.md</ExcludePackingDebFileExtensions>
+    </PropertyGroup>
+```
+
+### 如何添加更多文件加入 deb 打包里
+
+一般情况下，能够输出到发布路径的，就能加入到 deb 包里面。比如在 csproj 配置某些文件如果较新则拷贝等
+
+如果需要动态编写构建逻辑，则可在 Publish 之后，在 CreateDebUOS 之前，进行动态加入文件。如以下例子，添加的是构建信息 Version.txt 文件到打包的 deb 里面
+
+```xml
+  <Target Name="_BuildVersionInfoTarget" BeforeTargets="CreateDebUOS" DependsOnTargets="Publish">
+    <PropertyGroup>
+      <BuildVersionInfoFile>$([System.IO.Path]::Combine($(PublishDir), "Version.txt"))</BuildVersionInfoFile>
+      <BuildTimeInfo>$([System.DateTimeOffset]::get_Now().ToString())</BuildTimeInfo>
+    </PropertyGroup>
+    <ItemGroup>
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+      <BuildVersionInfoWriteArgLine Include="GitCommit" />
+      <BuildVersionInfoWriteArgLine Include="$(GitCommit)" />
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+
+      <BuildVersionInfoWriteArgLine Include="BuildTime" />
+      <BuildVersionInfoWriteArgLine Include="$(BuildTimeInfo)" />
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+    </ItemGroup>
+
+    <WriteLinesToFile File="$(BuildVersionInfoFile)" Lines="@(BuildVersionInfoWriteArgLine)" Overwrite="true" />
+  </Target>
+
+  <Target Name="_GitCommit" Returns="$(GitCommit)" BeforeTargets="_BuildVersionInfoTarget" Condition="'$(GitCommit)' == ''">
+    <Exec Command="git rev-parse HEAD" EchoOff="true" StandardErrorImportance="low" StandardOutputImportance="low" ConsoleToMSBuild="true" ContinueOnError="true" StdOutEncoding="utf-8">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommit" />
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+    </Exec>
+  </Target>
+```
+
