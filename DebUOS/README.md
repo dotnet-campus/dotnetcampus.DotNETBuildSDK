@@ -217,6 +217,9 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
 <!-- 配置放入到 DEBIAN\control 文件的 Description 属性。如不填写，默认将使用 Description 属性的值 -->
 <DebControlDescription>The file downloader.</DebControlDescription>
 
+<!-- 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。用于配置软件依赖，比如填写入 vlc,libvlc-dev 即可在声明安装包依赖 vlc 组件 -->
+<DebControlDepends></DebControlDepends>
+
 <!-- 应用名，英文名。将作为 opt\apps\${AppId}\entries\applications\${AppId}.desktop 和 opt\apps\${AppId}\info 的 Name 属性的值，不写默认和 AssemblyName 属性相同 -->
 <AppName>UnoFileDownloader</AppName>
 
@@ -289,3 +292,63 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
  如果有其他特殊规则，请自行编写 Target 在 CreateDebUOS 之前删除掉 -->
 <ExcludePackingDebFileExtensions>.pdb;.dbg;.md</ExcludePackingDebFileExtensions>
 ```
+
+## FAQ
+
+### 如何在 deb 包里面添加符号 pdb 文件
+
+添加 ExcludePackingDebFileExtensions 属性配置，重新指定打包时应该有哪些后缀被排除。因为默认的 ExcludePackingDebFileExtensions 属性包含了 .pdb .dbg .md 文件，因此符号 pdb 文件将被排除
+
+```xml
+    <PropertyGroup>
+      <ExcludePackingDebFileExtensions>.dbg;.md</ExcludePackingDebFileExtensions>
+    </PropertyGroup>
+```
+
+### 如何添加更多文件加入 deb 打包里
+
+一般情况下，能够输出到发布路径的，就能加入到 deb 包里面。比如在 csproj 配置某些文件如果较新则拷贝等
+
+如果需要动态编写构建逻辑，则可在 Publish 之后，在 CreateDebUOS 之前，进行动态加入文件。如以下例子，添加的是构建信息 Version.txt 文件到打包的 deb 里面
+
+```xml
+  <Target Name="_BuildVersionInfoTarget" BeforeTargets="CreateDebUOS" DependsOnTargets="Publish">
+    <PropertyGroup>
+      <BuildVersionInfoFile>$([System.IO.Path]::Combine($(PublishDir), "Version.txt"))</BuildVersionInfoFile>
+      <BuildTimeInfo>$([System.DateTimeOffset]::get_Now().ToString())</BuildTimeInfo>
+    </PropertyGroup>
+    <ItemGroup>
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+      <BuildVersionInfoWriteArgLine Include="GitCommit" />
+      <BuildVersionInfoWriteArgLine Include="$(GitCommit)" />
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+
+      <BuildVersionInfoWriteArgLine Include="BuildTime" />
+      <BuildVersionInfoWriteArgLine Include="$(BuildTimeInfo)" />
+      <BuildVersionInfoWriteArgLine Include="&gt;" />
+    </ItemGroup>
+
+    <WriteLinesToFile File="$(BuildVersionInfoFile)" Lines="@(BuildVersionInfoWriteArgLine)" Overwrite="true" />
+  </Target>
+
+  <Target Name="_GitCommit" Returns="$(GitCommit)" BeforeTargets="_BuildVersionInfoTarget" Condition="'$(GitCommit)' == ''">
+    <Exec Command="git rev-parse HEAD" EchoOff="true" StandardErrorImportance="low" StandardOutputImportance="low" ConsoleToMSBuild="true" ContinueOnError="true" StdOutEncoding="utf-8">
+      <Output TaskParameter="ConsoleOutput" PropertyName="GitCommit" />
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+    </Exec>
+  </Target>
+```
+
+### 如何添加 vlc 依赖
+
+在 PropertyGroup 里的 DebControlDepends 属性的添加 `vlc,libvlc-dev` 依赖，代码如下
+
+```xml
+  <PropertyGroup>
+    <!-- 软件的依赖包
+      vlc,libvlc-dev 依赖原因：https://code.videolan.org/videolan/LibVLCSharp/-/blob/3.x/docs/linux-setup.md -->
+    <DebControlDepends>vlc,libvlc-dev</DebControlDepends>
+  </PropertyGroup>
+```
+
+由于 LibVLCSharp 难以维护 Linux 复杂的 VLC 版本，因此软件带 VLC 是推荐声明依赖。声明依赖之后，将在安装 deb 安装包的时候要求依赖负载。如使用 dpkg 命令，则在缺失依赖时不给安装，且给出其依赖说明。如使用图形界面的安装器，比如麒麟系统的 kylin-installer 安装器，一般都会自动从软件包源安装依赖
