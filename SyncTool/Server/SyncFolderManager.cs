@@ -31,9 +31,15 @@ class SyncFolderManager
         {
             EnableRaisingEvents = true,
             NotifyFilter = NotifyFilters.Size | NotifyFilters.CreationTime | NotifyFilters.DirectoryName |
-                           NotifyFilters.FileName | NotifyFilters.LastWrite
+                           NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Attributes |
+                           NotifyFilters.LastAccess | NotifyFilters.Security,
+            IncludeSubdirectories = true,
         };
 
+        fileSystemWatcher.Error += (sender, args) =>
+        {
+            Console.WriteLine($"[SyncFolderManager] FileSystemWatcher Exception: {args.GetException()}");
+        };
         fileSystemWatcher.Changed += (sender, args) =>
         {
             UpdateChangeInner();
