@@ -82,7 +82,7 @@ public class DebUOSPackageCreator
         Logger.LogInformation($"打包完成 '{outputDebFile.FullName}'");
     }
 
-    private readonly IReadOnlyList<string> _packageIncludeDirectories = new List<string> {"\\opt", "\\usr"};
+    private readonly IReadOnlyList<string> _packageIncludeDirectories = new [] {"\\opt", "\\usr"};
 
     private void WriteControl(DirectoryInfo packingFolder, Stream targetStream)
     {
