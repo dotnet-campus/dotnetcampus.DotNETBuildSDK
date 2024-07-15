@@ -37,12 +37,18 @@ public class DebUOSPackageCreator
         var debTarFilePath = Path.Combine(workingFolder.FullName, "deb.tar");
         var debTarXzPath = Path.Combine(workingFolder.FullName, "deb.tar.xz");
 
-        // 压缩文件夹里面的文件
-        var archiveEntries = archiveBuilder.FromDirectory(
-            packingFolder.FullName,
-            null,
-            "", entry => optFileCanIncludePredicate?.Invoke(entry) is true 
-                         && _packageIncludeDirectories.Any(entry.Replace(packingFolder.FullName, "").StartsWith));
+        var archiveEntries = new List<ArchiveEntry>();
+        foreach (var subFolder in packingFolder.EnumerateDirectories())
+        {
+            if (subFolder.Name == "DEBIAN")
+            {
+                // 这里面存放的包控制信息，不需要加入压缩
+                continue;
+            }
+
+            archiveBuilder.AddDirectory(subFolder.FullName, string.Empty, $"/{subFolder.Name}", archiveEntries,
+                optFileCanIncludePredicate);
+        }
 
         EnsureDirectories(archiveEntries);
 
@@ -81,8 +87,6 @@ public class DebUOSPackageCreator
 
         Logger.LogInformation($"打包完成 '{outputDebFile.FullName}'");
     }
-
-    private readonly IReadOnlyList<string> _packageIncludeDirectories = new [] {"\\opt", "\\usr"};
 
     private void WriteControl(DirectoryInfo packingFolder, Stream targetStream)
     {

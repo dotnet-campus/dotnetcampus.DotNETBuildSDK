@@ -39,7 +39,7 @@ else if (!string.IsNullOrEmpty(options.PackageArgumentFilePath))
     logger.LogInformation($"开始根据配置创建 UOS 的 deb 包。配置文件：{options.PackageArgumentFilePath}");
     if (!File.Exists(options.PackageArgumentFilePath))
     {
-        logger.LogError($"配置文件 '{options.PackageArgumentFilePath}' 不创建");
+        logger.LogError($"配置文件 '{options.PackageArgumentFilePath}' 不存在");
         return;
     }
 
