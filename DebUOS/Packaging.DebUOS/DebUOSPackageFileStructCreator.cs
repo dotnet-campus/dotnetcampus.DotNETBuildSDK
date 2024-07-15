@@ -182,32 +182,6 @@ public class DebUOSPackageFileStructCreator
             File.Copy(desktopFile, userShareDesktopFile);
         }
 
-        if (configuration.CopyDesktopFileToHomeDesktop)
-        {
-            var home = Environment.GetEnvironmentVariable("HOME");
-            if (string.IsNullOrEmpty(home) || !Directory.Exists(home))
-            {
-                Logger.LogWarning($"HOME 环境变量为空或者找不到 HOME 文件夹，无法将桌面快捷方式复制到桌面。HOME={home}");
-            }
-            else
-            {
-                var homeDesktopFolder = Path.Join(home, "Desktop");
-                if (!Directory.Exists(homeDesktopFolder))
-                {
-                    homeDesktopFolder = Path.Join(home, "桌面");
-                }
-                if (Directory.Exists(homeDesktopFolder))
-                {
-                    var homeDesktopFile = Path.Join(homeDesktopFolder, $"{appId}.desktop");
-                    File.Copy(desktopFile, homeDesktopFile);
-                }
-                else
-                {
-                    Logger.LogWarning($"找不到 HOME 下的 \"Desktop\" 或 \"桌面\" 文件夹，无法将桌面快捷方式复制到桌面。HOME={home}");
-                }
-            }
-        }
-
         // opt\apps\AppId\entries\icons
         var iconsFolder = Path.Join(entriesFolder, "icons");
         if (!string.IsNullOrEmpty(configuration.UOSDebIconFolder))
@@ -228,11 +202,12 @@ public class DebUOSPackageFileStructCreator
             File.Copy(configuration.SvgIconFile, svgFile);
             if (configuration.CopyIconsToUsrShareIcons)
             {
-                var userShareSvgFolder = Path.Join("usr", "share", "icons", "hicolor", "scalable", "apps");
-                if (Directory.Exists(userShareSvgFolder))
+                var userShareSvgFolder = Path.Join(packingFolder, "usr", "share", "icons", "hicolor", "scalable", "apps");
+                if (!Directory.Exists(userShareSvgFolder))
                 {
-                    File.Copy(configuration.SvgIconFile, Path.Join(userShareSvgFolder, $"{appId}.svg"));
+                    Directory.CreateDirectory(userShareSvgFolder);
                 }
+                File.Copy(configuration.SvgIconFile, Path.Join(userShareSvgFolder, $"{appId}.svg"));
             }
         }
         else
@@ -259,11 +234,12 @@ public class DebUOSPackageFileStructCreator
                         anyIconFileExist = true;
                         if (configuration.CopyIconsToUsrShareIcons)
                         {
-                            var userSharePngFolder = Path.Join("usr", "share", "icons", "hicolor", resolution, "apps");
-                            if (Directory.Exists(userSharePngFolder))
+                            var userSharePngFolder = Path.Join(packingFolder, "usr", "share", "icons", "hicolor", resolution, "apps");
+                            if (!Directory.Exists(userSharePngFolder))
                             {
-                                File.Copy(iconFile, Path.Join(userSharePngFolder, $"{appId}.png"));
+                                Directory.CreateDirectory(userSharePngFolder);
                             }
+                            File.Copy(iconFile, Path.Join(userSharePngFolder, $"{appId}.png"), true);
                         }
                     }
                     else

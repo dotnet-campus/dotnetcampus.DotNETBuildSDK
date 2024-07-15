@@ -417,16 +417,6 @@ public class DebUOSConfiguration : Configuration
     }
     
     /// <summary>
-    /// 配置是否创建桌面快捷方式，即将 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件 Copy 到 "$HOME/Desktop" 或 "$HOME/桌面" 。默认是 false 关闭状态
-    /// </summary>
-    /// <example>true</example>
-    public bool CopyDesktopFileToHomeDesktop
-    {
-        set => SetValue(value);
-        get => GetBoolean() ?? false;
-    }
-    
-    /// <summary>
     /// 配置是否将 opt\apps\${AppId}\entries\icons 文件夹 Copy 到 /usr/share/icons/hicolor 文件夹里面。默认是 true 开启状态
     /// Copy 到 /usr/share/icons/hicolor 文件夹里面，是为了让应用在开始菜单\桌面等地方能够正常显示图标，如果不需要显示图标，可以关闭此选项
     /// </summary>
