@@ -174,6 +174,14 @@ public class DebUOSPackageFileStructCreator
             File.WriteAllText(desktopFile, stringBuilder.ToString(), encoding);
         }
 
+        if (configuration.CopyDesktopFileToUsrShareApplications)
+        {
+            var userShareApplicationsFolder = Path.Join(packingFolder, "usr", "share", "applications");
+            Directory.CreateDirectory(userShareApplicationsFolder);
+            var userShareDesktopFile = Path.Join(userShareApplicationsFolder, $"{appId}.desktop");
+            File.Copy(desktopFile, userShareDesktopFile);
+        }
+
         // opt\apps\AppId\entries\icons
         var iconsFolder = Path.Join(entriesFolder, "icons");
         if (!string.IsNullOrEmpty(configuration.UOSDebIconFolder))
@@ -192,6 +200,15 @@ public class DebUOSPackageFileStructCreator
             var svgFile = Path.Join(iconsFolder, "hicolor", "scalable", "apps", $"{appId}.svg");
             Directory.CreateDirectory(Path.GetDirectoryName(svgFile)!);
             File.Copy(configuration.SvgIconFile, svgFile);
+            if (configuration.CopyIconsToUsrShareIcons)
+            {
+                var userShareSvgFolder = Path.Join(packingFolder, "usr", "share", "icons", "hicolor", "scalable", "apps");
+                if (!Directory.Exists(userShareSvgFolder))
+                {
+                    Directory.CreateDirectory(userShareSvgFolder);
+                }
+                File.Copy(configuration.SvgIconFile, Path.Join(userShareSvgFolder, $"{appId}.svg"));
+            }
         }
         else
         {
@@ -202,6 +219,7 @@ public class DebUOSPackageFileStructCreator
                          (configuration.Png24x24IconFile, "24x24"),
                          (configuration.Png32x32IconFile, "32x32"),
                          (configuration.Png48x48IconFile, "48x48"),
+                         (configuration.Png64x64IconFile, "64x64"),
                          (configuration.Png128x128IconFile, "128x128"),
                          (configuration.Png256x256IconFile, "256x256"),
                          (configuration.Png512x512IconFile, "512x512"),
@@ -214,8 +232,16 @@ public class DebUOSPackageFileStructCreator
                         var pngFile = Path.Join(iconsFolder, "hicolor", resolution, "apps", $"{appId}.png");
                         Directory.CreateDirectory(Path.GetDirectoryName(pngFile)!);
                         File.Copy(iconFile, pngFile);
-
                         anyIconFileExist = true;
+                        if (configuration.CopyIconsToUsrShareIcons)
+                        {
+                            var userSharePngFolder = Path.Join(packingFolder, "usr", "share", "icons", "hicolor", resolution, "apps");
+                            if (!Directory.Exists(userSharePngFolder))
+                            {
+                                Directory.CreateDirectory(userSharePngFolder);
+                            }
+                            File.Copy(iconFile, Path.Join(userSharePngFolder, $"{appId}.png"), true);
+                        }
                     }
                     else
                     {
