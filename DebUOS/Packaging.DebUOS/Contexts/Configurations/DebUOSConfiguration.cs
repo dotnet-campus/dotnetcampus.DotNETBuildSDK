@@ -404,6 +404,37 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+    
+    /// <summary>
+    /// 配置是否将 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件 Copy 到 /usr/share/applications 文件夹里面。默认是 true 开启状态
+    /// Copy 到 /usr/share/applications 文件夹里面，是为了让应用在开始菜单里面显示，如果不需要在开始菜单里面显示，可以关闭此选项
+    /// </summary>
+    /// <example>true</example>
+    public bool CopyDesktopFileToUsrShareApplications
+    {
+        set => SetValue(value);
+        get => GetBoolean() ?? true;
+    }
+    
+    /// <summary>
+    /// 配置是否创建桌面快捷方式，即将 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件 Copy 到 "$HOME/Desktop" 或 "$HOME/桌面" 。默认是 false 关闭状态
+    /// </summary>
+    /// <example>true</example>
+    public bool CopyDesktopFileToHomeDesktop
+    {
+        set => SetValue(value);
+        get => GetBoolean() ?? false;
+    }
+    
+    /// <summary>
+    /// 配置是否将 opt\apps\${AppId}\entries\icons 文件夹 Copy 到 /usr/share/icons/hicolor 文件夹里面。默认是 true 开启状态
+    /// Copy 到 /usr/share/icons/hicolor 文件夹里面，是为了让应用在开始菜单\桌面等地方能够正常显示图标，如果不需要显示图标，可以关闭此选项
+    /// </summary>
+    public bool CopyIconsToUsrShareIcons
+    {
+        set => SetValue(value);
+        get => GetBoolean() ?? true;
+    }
 
     /// <summary>
     /// 进行打包的文件夹，用来组织打包的文件。可不填，且推荐不填，将被打包工具自动填充
