@@ -219,6 +219,7 @@ public class DebUOSPackageFileStructCreator
                          (configuration.Png24x24IconFile, "24x24"),
                          (configuration.Png32x32IconFile, "32x32"),
                          (configuration.Png48x48IconFile, "48x48"),
+                         (configuration.Png64x64IconFile, "64x64"),
                          (configuration.Png128x128IconFile, "128x128"),
                          (configuration.Png256x256IconFile, "256x256"),
                          (configuration.Png512x512IconFile, "512x512"),
