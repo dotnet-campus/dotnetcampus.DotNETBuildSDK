@@ -404,22 +404,25 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
-    
+
     /// <summary>
     /// 配置是否将 opt\apps\${AppId}\entries\applications\${AppId}.desktop 文件 Copy 到 /usr/share/applications 文件夹里面。默认是 true 开启状态
-    /// Copy 到 /usr/share/applications 文件夹里面，是为了让应用在开始菜单里面显示，如果不需要在开始菜单里面显示，可以关闭此选项
+    /// Copy 到 /usr/share/applications 文件夹里面，是为了让应用在麒麟开始菜单里面显示，如果不需要在开始菜单里面显示，可以关闭此选项
     /// </summary>
+    /// <remarks>这是用于在麒麟系统里的，在统信 UOS 不需要这么做，但看起来在统信 UOS 做了也没问题</remarks>
     /// <example>true</example>
     public bool CopyDesktopFileToUsrShareApplications
     {
         set => SetValue(value);
         get => GetBoolean() ?? true;
     }
-    
+
     /// <summary>
     /// 配置是否将 opt\apps\${AppId}\entries\icons 文件夹 Copy 到 /usr/share/icons/hicolor 文件夹里面。默认是 true 开启状态
     /// Copy 到 /usr/share/icons/hicolor 文件夹里面，是为了让应用在开始菜单\桌面等地方能够正常显示图标，如果不需要显示图标，可以关闭此选项
     /// </summary>
+    /// <remarks>这是用于在麒麟系统里的，在统信 UOS 不需要这么做，但看起来在统信 UOS 做了也没问题</remarks>
+    /// <example>true</example>
     public bool CopyIconsToUsrShareIcons
     {
         set => SetValue(value);

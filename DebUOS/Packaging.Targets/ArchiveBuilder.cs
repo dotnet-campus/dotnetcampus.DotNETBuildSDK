@@ -228,7 +228,7 @@ namespace Packaging.Targets
             return value;
         }
 
-        protected void AddDirectory(string directory, string relativePath, string prefix, List<ArchiveEntry> value/*, ITaskItem[] metadata*/, Predicate<string>? fileCanIncludePredicate)
+        public void AddDirectory(string directory, string relativePath, string prefix, List<ArchiveEntry> value/*, ITaskItem[] metadata*/, Predicate<string>? fileCanIncludePredicate)
         {
             this._inode++;
 
