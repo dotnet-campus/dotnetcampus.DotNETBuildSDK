@@ -555,7 +555,7 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
-    
+
     /// <inheritdoc cref="Png16x16IconFile"/>
     /// <example>Assets\Icons\Logo64x64.png</example>
     public string? Png64x64IconFile
