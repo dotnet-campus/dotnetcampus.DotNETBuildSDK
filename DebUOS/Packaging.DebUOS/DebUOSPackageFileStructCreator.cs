@@ -421,7 +421,7 @@ public class DebUOSPackageFileStructCreator
                 ThrowFileNotFoundException(configuration.DebPreinstFile, nameof(configuration.DebPreinstFile));
             }
         }
-     
+
 
         static void ThrowFileNotFoundException(string file, string propertyName)
         {
