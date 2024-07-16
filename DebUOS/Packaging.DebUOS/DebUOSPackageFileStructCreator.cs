@@ -370,25 +370,62 @@ public class DebUOSPackageFileStructCreator
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
         }
 
-        if (File.Exists(configuration.DebPostinstFile))
+        if (!string.IsNullOrEmpty(configuration.DebPostinstFile))
         {
-            var postinstFile = Path.Join(packingFolder, "DEBIAN", "postinst");
-            File.Copy(configuration.DebPostinstFile, postinstFile);
+            if (File.Exists(configuration.DebPostinstFile))
+            {
+                var postinstFile = Path.Join(packingFolder, "DEBIAN", "postinst");
+                File.Copy(configuration.DebPostinstFile, postinstFile);
+            }
+            else
+            {
+                ThrowFileNotFoundException(configuration.DebPostinstFile, nameof(configuration.DebPostinstFile));
+            }
         }
-        if (File.Exists(configuration.DebPrermFile))
+
+        if (!string.IsNullOrEmpty(configuration.DebPrermFile))
         {
-            var prermFile = Path.Join(packingFolder, "DEBIAN", "prerm");
-            File.Copy(configuration.DebPrermFile, prermFile);
+            if (File.Exists(configuration.DebPrermFile))
+            {
+                var prermFile = Path.Join(packingFolder, "DEBIAN", "prerm");
+                File.Copy(configuration.DebPrermFile, prermFile);
+            }
+            else
+            {
+                ThrowFileNotFoundException(configuration.DebPrermFile, nameof(configuration.DebPrermFile));
+            }
         }
-        if (File.Exists(configuration.DebPostrmFile))
+
+        if (!string.IsNullOrEmpty(configuration.DebPostrmFile))
         {
-            var postrmFile = Path.Join(packingFolder, "DEBIAN", "postrm");
-            File.Copy(configuration.DebPostrmFile, postrmFile);
+            if (File.Exists(configuration.DebPostrmFile))
+            {
+                var postrmFile = Path.Join(packingFolder, "DEBIAN", "postrm");
+                File.Copy(configuration.DebPostrmFile, postrmFile);
+            }
+            else
+            {
+                ThrowFileNotFoundException(configuration.DebPostrmFile, nameof(configuration.DebPostrmFile));
+            }
         }
-        if (File.Exists(configuration.DebPreinstFile))
+
+        if (!string.IsNullOrEmpty(configuration.DebPreinstFile))
         {
-            var preinstFile = Path.Join(packingFolder, "DEBIAN", "preinst");
-            File.Copy(configuration.DebPreinstFile, preinstFile);
+            if (File.Exists(configuration.DebPreinstFile))
+            {
+                var preinstFile = Path.Join(packingFolder, "DEBIAN", "preinst");
+                File.Copy(configuration.DebPreinstFile, preinstFile);
+            }
+            else
+            {
+                ThrowFileNotFoundException(configuration.DebPreinstFile, nameof(configuration.DebPreinstFile));
+            }
+        }
+     
+
+        static void ThrowFileNotFoundException(string file, string propertyName)
+        {
+            throw new FileNotFoundException($"已配置 `{propertyName}` 属性，但找不到其配置的 '{file}' 文件", Path.GetFullPath(file));
         }
     }
 
