@@ -345,3 +345,4 @@ healthchecksdb
 /GitRevisionTask/Properties/launchSettings.json
 /RunWithConfigValueTask/Properties/launchSettings.json
 /RegexReplaceTask/Properties/launchSettings.json
+*/Properties/launchSettings.json
