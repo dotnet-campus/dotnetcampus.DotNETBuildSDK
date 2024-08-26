@@ -6,7 +6,7 @@
     "Serve": {
       "commandName": "Project",
       "commandLineArgs": "serve -p 5625",
-      "workingDirectory": "C:\\lindexi\\SyncFile_Serve\\"
+      "workingDirectory": "C:\\lindexi\\SyncFile_Serve\\File\\"
     },
     "Sync": {
       "commandName": "Project",
