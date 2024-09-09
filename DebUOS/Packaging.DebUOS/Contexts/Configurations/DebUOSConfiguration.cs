@@ -1,5 +1,6 @@
 ﻿// ReSharper disable InconsistentNaming
 
+using System;
 using System.IO;
 using dotnetCampus.Configurations;
 
@@ -207,13 +208,48 @@ public class DebUOSConfiguration : Configuration
     }
 
     /// <summary>
-    /// 配置放入到 DEBIAN\control 文件的 Standards-Version 属性。默认是 3.9.6 的值
+    /// 配置放入到 DEBIAN\control 文件的 Standards-Version 属性。默认不写将会取 <see cref="UOSDebVersion"/> 属性的值，取不到则设置为 3.9.6 的值
     /// </summary>
     /// <example>3.9.6</example>
     public string DebControlStandardsVersion
     {
         set => SetValue(value);
-        get => GetString() ?? "3.9.6";
+        get
+        {
+            var result = GetString();
+
+            if (result is not null)
+            {
+                return result;
+            }
+
+            if (System.Version.TryParse(UOSDebVersion, out var version))
+            {
+                string standardVersion;
+
+                var major = version.Major;
+                var minor = version.Minor;
+                var build = version.Build;
+                var revision = version.Revision;
+
+                major = Math.Max(0, major);
+                minor = Math.Max(0, minor);
+                build = Math.Max(0, build);
+
+                if (revision >= 0)
+                {
+                    standardVersion = $"{major}.{minor}.{build}.{revision}";
+                }
+                else
+                {
+                    standardVersion = $"{major}.{minor}.{build}";
+                }
+
+                return standardVersion;
+            }
+
+            return "3.9.6";
+        }
     }
 
     /// <summary>
