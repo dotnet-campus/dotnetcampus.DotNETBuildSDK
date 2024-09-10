@@ -157,14 +157,19 @@ internal class ServeOptions
             OutputStatus();
             return new SyncCompletedResponse();
         });
-        webApplication.UseStaticFiles(new StaticFileOptions()
+        webApplication.UseFileServer(new FileServerOptions()
         {
-            FileProvider = new PhysicalFileProvider(syncFolder, ExclusionFilters.System),
-            ContentTypeProvider = new ContentTypeProvider(),
-            ServeUnknownFileTypes = true,
+            StaticFileOptions =
+            {
+                FileProvider = new PhysicalFileProvider(syncFolder, ExclusionFilters.System),
+                ContentTypeProvider = new ContentTypeProvider(),
+                ServeUnknownFileTypes = true,
+                RequestPath = StaticFileConfiguration.RequestPath,
+                RedirectToAppendTrailingSlash = true,
+                DefaultContentType = MediaTypeNames.Application.Octet,
+            },
             RequestPath = StaticFileConfiguration.RequestPath,
-            RedirectToAppendTrailingSlash = true,
-            DefaultContentType = MediaTypeNames.Application.Octet,
+            EnableDirectoryBrowsing = true,
         });
 
         _ = Task.Run(() =>
