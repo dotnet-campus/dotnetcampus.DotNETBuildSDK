@@ -32,6 +32,33 @@ internal class SyncOptions
 
     public async Task Run()
     {
+        var syncFolder = SyncFolder;
+        if (string.IsNullOrEmpty(syncFolder))
+        {
+            // 没有给明确的文件夹，使用工作文件夹
+            syncFolder = Environment.CurrentDirectory;
+
+            if (OperatingSystem.IsLinux())
+            {
+                // 不写 -f 禁止 ~ 路径
+                var homePath = Environment.GetEnvironmentVariable("HOME");
+                if (syncFolder == homePath)
+                {
+                    Console.WriteLine($"禁止在 $HOME='{homePath}' 路径下进行同步，如果确定要在此路径下同步，请使用 -f 参数明确指定路径");
+                    return;
+                }
+            }
+        }
+
+        if (OperatingSystem.IsLinux())
+        {
+            if (syncFolder == "/")
+            {
+                Console.WriteLine($"禁止使用 / 根路径作为同步文件夹");
+                return;
+            }
+        }
+
         if (string.IsNullOrEmpty(Address))
         {
             Console.WriteLine($@"找不到同步地址，请确保传入正确参数。
@@ -43,13 +70,6 @@ internal class SyncOptions
 参数例子： 
 SyncTool -a http://127.0.0.1:56621 -f lindexi");
             return;
-        }
-
-        var syncFolder = SyncFolder;
-        if (string.IsNullOrEmpty(syncFolder))
-        {
-            // 没有给明确的文件夹，使用工作文件夹
-            syncFolder = Environment.CurrentDirectory;
         }
 
         syncFolder = Path.GetFullPath(syncFolder);
