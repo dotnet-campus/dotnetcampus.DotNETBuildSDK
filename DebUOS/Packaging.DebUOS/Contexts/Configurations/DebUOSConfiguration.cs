@@ -216,6 +216,14 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get
         {
+            // 参考 https://www.debian.org/doc/debian-policy/ch-controlfields.html#s-f-standards-version
+            // > 5.6.11. Standards-Version
+            // > The most recent version of the standards (the policy manual and associated texts) with which the package complies. See Standards conformance.
+            // > The version number has four components: major and minor version number and major and minor patch level. When the standards change in a way that requires every package to change the major number will be changed. Significant changes that will require work in many packages will be signaled by a change to the minor number. The major patch level will be changed for any change to the meaning of the standards, however small; the minor patch level will be changed when only cosmetic, typographical or other edits are made which neither change the meaning of the document nor affect the contents of packages.
+            // 
+            // > Thus only the first three components of the policy version are significant in the Standards-Version control field, and so either these three components or all four components may be specified. 5
+            // 
+            // > udebs and source packages that only produce udebs do not use Standards-Version.
             var result = GetString();
 
             if (result is not null)
@@ -223,19 +231,22 @@ public class DebUOSConfiguration : Configuration
                 return result;
             }
 
+            // 尝试使用 UOSDebVersion 进行兼容，但是要求前提是这里的版本号是传统的非语义版本号
             if (System.Version.TryParse(UOSDebVersion, out var version))
             {
                 string standardVersion;
 
+                // 以下为兼容 UOSDebVersion 写的是 a.b.c.d 和 a.b.c 和 a.b 的写法
                 var major = version.Major;
                 var minor = version.Minor;
                 var build = version.Build;
                 var revision = version.Revision;
 
                 major = Math.Max(0, major);
-                minor = Math.Max(0, minor);
+                minor = Math.Max(0, minor); // 如果没有版本号，则为 -1 的值，使用 Max 可确保不写默认为 0 而不是负数
                 build = Math.Max(0, build);
 
+                // 是否有最后一位，根据 Debian 维护者指导文档和 Debian 政策手册，要求使用 3-4 位的版本号
                 if (revision >= 0)
                 {
                     standardVersion = $"{major}.{minor}.{build}.{revision}";
@@ -248,6 +259,7 @@ public class DebUOSConfiguration : Configuration
                 return standardVersion;
             }
 
+            // 为什么默认返回 3.9.6 呢？因为是从 https://www.debian.org/doc/manuals/debmake-doc/ch09.en.html 里面抄的代码。且返回一个非 1.0.0 的版本号会比较方便大家想设置时，去找到是在哪里配置的
             return "3.9.6";
         }
     }
