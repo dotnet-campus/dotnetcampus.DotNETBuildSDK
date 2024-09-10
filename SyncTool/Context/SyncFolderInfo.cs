@@ -1,4 +1,6 @@
-﻿namespace SyncTool.Context;
+﻿using System.Text.Json.Serialization;
+
+namespace SyncTool.Context;
 
 /// <summary>
 /// 同步的文件夹信息
@@ -10,6 +12,7 @@ record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList, List<SyncF
     /// <summary>
     /// 同步的文件字典，用来给服务端快速获取文件对应
     /// </summary>
+    [JsonIgnore] // 这个属性不需要序列化，只有在服务端使用，用来快速获取文件关系
     public Dictionary<string /*RelativePath*/, SyncFileInfo> SyncFileDictionary
     {
         get
@@ -19,5 +22,6 @@ record SyncFolderInfo(ulong Version, List<SyncFileInfo> SyncFileList, List<SyncF
         }
     }
 
+    [JsonIgnore]
     private Dictionary<string /*RelativePath*/, SyncFileInfo>? _syncFileDictionary;
 }
