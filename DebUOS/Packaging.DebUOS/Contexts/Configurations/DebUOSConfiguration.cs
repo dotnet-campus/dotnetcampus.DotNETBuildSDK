@@ -182,6 +182,20 @@ public class DebUOSConfiguration : Configuration
                 {
                     architecture = "arm64";
                 }
+                else if (RuntimeIdentifier == "linux-loongarch64")
+                {
+                    architecture = "loongarch64";
+                }
+                //else if (RuntimeIdentifier == "linux-mips64el")
+                //{
+                //    // 这个似乎 dotnet 是没有支持的，且我也没设备，先不写了。有需要的话，开发者自己加上 Architecture 就可以了
+                //    architecture = "mips64el";
+                //}
+                //else if (RuntimeIdentifier == "linux-sw_64")
+                //{
+                //    // 这个似乎 dotnet 是没有支持的，且我也没设备
+                //    architecture = "sw_64";
+                //}
             }
             return architecture ?? "amd64";
         }
