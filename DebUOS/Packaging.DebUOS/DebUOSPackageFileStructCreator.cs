@@ -90,12 +90,12 @@ public class DebUOSPackageFileStructCreator
         var appIdFolder = Path.Join(packingFolder, "opt", "apps", appId);
         var filesFolder = Path.Join(appIdFolder, "files");
         Directory.CreateDirectory(filesFolder);
-        var applicationBin = Path.Join(filesFolder, "bin");
-        if (!FolderUtils.CreateSymbolLinkOrCopyFolder(projectPublishFolder, applicationBin))
+        var applicationFolder = configuration.ReplaceBinWithAppVersion ? Path.Join(filesFolder, configuration.UOSDebVersion) : Path.Join(filesFolder, "bin");
+        if (!FolderUtils.CreateSymbolLinkOrCopyFolder(projectPublishFolder, applicationFolder))
         {
-            throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationBin}' 失败");
+            throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationFolder}' 失败");
         }
-
+    
         // opt\apps\AppId\entries
         // opt\apps\AppId\entries\applications
         var entriesFolder = Path.Join(appIdFolder, "entries");
@@ -153,7 +153,9 @@ public class DebUOSPackageFileStructCreator
             {
                 // 这里不能使用 Path.Join 方法，因为如果在 Windows 上进行打包，会将 \ 替换为 /，导致打包失败
                 //var exec = Path.Join("/opt/apps", appId, "files", "bin", configuration.AssemblyName);
-                var exec = $"/opt/apps/{appId}/files/bin/{configuration.AssemblyName}";
+                var exec = configuration.ReplaceBinWithAppVersion 
+                    ? $"/opt/apps/{appId}/files/{configuration.UOSDebVersion}/{configuration.AssemblyName}" 
+                    : $"/opt/apps/{appId}/files/bin/{configuration.AssemblyName}";
                 stringBuilder.Append($"Exec={exec}\n");
             }
 

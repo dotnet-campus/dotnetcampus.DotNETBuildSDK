@@ -230,6 +230,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="CopyDesktopFileToUsrShareApplications" Condition="$(CopyDesktopFileToUsrShareApplications)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(CopyDesktopFileToUsrShareApplications)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="PackingFolder" Condition="$(PackingFolder)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(PackingFolder)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
@@ -292,6 +297,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="ExcludePackingDebFileExtensions" Condition="$(ExcludePackingDebFileExtensions)!=''"/>
       <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(ExcludePackingDebFileExtensions)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="ReplaceBinWithAppVersion" Condition="$(ReplaceBinWithAppVersion)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(ReplaceBinWithAppVersion)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
     </ItemGroup>

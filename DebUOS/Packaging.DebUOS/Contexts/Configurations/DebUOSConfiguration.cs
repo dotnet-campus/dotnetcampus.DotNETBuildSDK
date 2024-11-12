@@ -663,6 +663,15 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString() ?? ".pdb;.dbg;.md";
     }
+    
+    /// <summary>
+    /// 打包时是否将 bin 文件夹替换为应用版本号，默认不替换
+    /// </summary>
+    public bool ReplaceBinWithAppVersion
+    {
+        set => SetValue(value);
+        get => GetBoolean() ?? false;
+    }
 
     #endregion
 }
