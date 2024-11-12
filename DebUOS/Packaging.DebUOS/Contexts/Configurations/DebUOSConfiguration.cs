@@ -316,6 +316,15 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+    
+    /// <summary>
+    /// 此字段若配置了，则会在 control 文件中写入 X-Package-System 属性，值为此字段的值
+    /// </summary>
+    public string? DebControlXPackageSystem
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
 
     /// <summary>
     /// 应用名，英文名。将作为 opt\apps\${AppId}\entries\applications\${AppId}.desktop 和 opt\apps\${AppId}\info 的 Name 属性的值，不写默认和 AssemblyName 属性相同

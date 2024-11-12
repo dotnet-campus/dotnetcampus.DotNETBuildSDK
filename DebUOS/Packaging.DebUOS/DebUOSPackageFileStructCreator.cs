@@ -369,6 +369,11 @@ public class DebUOSPackageFileStructCreator
                 stringBuilder.Append($"Depends: {configuration.DebControlDepends}\n");
             }
 
+            if (!string.IsNullOrEmpty(configuration.DebControlXPackageSystem))
+            {
+                stringBuilder.Append($"X-Package-System: {configuration.DebControlXPackageSystem}\n");
+            }
+
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
         }
 

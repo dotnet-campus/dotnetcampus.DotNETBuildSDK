@@ -155,6 +155,11 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
+      <DebUOSPackingWriteArgLine Include="DebControlXPackageSystem" Condition="$(DebControlXPackageSystem)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(DebControlXPackageSystem)))"/>
+      <DebUOSPackingWriteArgLine Include=">"/>
+
+      <DebUOSPackingWriteArgLine Include=">"/>
       <DebUOSPackingWriteArgLine Include="AppName" Condition="$(AppName)!=''"/>
       <DebUOSPackingWriteArgLine Include="$(AppName)"/>
       <DebUOSPackingWriteArgLine Include=">"/>
