@@ -103,7 +103,7 @@ public class DebUOSPackageFileStructCreator
         {
             throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationFolder}' 失败");
         }
-    
+
         // opt\apps\AppId\entries
         // opt\apps\AppId\entries\applications
         var entriesFolder = Path.Join(appIdFolder, "entries");

@@ -316,7 +316,7 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
-    
+
     /// <summary>
     /// 此字段若配置了，则会在 control 文件中写入 X-Package-System 属性，值为此字段的值
     /// </summary>
