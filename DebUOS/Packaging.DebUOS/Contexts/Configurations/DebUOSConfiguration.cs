@@ -308,7 +308,7 @@ public class DebUOSConfiguration : Configuration
         get => GetString();
     }
     /// <summary>
-    /// 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。
+    /// 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。用于配置软件依赖，比如填写入 vlc,libvlc-dev 即可在声明安装包依赖 vlc 组件
     /// </summary>
     /// <example>vlc</example>
     public string? DebControlDepends

@@ -229,7 +229,7 @@ dotnet publish -t:CreateDebUOS -c release -r linux-x64 --self-contained
 <!-- 配置放入到 DEBIAN\control 文件的 Description 属性。如不填写，默认将使用 Description 属性的值 -->
 <DebControlDescription>The file downloader.</DebControlDescription>
 
-<!-- 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。 -->
+<!-- 配置放入到 DEBIAN\control 文件的 Depends 属性。如不填写，则忽略。用于配置软件依赖，比如填写入 vlc,libvlc-dev 即可在声明安装包依赖 vlc 组件 -->
 <DebControlDepends>vlc</DebControlDepends>
 
 <!-- 应用名，英文名。将作为 opt\apps\${AppId}\entries\applications\${AppId}.desktop 和 opt\apps\${AppId}\info 的 Name 属性的值，不写默认和 AssemblyName 属性相同 -->
