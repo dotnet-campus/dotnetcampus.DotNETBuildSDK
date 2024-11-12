@@ -316,6 +316,15 @@ public class DebUOSConfiguration : Configuration
         set => SetValue(value);
         get => GetString();
     }
+    
+    /// <summary>
+    /// 此字段若配置了，则会在 control 文件中写入 X-Package-System 属性，值为此字段的值
+    /// </summary>
+    public string? DebControlXPackageSystem
+    {
+        set => SetValue(value);
+        get => GetString();
+    }
 
     /// <summary>
     /// 应用名，英文名。将作为 opt\apps\${AppId}\entries\applications\${AppId}.desktop 和 opt\apps\${AppId}\info 的 Name 属性的值，不写默认和 AssemblyName 属性相同
@@ -662,6 +671,17 @@ public class DebUOSConfiguration : Configuration
     {
         set => SetValue(value);
         get => GetString() ?? ".pdb;.dbg;.md";
+    }
+
+    /// <summary>
+    /// 打包时是否将 bin 文件夹替换为应用版本号，默认不替换。如设置为 True 将使用 <see cref="UOSDebVersion"/> 属性的版本号作为文件夹名替换 bin 文件夹名
+    /// </summary>
+    /// <remarks>有些应用期望里层带版本号，即打出 `/opt/apps/${AppId}/files/${UOSDebVersion}/${AssemblyName}`格式的路径，如 `/opt/apps/com.dotnetcampus.app/files/1.0.0/app` 的路径，可以方便用来做软件更新。默认为 false 打出来的是 /opt/apps/${AppId}/files/bin/${AssemblyName} 格式的路径</remarks>
+    /// <example>False</example>
+    public bool UsingAppVersionInsteadOfBinOnDebPacking
+    {
+        set => SetValue(value);
+        get => GetBoolean() ?? false;
     }
 
     #endregion

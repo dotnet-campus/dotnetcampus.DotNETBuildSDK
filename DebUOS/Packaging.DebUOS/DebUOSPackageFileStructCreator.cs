@@ -90,12 +90,20 @@ public class DebUOSPackageFileStructCreator
         var appIdFolder = Path.Join(packingFolder, "opt", "apps", appId);
         var filesFolder = Path.Join(appIdFolder, "files");
         Directory.CreateDirectory(filesFolder);
-        var applicationBin = Path.Join(filesFolder, "bin");
-        if (!FolderUtils.CreateSymbolLinkOrCopyFolder(projectPublishFolder, applicationBin))
+        var binaryFolderName = "bin";
+        if (configuration.UsingAppVersionInsteadOfBinOnDebPacking)
         {
-            throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationBin}' 失败");
+            // 如果配置了使用版本号作为文件夹名，则使用版本号作为文件夹名
+            // 否则使用 bin 作为文件夹名
+            binaryFolderName = configuration.UOSDebVersion;
         }
 
+        var applicationFolder = Path.Join(filesFolder, binaryFolderName);
+        if (!FolderUtils.CreateSymbolLinkOrCopyFolder(projectPublishFolder, applicationFolder))
+        {
+            throw new PackagingException($"将发布输出文件拷贝到安装包打包文件夹失败，从 '{projectPublishFolder}' 复制到 '{applicationFolder}' 失败");
+        }
+    
         // opt\apps\AppId\entries
         // opt\apps\AppId\entries\applications
         var entriesFolder = Path.Join(appIdFolder, "entries");
@@ -153,7 +161,7 @@ public class DebUOSPackageFileStructCreator
             {
                 // 这里不能使用 Path.Join 方法，因为如果在 Windows 上进行打包，会将 \ 替换为 /，导致打包失败
                 //var exec = Path.Join("/opt/apps", appId, "files", "bin", configuration.AssemblyName);
-                var exec = $"/opt/apps/{appId}/files/bin/{configuration.AssemblyName}";
+                var exec = $"/opt/apps/{appId}/files/{binaryFolderName}/{configuration.AssemblyName}";
                 stringBuilder.Append($"Exec={exec}\n");
             }
 
@@ -365,6 +373,11 @@ public class DebUOSPackageFileStructCreator
             if (!string.IsNullOrEmpty(configuration.DebControlDepends))
             {
                 stringBuilder.Append($"Depends: {configuration.DebControlDepends}\n");
+            }
+
+            if (!string.IsNullOrEmpty(configuration.DebControlXPackageSystem))
+            {
+                stringBuilder.Append($"X-Package-System: {configuration.DebControlXPackageSystem}\n");
             }
 
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
