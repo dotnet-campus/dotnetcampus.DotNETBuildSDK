@@ -305,8 +305,8 @@
       <DebUOSPackingWriteArgLine Include=">"/>
 
       <DebUOSPackingWriteArgLine Include=">"/>
-      <DebUOSPackingWriteArgLine Include="ReplaceBinWithAppVersion" Condition="$(ReplaceBinWithAppVersion)!=''"/>
-      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(ReplaceBinWithAppVersion)))"/>
+      <DebUOSPackingWriteArgLine Include="UsingAppVersionInsteadOfBinOnDebPacking" Condition="$(UsingAppVersionInsteadOfBinOnDebPacking)!=''"/>
+      <DebUOSPackingWriteArgLine Include="$([MSBuild]::Escape($(UsingAppVersionInsteadOfBinOnDebPacking)))"/>
       <DebUOSPackingWriteArgLine Include=">"/>
 
     </ItemGroup>
