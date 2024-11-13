@@ -65,7 +65,7 @@ namespace dotnetCampus.DotNETBuild
                 // 清空日志缓存
                 logger.LogCacheMessage();
 
-                if (currentConfiguration is {} fileConfiguration)
+                if (currentConfiguration is { } fileConfiguration)
                 {
                     await fileConfiguration.SaveAsync();
                 }
