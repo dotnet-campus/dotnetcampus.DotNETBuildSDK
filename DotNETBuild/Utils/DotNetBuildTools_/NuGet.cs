@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using Microsoft.Extensions.Logging;
@@ -68,6 +69,13 @@ namespace dotnetCampus.DotNETBuild.Utils
             if (!string.IsNullOrEmpty(toolConfiguration.NugetPath))
             {
                 Logger.LogInformation($"获取配置文件的 NuGet 文件 {toolConfiguration.NugetPath}");
+                return;
+            }
+
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                // 一般非 Windows 下打包也不用 NuGet.exe 推送，将使用 dotnet nuget 命令
+                toolConfiguration.NugetPath = "nuget";
                 return;
             }
 

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using dotnetCampus.Configurations;
+using dotnetCampus.DotNETBuild.Context;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
@@ -466,5 +468,27 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// 获取环境变量 "CI_PROJECT_URL"
         /// </summary>
         public static string? ProjectUrl => Environment.GetEnvironmentVariable("CI_PROJECT_URL");
+
+        /// <summary>
+        /// 尝试从 GitLab CI 读取和填写配置。如果没有跑在 GitLab CI 上，那么返回 false 值
+        /// </summary>
+        /// <param name="appConfigurator"></param>
+        /// <returns></returns>
+        public static bool TryFillConfigurationWithGitLabCI(this IAppConfigurator appConfigurator)
+        {
+            if (!IsGitLabCI)
+            {
+                return false;
+            }
+
+            var commit = CommitSHA;
+            var buildConfiguration = appConfigurator.Of<CompileConfiguration>();
+            if (string.IsNullOrEmpty(buildConfiguration.CurrentCommit))
+            {
+                buildConfiguration.CurrentCommit = commit;
+            }
+
+            return true;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.Versioning;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
 using dotnetCampus.DotNETBuild.Utils;
@@ -92,11 +93,14 @@ namespace dotnetCampus.DotNETBuild
         }
 
         /// <summary>
-        /// 执行命令
+        /// 执行命令，使用 cmd 执行命令
         /// </summary>
         /// <param name="str"></param>
         /// <param name="workingDirectory">工作路径默认为代码文件夹</param>
         /// <returns></returns>
+#if NET6_0_OR_GREATER
+        [SupportedOSPlatform("Windows")]
+#endif
         protected (bool success, string output) Command(string str, string workingDirectory = "")
         {
             (bool success, string output) = ExecuteProcessCommand("cmd.exe", $"/c {str}", workingDirectory);

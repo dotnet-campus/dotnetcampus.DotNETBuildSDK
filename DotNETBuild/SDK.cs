@@ -50,6 +50,9 @@ namespace dotnetCampus.DotNETBuild
 
             SetCommonConfiguration(appConfigurator);
 
+            // 获取开始构建的时间，获取时将自动设置开始构建的时间
+            _ = appConfigurator.Of<CompileConfiguration>().BuildStartTime;
+
             // 完成框架，重新设置一下日志
             logger.SwitchActualLogger();
 
@@ -62,7 +65,7 @@ namespace dotnetCampus.DotNETBuild
                 // 清空日志缓存
                 logger.LogCacheMessage();
 
-                if (currentConfiguration is FileConfigurationRepo fileConfiguration)
+                if (currentConfiguration is {} fileConfiguration)
                 {
                     await fileConfiguration.SaveAsync();
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -201,9 +202,7 @@ namespace dotnetCampus.DotNETBuild.Context
 #pragma warning restore CS0618
         }
 
-        /// <summary>
-        /// 当前的 commit 号
-        /// </summary>
+        /// <inheritdoc cref="GitConfiguration.CurrentCommit"/>
         public string CurrentCommit
         {
             set => SetValue(value);
@@ -244,6 +243,46 @@ namespace dotnetCampus.DotNETBuild.Context
         {
             set => SetValue(value);
             get => GetString();
+        }
+
+        /// <summary>
+        /// 对应 dotnet 的 RuntimeIdentifier 属性。需手动赋值
+        /// </summary>
+        /// <remarks>
+        /// 值如 linux-x64 或 win-x64 或 linux-loongarch64 等
+        /// </remarks>
+        public string RuntimeIdentifier
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// 设置或获取开始构建的时间
+        /// </summary>
+        public DateTime BuildStartTime
+        {
+            set => SetValue(value.ToString(CultureInfo.InvariantCulture));
+            get
+            {
+                var time = GetString();
+                if (time is null)
+                {
+                    var dateTime = DateTime.Now;
+                    SetValue(dateTime.ToString(CultureInfo.InvariantCulture));
+                    return dateTime;
+                }
+                else
+                {
+                    if (!DateTime.TryParse(time, out var dateTime))
+                    {
+                        dateTime = DateTime.Now;
+                        SetValue(dateTime.ToString(CultureInfo.InvariantCulture));
+                    }
+
+                    return dateTime;
+                }
+            }
         }
 
         /// <summary>
