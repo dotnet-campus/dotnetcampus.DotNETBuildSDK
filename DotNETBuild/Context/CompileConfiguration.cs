@@ -246,6 +246,18 @@ namespace dotnetCampus.DotNETBuild.Context
         }
 
         /// <summary>
+        /// 对应 dotnet 的 RuntimeIdentifier 属性。需手动赋值
+        /// </summary>
+        /// <remarks>
+        /// 值如 linux-x64 或 win-x64 或 linux-loongarch64 等
+        /// </remarks>
+        public string RuntimeIdentifier
+        {
+            set => SetValue(value);
+            get => GetString();
+        }
+
+        /// <summary>
         /// 设置或获取开始构建的时间
         /// </summary>
         public DateTime BuildStartTime
