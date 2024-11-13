@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="dotnetCampus.Configurations" Version="1.6.12" />
-    <PackageReference Include="Lindexi.Src.GitCommand.Source" Version="1.1.20">
+    <PackageReference Include="Lindexi.Src.GitCommand.Source" Version="1.1.23-alpha01">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
