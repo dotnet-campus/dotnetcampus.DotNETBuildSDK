@@ -100,7 +100,7 @@ public class DebUOSPackageCreator
                 var fileText = File.ReadAllText(filePath);
                 var mode = file == "control"
                     ? LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IRGRP | LinuxFileMode.S_IROTH
-                    : LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IXUSR;
+                    : LinuxFileMode.S_IRUSR | LinuxFileMode.S_IWUSR | LinuxFileMode.S_IXUSR | LinuxFileMode.S_IRGRP | LinuxFileMode.S_IXGRP | LinuxFileMode.S_IROTH | LinuxFileMode.S_IXOTH;
                 WriteControlEntry(controlTar, $"./{file}", fileText, mode);
             }
         }
