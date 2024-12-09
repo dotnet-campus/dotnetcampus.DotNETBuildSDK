@@ -264,6 +264,7 @@ public class DebUOSPackageFileStructCreator
             }
         }
 
+        // info 文件规范来源于 UOS 规范或 deeping 打包规范： https://docs.deepin.org/info/%E5%BC%80%E5%8F%91%E8%BF%9B%E9%98%B6/%E5%BA%94%E7%94%A8%E5%95%86%E5%BA%97/%E5%BA%94%E7%94%A8%E6%89%93%E5%8C%85%E8%A7%84%E8%8C%83/%E7%9B%B8%E5%85%B3%E8%A7%84%E8%8C%83/%E5%95%86%E5%BA%97%E6%89%93%E5%8C%85%E8%A7%84%E8%8C%83
         // opt\apps\AppId\info
         var infoJsonFile = Path.Join(appIdFolder, "info");
         if (File.Exists(configuration.DebInfoFile))
