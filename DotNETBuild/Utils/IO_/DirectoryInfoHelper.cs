@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -11,6 +12,22 @@ namespace dotnetCampus.DotNETBuild.Utils
     /// </summary>
     public static class DirectoryInfoHelper
     {
+#nullable enable
+        public static DirectoryInfo? Ancestor(this DirectoryInfo currentDirectoryInfo, Predicate<DirectoryInfo> matchPredicate)
+        {
+            var t = currentDirectoryInfo;
+            while (t != null)
+            {
+                if (matchPredicate(t))
+                {
+                    return t;
+                }
+                t = t.Parent;
+            }
+            return null;
+        }
+#nullable restore
+
         /// <summary>
         /// 获取程序集所在文件夹
         /// </summary>
