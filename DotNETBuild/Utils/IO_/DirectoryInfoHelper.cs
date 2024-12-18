@@ -13,7 +13,7 @@ namespace dotnetCampus.DotNETBuild.Utils
     public static class DirectoryInfoHelper
     {
 #nullable enable
-        public static DirectoryInfo? Ancestor(this DirectoryInfo currentDirectoryInfo, Predicate<DirectoryInfo> matchPredicate)
+        public static DirectoryInfo? FindAncestor(this DirectoryInfo currentDirectoryInfo, Predicate<DirectoryInfo> matchPredicate)
         {
             var t = currentDirectoryInfo;
             while (t != null)
