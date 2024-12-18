@@ -56,7 +56,18 @@ namespace dotnetCampus.DotNETBuild.Utils
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
             };
+            return ExecuteCommand(processStartInfo);
+        }
+
+        /// <inheritdoc cref="ExecuteCommand(string,string,string)"/>
+        public static (bool success, string output) ExecuteCommand(ProcessStartInfo processStartInfo)
+        {
             var process = Process.Start(processStartInfo);
+
+            if (process is null)
+            {
+                return (false, "Process.Start return null.");
+            }
 
             var output = process.StandardOutput.ReadToEnd();
             bool success = true;
@@ -68,20 +79,17 @@ namespace dotnetCampus.DotNETBuild.Utils
             return (success, output);
         }
 
+        /// <inheritdoc cref="ExecuteCommand(string,string,string)"/>
         public static async Task<string> ExecuteCommandAsync(string exeName, string arguments)
         {
             var task = Task.Run(() => ExecuteCommand(exeName, arguments));
-
-            return await Task.Run(() =>
+            await Task.WhenAny(task, Task.Delay(TimeSpan.FromMinutes(1)));
+            if (task.IsCompleted)
             {
-                task.Wait(TimeSpan.FromMinutes(1));
-                if (task.IsCompleted)
-                {
-                    return task.Result.output;
-                }
+                return task.Result.output;
+            }
 
-                return "";
-            });
+            return "";
         }
     }
 }
