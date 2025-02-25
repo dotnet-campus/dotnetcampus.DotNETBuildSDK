@@ -17,9 +17,10 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <param name="arguments"></param>
         /// <param name="workingDirectory"></param>
         /// <param name="onReceivedOutput">当收到进程输出触发</param>
+        /// <param name="processStartInfoFilter">用于对输入过程的过滤。如设置编码等</param>
         /// <returns></returns>
         public static ProcessResult ExecuteCommand(string exeName, string arguments,
-            string workingDirectory = "", Action<ProcessOutputInfo>? onReceivedOutput = null)
+            string workingDirectory = "", Action<ProcessOutputInfo>? onReceivedOutput = null, Action<ProcessStartInfo>? processStartInfoFilter = null)
         {
             var processStartInfo = new ProcessStartInfo
             {
@@ -37,6 +38,8 @@ namespace dotnetCampus.DotNETBuild.Utils
                 // 编码？这就不设置了，如果还需要配置编码等，那就自己业务实现好了
                 //StandardOutputEncoding = Encoding.UTF8
             };
+
+            processStartInfoFilter?.Invoke(processStartInfo);
 
             var processOutputInfoList = new List<ProcessOutputInfo>();
 
@@ -80,5 +83,6 @@ namespace dotnetCampus.DotNETBuild.Utils
             processOutputInfoList.TrimExcess();
             return new ProcessResult(exitCode, processOutputInfoList);
         }
+
     }
 }

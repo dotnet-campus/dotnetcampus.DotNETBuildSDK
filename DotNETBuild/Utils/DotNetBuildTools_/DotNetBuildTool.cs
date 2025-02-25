@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Diagnostics;
+
 using dotnetCampus.Configurations;
 using Microsoft.Extensions.Logging;
 
@@ -41,9 +44,10 @@ namespace dotnetCampus.DotNETBuild.Utils
         /// <param name="arguments"></param>
         /// <param name="workingDirectory">默认将使用当前进程工作路径</param>
         /// <param name="needAutoLogOutput">是否实时输出</param>
+        /// <param name="processStartInfoFilter">用于对输入过程的过滤。如设置编码等</param>
         /// <returns></returns>
         protected ProcessResult ExecuteProcessCommand(string exeName, string arguments,
-            string workingDirectory = "", bool needAutoLogOutput = true)
+            string workingDirectory = "", bool needAutoLogOutput = true, Action<ProcessStartInfo>? processStartInfoFilter = null)
         {
             Logger.LogInformation($"{exeName} {arguments}");
 
@@ -61,7 +65,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                         Logger.LogWarning(message);
                     }
                 }
-            });
+            }, processStartInfoFilter);
             Logger.LogInformation($"ExitCode: {result.ExitCode}");
 
             return result;
