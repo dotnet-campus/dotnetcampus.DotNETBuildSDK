@@ -107,7 +107,7 @@ class MSBuildFormatter : ConsoleFormatter
             LogLevel.Critical => "error: ",
             _ => "",
         };
-        textWriter.Write($"{logLevelString}{message}");
+        textWriter.Write($"{logLevelString}[DebUOS] {message}");
         if (exception != null)
         {
             textWriter.WriteLine(exception);
