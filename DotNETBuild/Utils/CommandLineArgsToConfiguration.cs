@@ -3,8 +3,17 @@ using dotnetCampus.Configurations;
 
 namespace dotnetCampus.DotNETBuild.Utils
 {
+    /// <summary>
+    /// 命令行参数到配置的扩展
+    /// </summary>
     public static class CommandLineArgsToConfiguration
     {
+        /// <summary>
+        /// 添加命令行参数到配置
+        /// </summary>
+        /// <param name="appConfigurator"></param>
+        /// <param name="args"></param>
+        /// <param name="switchMapping">命令行参数到配置的映射表</param>
         public static void AddCommandLine(this IAppConfigurator appConfigurator, string[] args,
             Dictionary<string, string> switchMapping)
         {
