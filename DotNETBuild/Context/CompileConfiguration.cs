@@ -242,7 +242,7 @@ namespace dotnetCampus.DotNETBuild.Context
         public string AppVersion
         {
             set => SetValue(value);
-            get => GetString();
+            get => GetString() ?? GetString("Version");
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace dotnetCampus.DotNETBuild.Context
         /// <remarks>
         /// 值如 linux-x64 或 win-x64 或 linux-loongarch64 等
         /// </remarks>
-        public string RuntimeIdentifier
+        public ConfigurationString? RuntimeIdentifier
         {
             set => SetValue(value);
             get => GetString();
