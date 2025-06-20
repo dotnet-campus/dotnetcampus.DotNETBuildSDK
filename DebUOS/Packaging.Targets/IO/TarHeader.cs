@@ -68,8 +68,10 @@ namespace Packaging.Targets.IO
         public string FileName
         {
             get => this.GetString(this.name, 100);
-            set => this.name = this.CreateString(value, 100);
+            set => this.name = this.CreateString(value, 100, reason: TarLimitReason);
         }
+
+        private const string TarLimitReason = "From http://ibgwww.colorado.edu/~lessem/psyc5112/usail/man/solaris/tar.1.html , The file name (or leaf) length cannot exceed 100 characters. It is the limit of tar.";
 
         public LinuxFileMode FileMode
         {
@@ -124,7 +126,7 @@ namespace Packaging.Targets.IO
         public string LinkName
         {
             get => this.GetString(this.linkname, 100);
-            set => this.linkname = this.CreateString(value, 100);
+            set => this.linkname = this.CreateString(value, 100, TarLimitReason);
         }
 
         public string Magic
@@ -242,7 +244,8 @@ namespace Packaging.Targets.IO
             return this.CreateString(Convert.ToString(data.Value, 8).PadLeft(len - 1, '0'), len);
         }
 
-        private byte[] CreateString(string s, int len)
+#nullable enable
+        private byte[] CreateString(string? s, int len, string? reason = null)
         {
             var target = new byte[len];
             if (s == null)
@@ -253,7 +256,7 @@ namespace Packaging.Targets.IO
             var buffer = Encoding.UTF8.GetBytes(s);
             if (buffer.Length > len)
             {
-                throw new Exception($"String {s} exceeds the limit of {len}");
+                throw new Exception($"String {s} exceeds the limit of {len}.{reason}");
             }
 
             for (var c = 0; c < len; c++)
