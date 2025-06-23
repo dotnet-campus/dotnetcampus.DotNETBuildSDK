@@ -71,7 +71,7 @@ namespace Packaging.Targets.IO
             set => this.name = this.CreateString(value, 100, reason: TarLimitReason);
         }
 
-        private const string TarLimitReason = "From https://www.gnu.org/software/tar/manual/html_node/Standard.html , The file name (or leaf) length cannot exceed 100 characters. It is the limit of tar.";
+        private const string TarLimitReason = "From http://ibgwww.colorado.edu/~lessem/psyc5112/usail/man/solaris/tar.1.html , The file name (or leaf) length cannot exceed 100 characters. It is the limit of tar.";
 
         public LinuxFileMode FileMode
         {
