@@ -1,4 +1,4 @@
-﻿using dotnetCampus.Cli;
+﻿using DotNetCampus.Cli.Compiler;
 
 namespace Packaging.DebUOS.Tool;
 

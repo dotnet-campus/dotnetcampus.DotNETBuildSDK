@@ -2,7 +2,8 @@
 
 using System.Reflection;
 using System.Text;
-using dotnetCampus.Cli;
+using DotNetCampus.Cli;
+using DotNetCampus.Cli.Compiler;
 using dotnetCampus.Configurations.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
