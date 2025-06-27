@@ -22,4 +22,10 @@ public class Options
 
     [Option('o', "Output", Description = "Output path", LocalizableDescription = "输出的 deb 文件路径")]
     public string? OutputPath { set; get; }
+
+    /// <summary>
+    /// 是否强行使用 UTF-8 编码作为控制台输出
+    /// </summary>
+    [Option()]
+    public bool? ForceUtf8ConsoleOutput { get; init; }
 }

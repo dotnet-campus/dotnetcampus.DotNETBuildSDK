@@ -14,6 +14,11 @@ using Packaging.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
 
+if (options.ForceUtf8ConsoleOutput is true)
+{
+    Console.OutputEncoding = Encoding.UTF8;
+}
+
 var loggerFactory = LoggerFactory.Create(builder =>
 {
     builder.AddConsole(loggerOptions => loggerOptions.FormatterName = MSBuildFormatter.FormatterName);
