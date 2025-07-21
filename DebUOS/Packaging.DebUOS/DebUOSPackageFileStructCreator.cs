@@ -380,7 +380,12 @@ public class DebUOSPackageFileStructCreator
             {
                 stringBuilder.Append($"X-Package-System: {configuration.DebControlXPackageSystem}\n");
             }
-
+            
+            // 去掉最后的空行
+            if (stringBuilder[^1] == '\n')
+            {
+                stringBuilder.Remove(stringBuilder.Length - 1, 1);
+            }
             File.WriteAllText(controlFile, stringBuilder.ToString(), encoding);
         }
 
