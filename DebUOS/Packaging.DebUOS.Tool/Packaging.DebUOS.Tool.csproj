@@ -29,4 +29,7 @@
       <PrivateAssets>all</PrivateAssets>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="dotnetCampus.CommandLine" Version="4.0.0-alpha04" />
+  </ItemGroup>
 </Project>
