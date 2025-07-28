@@ -2,7 +2,8 @@
 
 using System.Reflection;
 using System.Text;
-using dotnetCampus.Cli;
+using DotNetCampus.Cli;
+using DotNetCampus.Cli.Compiler;
 using dotnetCampus.Configurations.Core;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -12,6 +13,11 @@ using Packaging.DebUOS.Contexts.Configurations;
 using Packaging.DebUOS.Tool;
 
 var options = CommandLine.Parse(args).As<Options>();
+
+if (options.ForceUtf8ConsoleOutput is true)
+{
+    Console.OutputEncoding = Encoding.UTF8;
+}
 
 var loggerFactory = LoggerFactory.Create(builder =>
 {
