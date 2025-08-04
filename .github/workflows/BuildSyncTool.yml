@@ -1,0 +1,77 @@
+name: BuildSyncTool
+
+on: [push]
+
+jobs:
+  Build_win-x86:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet publish --configuration Release -r win-x86 /p:PublishSingleFile=true --self-contained true SyncTool/SyncTool.csproj
+
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: SyncTool_win-x86
+          path: SyncTool/bin/Release/net8.0/win-x86/publish
+
+  Build_win-x64:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet publish --configuration Release -r win-x64 /p:PublishSingleFile=true --self-contained true SyncTool/SyncTool.csproj
+
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: SyncTool_win-x64
+          path: SyncTool/bin/Release/net8.0/win-x64/publish
+
+  Build_linux-x64:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet publish --configuration Release -r linux-x64 /p:PublishSingleFile=true --self-contained true SyncTool/SyncTool.csproj
+
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: SyncTool_linux-x64
+          path: SyncTool/bin/Release/net8.0/linux-x64/publish
+
+  Build_linux-arm64:
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Build with dotnet
+        run: dotnet publish --configuration Release -r linux-arm64 /p:PublishSingleFile=true --self-contained true SyncTool/SyncTool.csproj
+
+      - uses: actions/upload-artifact@v4
+        with: 
+          name: SyncTool_linux-arm64
+          path: SyncTool/bin/Release/net8.0/linux-arm64/publish
