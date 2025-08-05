@@ -299,6 +299,14 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     return;
                 }
 
+                if (!Directory.Exists(folder))
+                {
+                    // 如果文件夹不存在了，可能是之前删除了，不再继续
+                    // 什么情况可能导致文件夹不存在？如有这样的路径 A\B\C 结构
+                    // 之前进入到 A\B 时，将 B 删除了，那么 A\B\C 就会不存在
+                    continue;
+                }
+
                 if (Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories).Any())
                 {
                     // 如果存在文件，则不是空文件夹，不能删除
@@ -339,6 +347,13 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                         await Task.Delay(100);
                     }
                 }
+            }
+
+            foreach (var syncFolderPathInfo in syncFolderPathInfoList)
+            {
+                var folderPath = Path.Join(syncFolder, syncFolderPathInfo.RelativePath);
+                // 重新创建，防止误删空文件夹
+                Directory.CreateDirectory(folderPath);
             }
         }
 
