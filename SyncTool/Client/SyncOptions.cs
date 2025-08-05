@@ -348,6 +348,13 @@ SyncTool -a http://127.0.0.1:56621 -f lindexi");
                     }
                 }
             }
+
+            foreach (var syncFolderPathInfo in syncFolderPathInfoList)
+            {
+                var folderPath = Path.Join(syncFolder, syncFolderPathInfo.RelativePath);
+                // 重新创建，防止误删空文件夹
+                Directory.CreateDirectory(folderPath);
+            }
         }
 
         async Task<string> DownloadFile(SyncFileInfo remoteSyncFileInfo)
