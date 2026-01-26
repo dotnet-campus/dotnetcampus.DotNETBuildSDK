@@ -77,9 +77,11 @@ try
             if (optionAttribute != null)
             {
                 stringBuilder.AppendLine(
-                    $"-{optionAttribute.ShortName}  {(optionAttribute.LongName ?? string.Empty).PadRight(10)} {optionAttribute.Description} {optionAttribute.LocalizableDescription}");
+                    $"-{optionAttribute.ShortNames?.FirstOrDefault()}  {(optionAttribute.LongNames?.FirstOrDefault() ?? string.Empty).PadRight(10)} {optionAttribute.Description} {optionAttribute.LocalizableDescription}");
             }
         }
+
+        stringBuilder.AppendLine($"OriginCommandline: {Environment.CommandLine}");
 
         Console.WriteLine(stringBuilder.ToString());
     }
