@@ -13,10 +13,11 @@ using dotnetCampus.Configurations.Core;
 
 namespace DotNETBuild.Tests;
 
-[TestClass]
+//[TestClass]
 public class MSBuildToolTest
 {
-    [TestMethod]
+    // 别的机器上不一定有，可能只有 dotnet 哦
+    //[TestMethod]
     public void TestFindMSBuild()
     {
         var memoryConfigurationRepo = new MemoryConfigurationRepo();

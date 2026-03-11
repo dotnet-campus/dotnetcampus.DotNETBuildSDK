@@ -178,19 +178,19 @@ namespace dotnetCampus.DotNETBuild.Utils
             }
 
             var vs2026EnterpriseMSBuild = @"C:\Program Files\Microsoft Visual Studio\18\Professional\MSBuild\Current\Bin\amd64\MSBuild.exe";
-            if (File.Exists(vs2022EnterpriseMSBuild))
+            if (File.Exists(vs2026EnterpriseMSBuild))
             {
                 compileConfiguration.VS2026EnterpriseMSBuild = vs2026EnterpriseMSBuild;
             }
 
             var vs2026ProfessionalMSBuild = @"C:\Program Files\Microsoft Visual Studio\18\Professional\Msbuild\Current\Bin\amd64\MSBuild.exe";
-            if (File.Exists(vs2022ProfessionalMSBuild))
+            if (File.Exists(vs2026ProfessionalMSBuild))
             {
                 compileConfiguration.VS2026ProfessionalMSBuild = vs2026ProfessionalMSBuild;
             }
 
             var vs2026CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\18\Community\Msbuild\Current\Bin\amd64\MSBuild.exe";
-            if (File.Exists(vs2022CommunityMSBuild))
+            if (File.Exists(vs2026CommunityMSBuild))
             {
                 compileConfiguration.VS2026CommunityMSBuild = vs2026CommunityMSBuild;
             }
