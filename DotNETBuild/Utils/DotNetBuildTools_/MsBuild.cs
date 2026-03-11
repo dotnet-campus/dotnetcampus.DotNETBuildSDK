@@ -189,7 +189,7 @@ namespace dotnetCampus.DotNETBuild.Utils
                 compileConfiguration.VS2026ProfessionalMSBuild = vs2026ProfessionalMSBuild;
             }
 
-            var vs2026CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\2022\Community\Msbuild\Current\Bin\amd64\MSBuild.exe";
+            var vs2026CommunityMSBuild = @"C:\Program Files\Microsoft Visual Studio\18\Community\Msbuild\Current\Bin\amd64\MSBuild.exe";
             if (File.Exists(vs2022CommunityMSBuild))
             {
                 compileConfiguration.VS2026CommunityMSBuild = vs2026CommunityMSBuild;
