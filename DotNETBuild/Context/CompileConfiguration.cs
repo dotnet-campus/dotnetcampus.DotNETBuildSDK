@@ -58,6 +58,9 @@ namespace dotnetCampus.DotNETBuild.Context
                 return GetMSBuildPath
                 (
                     msbuild,
+                    VS2026EnterpriseMSBuild,
+                    VS2026ProfessionalMSBuild,
+                    VS2026CommunityMSBuild,
                     VS2022EnterpriseMSBuild,
                     VS2022ProfessionalMSBuild,
                     VS2022CommunityMSBuild,
@@ -175,6 +178,33 @@ namespace dotnetCampus.DotNETBuild.Context
         /// VisualStudio 2022 社区版的 MSBuild.exe 文件所在路径
         /// </summary>
         public string VS2022CommunityMSBuild
+        {
+            set => SetFullPath(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// VisualStudio 2026 企业版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2026EnterpriseMSBuild
+        {
+            set => SetFullPath(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// VisualStudio 2026 社区版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2026ProfessionalMSBuild
+        {
+            set => SetFullPath(value);
+            get => GetString();
+        }
+
+        /// <summary>
+        /// VisualStudio 2026 社区版的 MSBuild.exe 文件所在路径
+        /// </summary>
+        public string VS2026CommunityMSBuild
         {
             set => SetFullPath(value);
             get => GetString();
