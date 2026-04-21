@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using dotnetCampus.Configurations;
 using dotnetCampus.DotNETBuild.Context;
@@ -131,19 +132,24 @@ namespace dotnetCampus.DotNETBuild.Utils
 
         private FileInfo FindSlnOrCsprojFile(DirectoryInfo directory)
         {
-            // 优先找 sln 文件
+            // 优先找 sln/slnx 文件
             // 如果找不到，找 csproj 文件
             // 如果找不到，返回空
             // 如果找到大于一个文件，异常
 
             var slnFileList = Directory.GetFiles(directory.FullName, "*.sln");
+            var slnxFileList = Directory.GetFiles(directory.FullName, "*.slnx");
+
+            slnFileList = slnFileList.Concat(slnxFileList).ToArray();
+
             if (slnFileList.Length > 1)
             {
                 throw new ArgumentException(
-                    $"在{directory}找到大于一个 sln 文件，找到的文件如下：{string.Join(';', slnFileList)}");
+                    $"在{directory}找到大于一个 sln/slnx 文件，找到的文件如下：{string.Join(';', slnFileList)}");
             }
             else if (slnFileList.Length == 1)
             {
+                // 正确找到了
                 return new FileInfo(slnFileList[0]);
             }
             else
