@@ -9,5 +9,8 @@ namespace PublishFolderCleaner
 
         [Option('a', "ApplicationName")]
         public string ApplicationName { set; get; } = null!;
+
+        [Option('e', "Exclude")]
+        public string Exclude { set; get; } = "";
     }
 }
