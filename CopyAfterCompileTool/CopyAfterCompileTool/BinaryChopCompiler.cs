@@ -112,7 +112,8 @@ namespace dotnetCampus.CopyAfterCompileTool
         {
             _git.FetchAll();
 
-            var commitList = GetCommitList().Reverse().ToList();
+            var commitList = GetCommitList().ToList();
+            commitList.Reverse();
 
             for (var i = 0; i < commitList.Count; i++)
             {

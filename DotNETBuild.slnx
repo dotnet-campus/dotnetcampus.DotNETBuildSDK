@@ -1,0 +1,64 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/CopyAfterCompileTool/">
+    <Project Path="CopyAfterCompileTool/CopyAfterCompileTool/CopyAfterCompileTool.csproj" />
+    <Project Path="CopyAfterCompileTool/CopyAfterCompileToolTests/CopyAfterCompileToolDemo/CopyAfterCompileToolDemo.csproj" />
+  </Folder>
+  <Folder Name="/DebUOS/">
+    <Project Path="DebUOS/Packaging.DebUOS.NuGet/Packaging.DebUOS.NuGet.csproj" />
+    <Project Path="DebUOS/Packaging.DebUOS.Tool/Packaging.DebUOS.Tool.csproj" />
+    <Project Path="DebUOS/Packaging.DebUOS/Packaging.DebUOS.csproj" />
+    <Project Path="DebUOS/Packaging.Targets/Packaging.Targets.csproj" />
+  </Folder>
+  <Folder Name="/Demos/">
+    <Project Path="Demos/DotNETBuildSDK.Demo/DotNETBuildSDK.Demo.csproj" />
+  </Folder>
+  <Folder Name="/GitLab/">
+    <Project Path="GitLab/GitLabCodeFormatBot/GitLabCodeFormatBot.csproj" />
+    <Project Path="GitLab/GitLabMergeRequestCreator/GitLabMergeRequestCreator.csproj" />
+  </Folder>
+  <Folder Name="/PublishFolderCleaner/">
+    <File Path="PublishFolderCleaner/README.md" />
+    <Project Path="PublishFolderCleaner/PublishFolderCleaner.Demo/PublishFolderCleaner.Demo.csproj" />
+    <Project Path="PublishFolderCleaner/PublishFolderCleaner.NuGet/PublishFolderCleaner.NuGet.csproj" />
+    <Project Path="PublishFolderCleaner/PublishFolderCleaner/PublishFolderCleaner.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="build/Version.props" />
+    <File Path="Directory.Build.props" />
+    <File Path="README.md" />
+  </Folder>
+  <Folder Name="/SyncTool/">
+    <Project Path="SyncTool/SyncTool.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/DotNETBuild.Tests/DotNETBuild.Tests.csproj" />
+    <Project Path="Tests/PickTextValueTask.Tests/PickTextValueTask.Tests.csproj" />
+    <Project Path="Tests/RegexReplaceTask.Tests/RegexReplaceTask.Tests.csproj" />
+    <Project Path="Tests/RunWithConfigValueTask.Tests/RunWithConfigValueTask.Tests.csproj" />
+  </Folder>
+  <Folder Name="/XmlComparerTool/">
+    <Project Path="XmlComparerTool/XmlComparer.Tests/XmlComparer.Tests.csproj" />
+    <Project Path="XmlComparerTool/XmlComparer/XmlComparer.csproj" />
+  </Folder>
+  <Project Path="BuildKitTool/BuildKitTool.csproj" />
+  <Project Path="BuildMd5Task/BuildMd5Task.csproj" />
+  <Project Path="DotNETBuild/DotNETBuildSDK.csproj" />
+  <Project Path="DotNETTask/DotNETTask.csproj" />
+  <Project Path="GetAssemblyVersionTask/GetAssemblyVersionTask.csproj" />
+  <Project Path="GitRevisionTask/GitRevisionTask.csproj" />
+  <Project Path="MatrixRun/MatrixRun.csproj" />
+  <Project Path="MSBuildTask/MSBuildTask.csproj" />
+  <Project Path="NuGetPublishTask/NuGetPublishTask.csproj" />
+  <Project Path="NuGetTask/NuGetTask.csproj" />
+  <Project Path="PickTextValueTask/PickTextValueTask.csproj" />
+  <Project Path="RegexReplaceTask/RegexReplaceTask.csproj" />
+  <Project Path="RunWithConfigValueTask/RunWithConfigValueTask.csproj" />
+  <Project Path="SendEmailTask/SendEmailTask.csproj" />
+  <Project Path="VerifyMd5Task/VerifyMd5Task.csproj" />
+  <Project Path="WriteAppVersionTask/WriteAppVersionTask.csproj" />
+</Solution>

@@ -17,9 +17,15 @@
 
 ## 使用方法
 
-每次构建推荐先调用 `dotnet buildkit init` 命令，此命令将会做初始化以及必备命令安装，读取机器配置和项目配置写入到构建时配置
+使用 .NET 10 SDK 或更高版本提供的 `dnx` 按需执行某个工具，无需预先全局安装工具，也无需调用 `dotnet buildkit init`。例如：
 
-后续根据需要调用对应的命令执行构建命令
+```sh
+dnx dotnetCampus.PickTextValueTask -- -f 输入文件路径 -r 输入正则 -o 输出文件路径 -s 替换正则
+```
+
+`--` 后面的参数将传递给工具。CI 中可使用 `dnx dotnetCampus.PickTextValueTask@版本号 -- ...` 固定工具版本，并在工具包名之前添加 `--yes` 跳过确认。
+
+已有的全局安装方式仍可用于其他工具，后续根据需要直接调用对应命令。BuildKitTool 已过期，不再打包发布；它原有的配置初始化工作需由构建流程自行完成。
 
 ## 为什么要创建这个项目
 
@@ -41,20 +47,20 @@
 
 放在 `项目\build\build.coin` 是项目配置
 
-默认在 `dotnet buildkit init` 命令，将会构建 `项目\build.coin` 构建时配置文件，此配置将包含机器配置和项目配置，其中项目配置内容相同项将会覆盖机器配置
+旧版 BuildKitTool 的 `dotnet buildkit init` 命令会构建 `项目\build.coin` 构建时配置文件，合并机器配置和项目配置，同名项以项目配置为准。BuildKitTool 停止打包后，如需此合并行为，请在构建流程中自行完成；`dnx` 仅负责执行工具，不会初始化或合并配置。
 
 ## 配置列表
 
 ### DotNETToolList
 
-需要安装的工具列表，多个工具之间使用分号分割
+旧版 BuildKitTool 使用的待安装工具列表，多个工具之间使用分号分割。改用 `dnx` 后无需配置此项。
 
 ```
 DotNETToolList
 dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 ```
 
-此配置项用来解决某些内部项目需要用到一些内部工具，这部分内部工具不适合开源，但是又期望在 dotnet buildkit init 的时候自动安装
+此配置项仅供旧版 `dotnet buildkit init` 自动安装内部工具使用；新构建流程请通过 `dnx` 按需执行工具，并配置相应的 NuGet 源。
 
 ### AppVersion
 
@@ -69,23 +75,9 @@ dotnetCampus.UpdateAllDotNetTools;dotnetCampus.UpdateAllDotNetTools
 
 ## 工具列表
 
-### dotnetCampus.BuildKitTool
+### dotnetCampus.BuildKitTool（已过期）
 
-这是主工具
-
-```
-dotnet tool install -g dotnetCampus.BuildKitTool
-```
-
-使用方法：
-
-```
-dotnet buildkit init [-c debug|release ]
-
--c --Configuration 可选 表示当前输出等级是 debug 或 release 等级，以及当前默认构建等级。默认是 Debug 等级
-
-执行此命令将会初始化构建环境，包括寻找各个文件路径，以及安装更新必要工具
-```
+此工具不再参与打包发布，源码仅作历史保留。请使用 .NET 10 SDK 或更高版本的 `dnx` 直接执行所需工具，参见上方[使用方法](#使用方法)。`dnx` 不替代旧工具的配置合并和环境初始化功能，这些工作应由构建流程自行完成。
 
 ### PickTextValueTask
 
